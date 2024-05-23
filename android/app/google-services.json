@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "115811546693",
-    "project_id": "simarku-2f254",
-    "storage_bucket": "simarku-2f254.appspot.com"
+    "project_number": "716875505153",
+    "project_id": "simarku-a8d45",
+    "storage_bucket": "simarku-a8d45.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:115811546693:android:804a22816eb698c60d552c",
+        "mobilesdk_app_id": "1:716875505153:android:14021f42510dcada892a00",
         "android_client_info": {
           "package_name": "com.example.simarku"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyD-v4tIZFJE2qqjEPXkEJvOgwX-W15lFn8"
+          "current_key": "AIzaSyDuK-PUsoP8-p-egC8eP6wccAwHjHx-LZc"
         }
       ],
       "services": {

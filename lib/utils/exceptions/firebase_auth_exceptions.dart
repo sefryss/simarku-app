@@ -8,7 +8,7 @@ class SMFirebaseAuthException implements Exception {
   String get message {
     switch (code) {
       case 'invalid-credential':
-        return 'Kredensial tidak valid. Mohon periksa kembali';
+        return 'Email atau Pasword tidak valid';
       case 'invalid-email':
         return 'Format email tidak valid. Mohon periksa kembali email Anda';
       case 'user-not-found':
