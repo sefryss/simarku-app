@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
 
 class AllFilterModalBottomSheet extends StatefulWidget {
@@ -17,52 +19,6 @@ class AllFilterModalBottomSheet extends StatefulWidget {
 class _AllFilterModalBottomSheetState extends State<AllFilterModalBottomSheet> {
   @override
   Widget build(BuildContext context) {
-    // Replace with your actual data or use static values for demonstration
-    final categoryFilter = [
-      'Fiksi',
-      'Non-Fiksi',
-      'Pendidikan',
-      'Otomotif',
-      'Kesehatan',
-      'Travel',
-      'Masakan',
-    ];
-    final scheduleFilter = [
-      'Novel',
-      'Cerpen',
-      'Puisi',
-      'Drama',
-      'Misteri',
-      'Thriller',
-      'Fantasi',
-      'Sains Fiksi',
-      'Romansa',
-      'Sejarah',
-      'Biografi',
-      'Horor',
-      'Humor',
-      'Agama & Spiritualitas',
-    ];
-    final eventTypeFilter = [
-      'Buku Fisik',
-      'E-Book',
-    ];
-    final locationFilter = [
-      'Kab. Tanggerang',
-      'Kota Bekasi',
-      'DKI Jakarta',
-      'Jawa Barat',
-      'Jawa Tengah',
-    ];
-    final universityFilter = [
-      'Universitas Budi Luhur',
-      'Gunadarma',
-      'UPI',
-      'UNSIKA',
-      'Telkom University',
-      'PNJ',
-    ];
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -87,101 +43,146 @@ class _AllFilterModalBottomSheetState extends State<AllFilterModalBottomSheet> {
                 children: [
                   _FilterSection(
                     title: 'Kategori',
-                    filters: List<Widget>.generate(
-                      categoryFilter.length,
-                      (index) => FilterChip(
-                        label: Text(categoryFilter[index]),
-                        onSelected: (selected) {
-                          setState(() {
-                            selected
-                                ? widget.selectedItems.addAll({
-                                    'major': 'ID${index + 1}',
-                                    'major_name': categoryFilter[index],
-                                  })
-                                : widget.selectedItems.remove('major');
-                          });
-                        },
-                        selected:
-                            widget.selectedItems['major'] == 'ID${index + 1}',
-                      ),
-                    ),
+                    stream: FirebaseFirestore.instance
+                        .collection('books')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+
+                      // Get unique categories from the stories
+                      List<Category> categories = snapshot.data!.docs
+                          .map((doc) {
+                            StoryModel story = StoryModel.fromFirestore(doc);
+                            return story.category!;
+                          })
+                          .toSet()
+                          .toList();
+
+                      return Wrap(
+                        spacing: 8,
+                        children: List<Widget>.generate(
+                          categories.length,
+                          (index) => FilterChip(
+                            label: Text(getCategoryString(categories[index])),
+                            onSelected: (selected) {
+                              setState(() {
+                                if (selected) {
+                                  widget.selectedItems.addAll({
+                                    'category': categories[index],
+                                    'category_name':
+                                        getCategoryString(categories[index]),
+                                  });
+                                } else {
+                                  widget.selectedItems.remove('category');
+                                }
+                              });
+                            },
+                            selected: widget.selectedItems['category'] ==
+                                categories[index],
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   _FilterSection(
                     title: 'Genre',
-                    filters: List<Widget>.generate(
-                      scheduleFilter.length,
-                      (index) => FilterChip(
-                        label: Text(' ${scheduleFilter[index]}'),
-                        onSelected: (selected) {
-                          setState(() {
-                            selected
-                                ? widget.selectedItems
-                                    .addAll({'semester': scheduleFilter[index]})
-                                : widget.selectedItems.remove('semester');
-                          });
-                        },
-                        selected: widget.selectedItems['semester'] ==
-                            scheduleFilter[index],
-                      ),
-                    ),
+                    stream: FirebaseFirestore.instance
+                        .collection('genre_list')
+                        .where('is_active', isEqualTo: true)
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+
+                      List<Genre> genres = snapshot.data!.docs.map((doc) {
+                        return Genre.fromFirestore(doc);
+                      }).toList();
+
+                      return Wrap(
+                        spacing: 8,
+                        children: List<Widget>.generate(
+                          genres.length,
+                          (index) => FilterChip(
+                            label: Text(genres[index].genre!),
+                            onSelected: (selected) {
+                              setState(() {
+                                if (selected) {
+                                  widget.selectedItems.addAll({
+                                    'major': genres[index].id,
+                                    'major_name': genres[index].genre,
+                                  });
+                                } else {
+                                  widget.selectedItems.remove('major');
+                                }
+                              });
+                            },
+                            selected: widget.selectedItems['major'] ==
+                                genres[index].id,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   _FilterSection(
                     title: 'Jenis Buku',
-                    filters: List<Widget>.generate(
-                      eventTypeFilter.length,
-                      (index) => FilterChip(
-                        label: Text('${eventTypeFilter[index]} SKS'),
-                        onSelected: (selected) {
-                          setState(() {
-                            selected
-                                ? widget.selectedItems
-                                    .addAll({'credit': eventTypeFilter[index]})
-                                : widget.selectedItems.remove('credit');
-                          });
-                        },
-                        selected: widget.selectedItems['credit'] ==
-                            eventTypeFilter[index],
-                      ),
-                    ),
+                    stream: FirebaseFirestore.instance
+                        .collection('books')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return Center(child: Text('Error: ${snapshot.error}'));
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+
+                      // Get unique book types from the stories
+                      List<BookType> bookTypes = snapshot.data!.docs
+                          .map((doc) {
+                            StoryModel story = StoryModel.fromFirestore(doc);
+                            return story.bookType!;
+                          })
+                          .toSet()
+                          .toList();
+
+                      return Wrap(
+                        spacing: 8,
+                        children: List<Widget>.generate(
+                          bookTypes.length,
+                          (index) => FilterChip(
+                            label: Text(getBookTypeString(bookTypes[index])),
+                            onSelected: (selected) {
+                              setState(() {
+                                if (selected) {
+                                  widget.selectedItems.addAll({
+                                    'book_type': bookTypes[index],
+                                    'book_type_name':
+                                        getBookTypeString(bookTypes[index]),
+                                  });
+                                } else {
+                                  widget.selectedItems.remove('book_type');
+                                }
+                              });
+                            },
+                            selected: widget.selectedItems['book_type'] ==
+                                bookTypes[index],
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  // _FilterSection(
-                  //   title: 'Lokasi',
-                  //   filters: List<Widget>.generate(
-                  //     locationFilter.length,
-                  //     (index) => FilterChip(
-                  //       label: Text(locationFilter[index]),
-                  //       onSelected: (selected) {
-                  //         setState(() {
-                  //           selected
-                  //               ? widget.selectedItems
-                  //                   .addAll({'level': locationFilter[index]})
-                  //               : widget.selectedItems.remove('level');
-                  //         });
-                  //       },
-                  //       selected: widget.selectedItems['level'] ==
-                  //           locationFilter[index],
-                  //     ),
-                  //   ),
-                  // ),
-                  // _FilterSection(
-                  //   title: 'Universitas',
-                  //   filters: List<Widget>.generate(
-                  //     universityFilter.length,
-                  //     (index) => FilterChip(
-                  //       label: Text(universityFilter[index]),
-                  //       onSelected: (selected) {
-                  //         setState(() {
-                  //           selected
-                  //               ? widget.selectedItems
-                  //                   .addAll({'level': universityFilter[index]})
-                  //               : widget.selectedItems.remove('level');
-                  //         });
-                  //       },
-                  //       selected: widget.selectedItems['level'] ==
-                  //           universityFilter[index],
-                  //     ),
-                  //   ),
-                  // ),
                 ],
               ),
             ),
@@ -208,11 +209,13 @@ class _AllFilterModalBottomSheetState extends State<AllFilterModalBottomSheet> {
 class _FilterSection extends StatelessWidget {
   const _FilterSection({
     required this.title,
-    required this.filters,
+    required this.stream,
+    required this.builder,
   });
 
   final String title;
-  final List<Widget> filters;
+  final Stream<QuerySnapshot> stream;
+  final AsyncWidgetBuilder<QuerySnapshot> builder;
 
   @override
   Widget build(BuildContext context) {
@@ -229,10 +232,10 @@ class _FilterSection extends StatelessWidget {
               height: 21 / 14,
             ),
           ),
-          Wrap(
-            spacing: 8,
-            children: filters,
-          )
+          StreamBuilder<QuerySnapshot>(
+            stream: stream,
+            builder: builder,
+          ),
         ],
       ),
     );

@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:simarku/models/models.dart';
 
-class CategoryFilterModalBottomSheet extends StatefulWidget {
-  const CategoryFilterModalBottomSheet({
+class GenreFilterModalBottomSheet extends StatefulWidget {
+  const GenreFilterModalBottomSheet({
     super.key,
     required this.selectedItems,
   });
@@ -11,12 +11,12 @@ class CategoryFilterModalBottomSheet extends StatefulWidget {
   final Map<String, dynamic> selectedItems;
 
   @override
-  State<CategoryFilterModalBottomSheet> createState() =>
-      _CategoryFilterModalBottomSheetState();
+  State<GenreFilterModalBottomSheet> createState() =>
+      _GenreFilterModalBottomSheetState();
 }
 
-class _CategoryFilterModalBottomSheetState
-    extends State<CategoryFilterModalBottomSheet> {
+class _GenreFilterModalBottomSheetState
+    extends State<GenreFilterModalBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -25,7 +25,7 @@ class _CategoryFilterModalBottomSheetState
       children: [
         const ListTile(
           title: Text(
-            'Kategori',
+            'Genre',
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 16,
@@ -34,7 +34,10 @@ class _CategoryFilterModalBottomSheetState
           ),
         ),
         StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('books').snapshots(),
+          stream: FirebaseFirestore.instance
+              .collection('genre_list')
+              .where('is_active', isEqualTo: true)
+              .snapshots(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -44,38 +47,31 @@ class _CategoryFilterModalBottomSheetState
               return Center(child: CircularProgressIndicator());
             }
 
-            // Get unique categories from the stories
-            List<Category> categories = snapshot.data!.docs
-                .map((doc) {
-                  StoryModel story = StoryModel.fromFirestore(doc);
-                  return story.category!;
-                })
-                .toSet()
-                .toList();
+            List<Genre> genres = snapshot.data!.docs.map((doc) {
+              return Genre.fromFirestore(doc);
+            }).toList();
 
             return Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
               child: Wrap(
                 spacing: 8,
                 children: List<Widget>.generate(
-                  categories.length,
+                  genres.length,
                   (index) => FilterChip(
-                    label: Text(getCategoryString(categories[index])),
+                    label: Text(genres[index].genre!),
                     onSelected: (selected) {
                       setState(() {
                         if (selected) {
                           widget.selectedItems.addAll({
-                            'category': categories[index],
-                            'category_name':
-                                getCategoryString(categories[index]),
+                            'major': genres[index].id,
+                            'major_name': genres[index].genre,
                           });
                         } else {
-                          widget.selectedItems.remove('category');
+                          widget.selectedItems.remove('major');
                         }
                       });
                     },
-                    selected:
-                        widget.selectedItems['category'] == categories[index],
+                    selected: widget.selectedItems['major'] == genres[index].id,
                   ),
                 ),
               ),

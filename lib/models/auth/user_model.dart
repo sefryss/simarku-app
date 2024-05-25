@@ -83,4 +83,17 @@ class UserModel {
       throw Exception("Document data is null!");
     }
   }
+
+   factory UserModel.fromFirestore(DocumentSnapshot doc) {
+    Map data = doc.data() as Map;
+    return UserModel(
+      id: doc.id,
+      address: data['address'] ?? '',
+      email: data['email'] ?? '',
+      fullName: data['FullName'] ?? '',
+      phoneNumber: data['PhoneNumber'] ?? '',
+      profilePicture: data['ProfilePicture'] ?? '',
+      nikNumber: data['NIKNumber'] ?? '',
+    );
+  }
 }

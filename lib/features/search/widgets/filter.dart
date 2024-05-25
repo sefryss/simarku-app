@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:simarku/features/search/widgets/all_filter_modal_bottom_sheet.dart';
 import 'package:simarku/features/search/widgets/category_filter_modal_bottom_sheet.dart';
-import 'package:simarku/features/search/widgets/event_type_filter_modal_bottom_sheet.dart';
-import 'package:simarku/features/search/widgets/location_filter_modal_bottom_sheet.dart';
-import 'package:simarku/features/search/widgets/schedule_filter_modal_bottom_sheet.dart';
-import 'package:simarku/features/search/widgets/university_filter_modal_bottom_sheet.dart';
+import 'package:simarku/features/search/widgets/book_type_filter_modal_bottom_sheet.dart';
+import 'package:simarku/features/search/widgets/genre_filter_modal_bottom_sheet.dart';
 import 'package:simarku/utils/global/app_config.dart';
 
-class EventFilter extends StatelessWidget implements PreferredSizeWidget {
-  const EventFilter({super.key});
+class BookFilter extends StatelessWidget implements PreferredSizeWidget {
+  const BookFilter({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +45,7 @@ class EventFilter extends StatelessWidget implements PreferredSizeWidget {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
               ),
               builder: (context) {
-                return ScheduleFilterModalBottomSheet(
+                return GenreFilterModalBottomSheet(
                     selectedItems: selectedItems);
               });
         },
@@ -68,50 +66,12 @@ class EventFilter extends StatelessWidget implements PreferredSizeWidget {
                 borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
               ),
               builder: (context) {
-                return EventTypeFilterModalBottomSheet(
+                return BookTypeFilterModalBottomSheet(
                     selectedItems: selectedItems);
               });
         },
         selected: false, // Set this based on your static data
       ),
-      // CustomFilterChip(
-      //   label: const Text('Lokasi'),
-      //   onSelected: (_) {
-      //     // Handle the selection logic
-      //     showModalBottomSheet(
-      //         context: context,
-      //         showDragHandle: true,
-      //         backgroundColor: theme.scaffoldBackgroundColor,
-      //         isScrollControlled: true,
-      //         shape: const RoundedRectangleBorder(
-      //           borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-      //         ),
-      //         builder: (context) {
-      //           return LocationFilterModalBottomSheet(
-      //               selectedItems: selectedItems);
-      //         });
-      //   },
-      //   selected: false, // Set this based on your static data
-      // ),
-      // CustomFilterChip(
-      //   label: const Text('Universitas'),
-      //   onSelected: (_) {
-      //     // Handle the selection logic
-      //     showModalBottomSheet(
-      //         context: context,
-      //         showDragHandle: true,
-      //         backgroundColor: theme.scaffoldBackgroundColor,
-      //         isScrollControlled: true,
-      //         shape: const RoundedRectangleBorder(
-      //           borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-      //         ),
-      //         builder: (context) {
-      //           return UniversityFilterModalBottomSheet(
-      //               selectedItems: selectedItems);
-      //         });
-      //   },
-      //   selected: false, // Set this based on your static data
-      // ),
     ];
 
     return Container(

@@ -1,11 +1,15 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
+import 'package:simarku/utils/constantWidget.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/shared_widgets/sm_back_button.dart';
+import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
 class DetailBook extends StatelessWidget {
-  final Book book;
+  final StoryModel book;
   const DetailBook({super.key, required this.book});
 
   @override
@@ -41,7 +45,7 @@ class DetailBook extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           image: DecorationImage(
-                            image: AssetImage(book.thumbnail),
+                            image: NetworkImage(book.image ?? ''),
                           ),
                         ),
                       ),
@@ -74,13 +78,13 @@ class DetailBook extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  book.title,
+                                  book.name ?? '',
                                   style: AppTextStyle.heading5SemiBold,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
-                                  book.author,
+                                  book.author ?? '',
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppTextStyle.body2Regular
@@ -94,16 +98,33 @@ class DetailBook extends StatelessWidget {
                       SizedBox(
                         height: 8,
                       ),
-                      Text(
-                        'Genre: ${book.genre}',
-                        style: AppTextStyle.body3Regular
-                            .copyWith(color: AppColors.neutral08),
+                      StreamBuilder<QuerySnapshot>(
+                        stream:
+                            FireBaseData.getGenreById(id: book.genreId ?? []),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null &&
+                              snapshot.connectionState ==
+                                  ConnectionState.active) {
+                            List<DocumentSnapshot> list = snapshot.data!.docs;
+
+                            String genre = FireBaseData.getGenreName(
+                                genre: book.genreId!, list: list);
+
+                            return Text(
+                              'Genre: ${genre}',
+                              style: AppTextStyle.body3Regular
+                                  .copyWith(color: AppColors.neutral08),
+                            );
+                          } else {
+                            return Text('');
+                          }
+                        },
                       ),
                       const SizedBox(
                         height: 4.0,
                       ),
                       Text(
-                        'Penerbit: ${book.publisher}',
+                        'Penerbit: ${book.publisher ?? ''}',
                         style: AppTextStyle.body3Regular
                             .copyWith(color: AppColors.neutral08),
                       ),
@@ -125,12 +146,13 @@ class DetailBook extends StatelessWidget {
                       const SizedBox(
                         height: 4.0,
                       ),
-                      Text(
-                        book.synopsis,
-                        style: AppTextStyle.body3Regular
+                      HtmlWidget(
+                        decode(
+                          book.desc ?? '',
+                        ),
+                        textStyle: AppTextStyle.body3Regular
                             .copyWith(color: AppColors.neutral08),
                       ),
-                      // const SizedBox(height: 40),
                     ],
                   ),
                 )
@@ -172,7 +194,7 @@ class DetailBook extends StatelessWidget {
                         height: 2,
                       ),
                       Text(
-                        book.releaseDate,
+                        book.releaseDate ?? '',
                         style: AppTextStyle.body3Medium,
                       ),
                     ],
@@ -181,25 +203,40 @@ class DetailBook extends StatelessWidget {
                     thickness: 1,
                     color: AppColors.neutral08,
                   ),
-                  Expanded(
-                    child: Column(
-                      children: [
-                        Text(
-                          'Pemilik',
-                          style: AppTextStyle.body3Regular,
-                        ),
-                        const SizedBox(
-                          height: 2,
-                        ),
-                        Text(
-                          book.owner,
-                          style: AppTextStyle.body3Medium
-                              .copyWith(color: AppColors.primary),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
-                    ),
+                  StreamBuilder<QuerySnapshot>(
+                    stream: FireBaseData.getOwnerById(id: book.ownerId ?? []),
+                    builder: (context, snapshot) {
+                      if (snapshot.data != null &&
+                          snapshot.connectionState == ConnectionState.active) {
+                        List<DocumentSnapshot> list = snapshot.data!.docs;
+
+                        String owner = FireBaseData.getOwnerName(
+                            owner: book.ownerId!, list: list);
+
+                        return Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                'Pemilik',
+                                style: AppTextStyle.body3Regular,
+                              ),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              Text(
+                                owner,
+                                style: AppTextStyle.body3Medium
+                                    .copyWith(color: AppColors.primary),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Text('');
+                      }
+                    },
                   ),
                   VerticalDivider(
                     thickness: 1,
@@ -215,7 +252,7 @@ class DetailBook extends StatelessWidget {
                         height: 2,
                       ),
                       Text(
-                        book.page,
+                        book.page ?? '',
                         style: AppTextStyle.body3Medium,
                       ),
                     ],
