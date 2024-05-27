@@ -263,7 +263,10 @@ class DetailBook extends StatelessWidget {
             const SizedBox(
               height: 12,
             ),
-            const ApplyButton()
+            ApplyButton(
+                book: book,
+              category: book.category,
+            )
           ],
         ),
       ),

@@ -2,10 +2,45 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:simarku/controllers/firbase_data/key_table.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/models/models.dart';
+import 'package:flutter/material.dart';
 
 class FireBaseData {
+  static updateData(
+      {required var map,
+      required String tableName,
+      required String doc,
+      required Function function,
+      bool? isToast,
+      required BuildContext context}) {
+    print("tableName------${tableName}");
+
+    FirebaseFirestore.instance
+        .collection(tableName)
+        .doc(doc)
+        .update(map)
+        .then((value) {
+      if (isToast == null) {
+        // showCustomToast(
+        //   message: "Update Successfully...",
+        //   title: 'Success',
+        //   context: context,
+        // );
+      }
+      function();
+    });
+  }
+
   static getString(List snap) {
     return snap.toString().replaceAll("[", "").replaceAll("]", "");
+  }
+
+  static addStoryViews(StoryModel storyModel, BuildContext context) async {
+    updateData(
+        map: {KeyTable.views: (storyModel.views! + 1)},
+        tableName: KeyTable.storyList,
+        doc: storyModel.id!,
+        context: context,
+        function: () {});
   }
 
   static getGenreById({required List id}) {
