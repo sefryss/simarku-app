@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:simarku/features/books/bebas_baca/screen/read_book_view.dart';
 import 'package:simarku/features/books/tukar_milik/screen/tukar_milik_book_view.dart';
 import 'package:simarku/features/books/tukar_pinjam/screen/tukar_pinjam_book_view.dart';
@@ -20,36 +21,19 @@ class ApplyButton extends StatelessWidget {
       case Category.tukarPinjam:
         buttonText = 'Tukar Pinjam';
         onTap = () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TukarPinjamBookView(),
-            ),
-          );
+          Get.to(TukarPinjamBookView());
         };
         break;
       case Category.tukarMilik:
         buttonText = 'Tukar Milik';
         onTap = () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => TukarMilikBookView(),
-            ),
-          );
+          Get.to(TukarMilikBookView());
         };
         break;
       case Category.bebasBaca:
         buttonText = 'Baca Buku';
         onTap = () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ReadBookView(
-                book: book,
-              ),
-            ),
-          );
+          Get.to(ReadBookView(book: book));
         };
         break;
       default:

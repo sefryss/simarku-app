@@ -1,17 +1,15 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
-// import 'package:ebook_app/models/book_list_model.dart';
-// import 'package:ebook_app/utils/color_category.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:html_unescape/html_unescape.dart';
-import 'package:launch_review/launch_review.dart';
+
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:shimmer/shimmer.dart';

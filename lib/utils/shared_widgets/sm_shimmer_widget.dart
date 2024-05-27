@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:simarku/utils/global/app_colors.dart';
 

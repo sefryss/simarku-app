@@ -4,7 +4,6 @@ import 'package:simarku/features/article/screen/all_article/widgets/widgets.dart
 import 'package:simarku/features/article/screen/detail_article/screen/detail_article_page.dart';
 
 import 'package:simarku/models/models.dart';
-import 'package:simarku/routes/app_router.dart';
 
 class BookmarkArticle extends StatelessWidget {
   const BookmarkArticle({super.key});

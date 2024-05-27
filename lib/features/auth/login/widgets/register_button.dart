@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/features/auth/register/screen/register_page.dart';
 import 'package:simarku/utils/global/app_config.dart';
-import 'package:simarku/routes/app_router.dart';
 
 class RegisterButton extends StatelessWidget {
   const RegisterButton({super.key});

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/controllers/auth/edit_user_controller.dart';
-import 'package:simarku/controllers/auth/signup_controller.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 import 'package:simarku/utils/validation/validation.dart';

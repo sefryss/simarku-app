@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:simarku/features/dashboard/widgets/widgets.dart';
 import 'package:simarku/features/profile/widgets/widgets.dart';
 import 'package:simarku/utils/global/app_config.dart';
 

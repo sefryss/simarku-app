@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
-import 'package:simarku/utils/global/app_config.dart';
+
 
 class SMAnimationLoaderWidget extends StatelessWidget {
   const SMAnimationLoaderWidget({

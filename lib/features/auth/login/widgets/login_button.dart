@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/controllers/auth/login_controller.dart';
 import 'package:simarku/utils/global/app_config.dart';
-import 'package:simarku/routes/app_router.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({super.key});

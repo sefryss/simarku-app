@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:simarku/controllers/auth/edit_user_controller.dart';
 import 'package:simarku/controllers/auth/user_controller.dart';
 import 'package:simarku/features/profile/screen/edit_profile/widgets/address_input_dart.dart';
@@ -154,46 +153,46 @@ Align _buildButton({required VoidCallback? onTap}) {
   );
 }
 
-void _pickFile(BuildContext context) {
-  showModalBottomSheet<ImageSource>(
-    context: context,
-    builder: (context) => Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Text(
-            'Ganti foto profil',
-            style:
-                AppTextStyle.body2SemiBold.copyWith(color: AppColors.n1Black),
-          ),
-        ),
-        const Divider(),
-        ButtonBar(
-          alignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            IconButton(
-              onPressed: () => ImageSource.camera,
-              icon: const Icon(Icons.camera_alt_outlined),
-              tooltip: 'Kamera',
-            ),
-            IconButton(
-              onPressed: () => ImageSource.gallery,
-              icon: const Icon(Icons.image_outlined),
-              tooltip: 'Galeri',
-            ),
-          ],
-        ),
-        const SizedBox(height: 16.0),
-      ],
-    ),
-    isScrollControlled: true,
-    showDragHandle: true,
-    shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(8.0))),
-  );
-}
+// void _pickFile(BuildContext context) {
+//   showModalBottomSheet<ImageSource>(
+//     context: context,
+//     builder: (context) => Column(
+//       mainAxisSize: MainAxisSize.min,
+//       crossAxisAlignment: CrossAxisAlignment.stretch,
+//       children: [
+//         Padding(
+//           padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//           child: Text(
+//             'Ganti foto profil',
+//             style:
+//                 AppTextStyle.body2SemiBold.copyWith(color: AppColors.n1Black),
+//           ),
+//         ),
+//         const Divider(),
+//         ButtonBar(
+//           alignment: MainAxisAlignment.spaceEvenly,
+//           children: [
+//             IconButton(
+//               onPressed: () => ImageSource.camera,
+//               icon: const Icon(Icons.camera_alt_outlined),
+//               tooltip: 'Kamera',
+//             ),
+//             IconButton(
+//               onPressed: () => ImageSource.gallery,
+//               icon: const Icon(Icons.image_outlined),
+//               tooltip: 'Galeri',
+//             ),
+//           ],
+//         ),
+//         const SizedBox(height: 16.0),
+//       ],
+//     ),
+//     isScrollControlled: true,
+//     showDragHandle: true,
+//     shape: const RoundedRectangleBorder(
+//         borderRadius: BorderRadius.vertical(top: Radius.circular(8.0))),
+//   );
+// }
 
 
   // .then(

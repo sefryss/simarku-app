@@ -2,8 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/controllers/auth/verify_email_controller.dart';
-import 'package:simarku/features/auth/login/screen/login_page.dart';
-import 'package:simarku/features/auth/register/widgets/widgets.dart';
 import 'package:simarku/repository/auth/auth_repository.dart';
 import 'package:simarku/utils/global/app_colors.dart';
 import 'package:simarku/utils/global/app_text_style.dart';

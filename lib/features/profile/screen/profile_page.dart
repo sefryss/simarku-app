@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:simarku/controllers/auth/login_controller.dart';
 import 'package:simarku/controllers/auth/user_controller.dart';
 import 'package:simarku/features/profile/screen/edit_profile/screen/edit_profile_page.dart';
 import 'package:simarku/features/profile/widgets/widgets.dart';
 import 'package:simarku/repository/auth/auth_repository.dart';
 import 'package:simarku/utils/global/app_config.dart';
-import 'package:simarku/routes/app_router.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 
 class ProfilePage extends StatelessWidget {

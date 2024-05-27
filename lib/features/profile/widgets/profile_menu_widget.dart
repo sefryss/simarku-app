@@ -22,6 +22,7 @@ class ProfileMenuWidget extends StatelessWidget {
         onTap: onTap,
         leading: SvgPicture.asset(
           icon,
+          // ignore: deprecated_member_use
           color: AppColors.primary,
           width: 24,
         ),

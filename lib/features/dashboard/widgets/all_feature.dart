@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:simarku/features/article/screen/all_article/screen/all_article_page.dart';
+import 'package:simarku/features/books/bebas_baca/screen/all_bebas_baca_view.dart';
+import 'package:simarku/features/books/tukar_milik/screen/all_tukar_milik_view.dart';
+import 'package:simarku/features/books/tukar_pinjam/screen/all_tukar_pinjam_view.dart';
 import 'package:simarku/utils/global/app_config.dart';
 
 class MainFeature extends StatelessWidget {
@@ -196,7 +199,9 @@ class AllFeature extends StatelessWidget {
                             children: [
                               //Fitur Tukar Pinjam
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Get.to(() => AllTukarPinjamView());
+                                },
                                 child: Column(
                                   children: [
                                     Stack(
@@ -228,7 +233,9 @@ class AllFeature extends StatelessWidget {
 
                               //Fitur Tukar Milik
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Get.to(() => AllTukarMilikView());
+                                },
                                 child: Column(
                                   children: [
                                     Stack(
@@ -331,9 +338,11 @@ class AllFeature extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              //Fitur E-Book
+                              //Fitur Bebas Baca
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  Get.to(() => AllBebasBacaView());
+                                },
                                 child: Column(
                                   children: [
                                     Stack(
@@ -355,7 +364,7 @@ class AllFeature extends StatelessWidget {
                                       height: 8,
                                     ),
                                     const Text(
-                                      'E-Book',
+                                      'Bebas Baca',
                                       style: AppTextStyle.body4Medium,
                                       textAlign: TextAlign.center,
                                     ),

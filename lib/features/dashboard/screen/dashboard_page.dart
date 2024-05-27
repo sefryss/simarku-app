@@ -1,15 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:simarku/controllers/auth/user_controller.dart';
 import 'package:simarku/features/article/screen/all_article/screen/all_article_page.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
-
 import 'package:simarku/utils/global/app_config.dart';
-import 'package:simarku/routes/app_router.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 
 class DashboardPage extends StatelessWidget {

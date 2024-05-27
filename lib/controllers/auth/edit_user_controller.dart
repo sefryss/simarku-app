@@ -1,10 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:simarku/controllers/auth/user_controller.dart';
-import 'package:simarku/features/dashboard/screen/dashboard_page.dart';
 import 'package:simarku/features/home/home_page.dart';
-import 'package:simarku/features/profile/screen/profile_page.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/repository/auth/user_repository.dart';
 import 'package:simarku/utils/loaders/full_screen_loader.dart';

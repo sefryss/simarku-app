@@ -132,6 +132,57 @@ class FireBaseData {
     }
   }
 
+  static getBebasBacaBookList({int limit = 0}) {
+    if (limit != 0) {
+      return FirebaseFirestore.instance
+          .collection(KeyTable.storyList)
+          .where(KeyTable.isActive, isEqualTo: true)
+          .where(KeyTable.category, isEqualTo: 'Bebas Baca')
+          .limit(limit)
+          .snapshots();
+    } else {
+      return FirebaseFirestore.instance
+          .collection(KeyTable.storyList)
+          .where(KeyTable.isActive, isEqualTo: true)
+          .where(KeyTable.category, isEqualTo: 'Bebas Baca')
+          .snapshots();
+    }
+  }
+
+  static getTukarPinjamBookList({int limit = 0}) {
+    if (limit != 0) {
+      return FirebaseFirestore.instance
+          .collection(KeyTable.storyList)
+          .where(KeyTable.isActive, isEqualTo: true)
+          .where(KeyTable.category, isEqualTo: 'Tukar Pinjam')
+          .limit(limit)
+          .snapshots();
+    } else {
+      return FirebaseFirestore.instance
+          .collection(KeyTable.storyList)
+          .where(KeyTable.isActive, isEqualTo: true)
+          .where(KeyTable.category, isEqualTo: 'Tukar Pinjam')
+          .snapshots();
+    }
+  }
+
+  static getTukarMilikBookList({int limit = 0}) {
+    if (limit != 0) {
+      return FirebaseFirestore.instance
+          .collection(KeyTable.storyList)
+          .where(KeyTable.isActive, isEqualTo: true)
+          .where(KeyTable.category, isEqualTo: 'Tukar Milik')
+          .limit(limit)
+          .snapshots();
+    } else {
+      return FirebaseFirestore.instance
+          .collection(KeyTable.storyList)
+          .where(KeyTable.isActive, isEqualTo: true)
+          .where(KeyTable.category, isEqualTo: 'Tukar Milik')
+          .snapshots();
+    }
+  }
+
   static getBookList() {
     return FirebaseFirestore.instance
         .collection(KeyTable.storyList)
