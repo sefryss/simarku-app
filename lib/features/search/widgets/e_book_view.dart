@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
+import 'package:simarku/features/search/widgets/widgets.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
@@ -29,11 +30,11 @@ class EBookView extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(
           16.0,
           24.0,
-          16.0,
+          0,
           16.0,
         ),
         child: StreamBuilder<QuerySnapshot>(
-          stream: FireBaseData.getPopularList(),
+          stream: FireBaseData.getEBooks(),
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
@@ -52,8 +53,6 @@ class EBookView extends StatelessWidget {
             return GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 3,
-                crossAxisSpacing: 16.0,
-                mainAxisSpacing: 16.0,
                 childAspectRatio: 0.5,
               ),
               itemCount: filteredBookList.length,

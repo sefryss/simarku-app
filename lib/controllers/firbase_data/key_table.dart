@@ -5,6 +5,7 @@ class KeyTable {
     static String ownerList = 'Users';
     static String sliderList = 'sliders';
     static String storyList = 'books';
+    static String bookTitle = 'name';
     static String storyId = 'story_id';
     static String authId = 'auth_id';
     static String index = 'index';

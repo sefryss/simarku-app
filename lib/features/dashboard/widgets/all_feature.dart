@@ -17,7 +17,9 @@ class MainFeature extends StatelessWidget {
       children: [
         //Fitur Tukar Pinjam
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Get.to(() => AllTukarPinjamView());
+          },
           child: Column(
             children: [
               Stack(
@@ -48,7 +50,9 @@ class MainFeature extends StatelessWidget {
 
         //Fitur Tukar Milik
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+            Get.to(() => AllTukarMilikView());
+          },
           child: Column(
             children: [
               Stack(

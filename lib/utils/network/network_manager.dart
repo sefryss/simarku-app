@@ -27,7 +27,9 @@ class NetworkManager extends GetxController {
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
     _connectionStatus.value = result;
     if (_connectionStatus.value == ConnectivityResult.none) {
-      SMLoaders.warningSnackBar(title: 'Tidak Ada Koneksi Internet');
+      SMLoaders.warningSnackBar(
+          title: 'Tidak Ada Koneksi Internet',
+          message: 'Coba periksa koneksi anda');
     }
   }
 

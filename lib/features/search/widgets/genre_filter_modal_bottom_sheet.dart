@@ -1,14 +1,16 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:simarku/models/models.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:simarku/models/genre_model.dart';
 
 class GenreFilterModalBottomSheet extends StatefulWidget {
   const GenreFilterModalBottomSheet({
-    super.key,
+    Key? key,
     required this.selectedItems,
-  });
+    required this.updateSelectedItems,
+  }) : super(key: key);
 
   final Map<String, dynamic> selectedItems;
+  final Function(String, dynamic) updateSelectedItems;
 
   @override
   State<GenreFilterModalBottomSheet> createState() =>
@@ -17,6 +19,14 @@ class GenreFilterModalBottomSheet extends StatefulWidget {
 
 class _GenreFilterModalBottomSheetState
     extends State<GenreFilterModalBottomSheet> {
+  late Map<String, dynamic> tempSelectedItems;
+
+  @override
+  void initState() {
+    super.initState();
+    tempSelectedItems = Map.from(widget.selectedItems);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -62,16 +72,20 @@ class _GenreFilterModalBottomSheetState
                     onSelected: (selected) {
                       setState(() {
                         if (selected) {
-                          widget.selectedItems.addAll({
-                            'major': genres[index].id,
-                            'major_name': genres[index].genre,
-                          });
+                          tempSelectedItems['genre_id'] = [
+                            ...(tempSelectedItems['genre_id'] ?? []),
+                            genres[index].id,
+                          ];
                         } else {
-                          widget.selectedItems.remove('major');
+                          tempSelectedItems['genre_id'] =
+                              List<String>.from(tempSelectedItems['genre_id']!)
+                                ..remove(genres[index].id);
                         }
                       });
                     },
-                    selected: widget.selectedItems['major'] == genres[index].id,
+                    selected: (tempSelectedItems['genre_id'] ?? [])
+                        .contains(genres[index].id),
+                    showCheckmark: false,
                   ),
                 ),
               ),
@@ -79,12 +93,22 @@ class _GenreFilterModalBottomSheetState
           },
         ),
         const Divider(height: 1),
+        // Di GenreFilterModalBottomSheet, tambahkan penanganan untuk menghapus filter genre
         Padding(
           padding: const EdgeInsets.all(16),
           child: FilledButton(
             onPressed: () {
-              widget.selectedItems.addAll({'apply': true});
-              Navigator.pop(context, widget.selectedItems);
+              // Periksa jika genre filter kosong
+              if (tempSelectedItems.containsKey('genre_id') &&
+                  (tempSelectedItems['genre_id'] as List).isNotEmpty) {
+                // Kirim filter genre yang dipilih ke fungsi updateSelectedItems
+                widget.updateSelectedItems(
+                    'genre_id', tempSelectedItems['genre_id']);
+              } else {
+                // Jika genre filter kosong, kirim null atau daftar kosong
+                widget.updateSelectedItems('genre_id', null);
+              }
+              Navigator.pop(context, tempSelectedItems);
             },
             child: const Text('Pilih'),
           ),

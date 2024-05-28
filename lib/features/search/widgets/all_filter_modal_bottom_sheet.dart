@@ -2,14 +2,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:simarku/models/models.dart';
 
-
 class AllFilterModalBottomSheet extends StatefulWidget {
   const AllFilterModalBottomSheet({
     super.key,
     required this.selectedItems,
+    required this.updateSelectedItems,
   });
 
   final Map<String, dynamic> selectedItems;
+  final Function(String, dynamic) updateSelectedItems;
 
   @override
   State<AllFilterModalBottomSheet> createState() =>
@@ -17,8 +18,18 @@ class AllFilterModalBottomSheet extends StatefulWidget {
 }
 
 class _AllFilterModalBottomSheetState extends State<AllFilterModalBottomSheet> {
+  late Map<String, dynamic> tempSelectedItems;
+
+  @override
+  void initState() {
+    super.initState();
+    tempSelectedItems = Map.from(widget.selectedItems);
+  }
+
   @override
   Widget build(BuildContext context) {
+    const List<String> bookTypes = ['Buku Fisik', 'E-Book'];
+    List<String> categories = ['Tukar Pinjam', 'Tukar Milik', 'Bebas Baca'];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -56,35 +67,26 @@ class _AllFilterModalBottomSheetState extends State<AllFilterModalBottomSheet> {
                       }
 
                       // Get unique categories from the stories
-                      List<Category> categories = snapshot.data!.docs
-                          .map((doc) {
-                            StoryModel story = StoryModel.fromFirestore(doc);
-                            return story.category!;
-                          })
-                          .toSet()
-                          .toList();
 
                       return Wrap(
                         spacing: 8,
                         children: List<Widget>.generate(
                           categories.length,
                           (index) => FilterChip(
-                            label: Text(getCategoryString(categories[index])),
+                            label: Text(categories[index]),
                             onSelected: (selected) {
                               setState(() {
                                 if (selected) {
-                                  widget.selectedItems.addAll({
-                                    'category': categories[index],
-                                    'category_name':
-                                        getCategoryString(categories[index]),
-                                  });
+                                  tempSelectedItems['category'] =
+                                      categories[index];
                                 } else {
-                                  widget.selectedItems.remove('category');
+                                  tempSelectedItems.remove('category');
                                 }
                               });
                             },
-                            selected: widget.selectedItems['category'] ==
+                            selected: tempSelectedItems['category'] ==
                                 categories[index],
+                            showCheckmark: false,
                           ),
                         ),
                       );
@@ -118,17 +120,21 @@ class _AllFilterModalBottomSheetState extends State<AllFilterModalBottomSheet> {
                             onSelected: (selected) {
                               setState(() {
                                 if (selected) {
-                                  widget.selectedItems.addAll({
-                                    'major': genres[index].id,
-                                    'major_name': genres[index].genre,
-                                  });
+                                  tempSelectedItems['genre_id'] = [
+                                    ...(tempSelectedItems['genre_id'] ?? []),
+                                    genres[index].id,
+                                  ];
                                 } else {
-                                  widget.selectedItems.remove('major');
+                                  tempSelectedItems['genre_id'] =
+                                      List<String>.from(
+                                          tempSelectedItems['genre_id']!)
+                                        ..remove(genres[index].id);
                                 }
                               });
                             },
-                            selected: widget.selectedItems['major'] ==
-                                genres[index].id,
+                            selected: (tempSelectedItems['genre_id'] ?? [])
+                                .contains(genres[index].id),
+                            showCheckmark: false,
                           ),
                         ),
                       );
@@ -149,35 +155,26 @@ class _AllFilterModalBottomSheetState extends State<AllFilterModalBottomSheet> {
                       }
 
                       // Get unique book types from the stories
-                      List<BookType> bookTypes = snapshot.data!.docs
-                          .map((doc) {
-                            StoryModel story = StoryModel.fromFirestore(doc);
-                            return story.bookType!;
-                          })
-                          .toSet()
-                          .toList();
 
                       return Wrap(
                         spacing: 8,
                         children: List<Widget>.generate(
                           bookTypes.length,
                           (index) => FilterChip(
-                            label: Text(getBookTypeString(bookTypes[index])),
+                            label: Text(bookTypes[index]),
                             onSelected: (selected) {
                               setState(() {
                                 if (selected) {
-                                  widget.selectedItems.addAll({
-                                    'book_type': bookTypes[index],
-                                    'book_type_name':
-                                        getBookTypeString(bookTypes[index]),
-                                  });
+                                  tempSelectedItems['book_type'] =
+                                      bookTypes[index];
                                 } else {
-                                  widget.selectedItems.remove('book_type');
+                                  tempSelectedItems.remove('book_type');
                                 }
                               });
                             },
-                            selected: widget.selectedItems['book_type'] ==
+                            selected: tempSelectedItems['book_type'] ==
                                 bookTypes[index],
+                            showCheckmark: false,
                           ),
                         ),
                       );
@@ -193,8 +190,27 @@ class _AllFilterModalBottomSheetState extends State<AllFilterModalBottomSheet> {
           padding: const EdgeInsets.all(16),
           child: FilledButton(
             onPressed: () {
-              widget.selectedItems.addAll({'apply': true});
-              Navigator.pop(context, widget.selectedItems);
+              try {
+                widget.updateSelectedItems(
+                    'category', tempSelectedItems['category']);
+                if (tempSelectedItems.containsKey('genre_id') &&
+                    (tempSelectedItems['genre_id'] as List).isNotEmpty) {
+                  // Kirim filter genre yang dipilih ke fungsi updateSelectedItems
+                  widget.updateSelectedItems(
+                      'genre_id', tempSelectedItems['genre_id']);
+                } else {
+                  // Jika genre filter kosong, kirim null atau daftar kosong
+                  widget.updateSelectedItems('genre_id', null);
+                }
+                widget.updateSelectedItems(
+                    'book_type', tempSelectedItems['book_type']);
+                setState(() {}); // Tambahkan setState di sini
+                if (Navigator.canPop(context)) {
+                  Navigator.pop(context, tempSelectedItems);
+                }
+              } catch (e) {
+                print('Error: $e');
+              }
             },
             child: const Text(
               'Pilih',

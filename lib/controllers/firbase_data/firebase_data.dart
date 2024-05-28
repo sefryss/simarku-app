@@ -113,25 +113,6 @@ class FireBaseData {
     return storyList;
   }
 
-  static getPopularList({int limit = 0}) {
-    if (limit != 0) {
-      return FirebaseFirestore.instance
-          .collection(KeyTable.storyList)
-          .where(KeyTable.isActive, isEqualTo: true)
-          .where(KeyTable.isPopular, isEqualTo: true)
-          .limit(limit)
-          .orderBy(KeyTable.index, descending: true)
-          .snapshots();
-    } else {
-      return FirebaseFirestore.instance
-          .collection(KeyTable.storyList)
-          .where(KeyTable.isActive, isEqualTo: true)
-          .where(KeyTable.isPopular, isEqualTo: true)
-          .orderBy(KeyTable.index, descending: true)
-          .snapshots();
-    }
-  }
-
   static getBebasBacaBookList({int limit = 0}) {
     if (limit != 0) {
       return FirebaseFirestore.instance
@@ -203,38 +184,104 @@ class FireBaseData {
         .snapshots();
   }
 
-  static getPhysicalBooks({int limit = 0}) {
-    if (limit != 0) {
-      return FirebaseFirestore.instance
-          .collection(KeyTable.storyList)
-          .where(KeyTable.isActive, isEqualTo: true)
-          .where(KeyTable.bookType, isEqualTo: 'Buku Fisik')
-          .limit(limit)
-          .snapshots();
-    } else {
-      return FirebaseFirestore.instance
-          .collection(KeyTable.storyList)
-          .where(KeyTable.bookType,
-              isEqualTo:
-                  'Buku Fisik') // Filter berdasarkan kategori 'Buku Fisik'
-          .snapshots();
+  // Di Firebase data, ubah filter genre untuk menangani kasus ketika genre filter kosong
+  static getPopularList({int limit = 0, Map<String, dynamic>? selectedItems}) {
+    Query query = FirebaseFirestore.instance
+        .collection(KeyTable.storyList)
+        .where(KeyTable.isActive, isEqualTo: true)
+        .where(KeyTable.isPopular, isEqualTo: true);
+
+    if (selectedItems != null && selectedItems.isNotEmpty) {
+      selectedItems.forEach((key, value) {
+        if (key != 'book_type') {
+          // Ubah kondisi untuk filter 'genre_id'
+          if (key == 'genre_id' && value != null) {
+            // Tambahkan pemeriksaan untuk nilai null
+            if (value is List) {
+              if (value.isNotEmpty) {
+                // Tambahkan pemeriksaan untuk daftar tidak kosong
+                query = query.where(key, arrayContainsAny: value);
+              }
+            }
+          } else {
+            query = query.where(key, isEqualTo: value);
+          }
+        }
+      });
+
+      if (selectedItems.containsKey('book_type')) {
+        query = query.where('book_type', isEqualTo: selectedItems['book_type']);
+      }
     }
+
+    if (limit != 0) {
+      query = query.limit(limit);
+    }
+
+    return query.orderBy(KeyTable.index, descending: true).snapshots();
   }
 
-  static getEBooks({int limit = 0}) {
-    if (limit != 0) {
-      return FirebaseFirestore.instance
-          .collection(KeyTable.storyList)
-          .where(KeyTable.isActive, isEqualTo: true)
-          .where(KeyTable.bookType, isEqualTo: 'E-Book')
-          .limit(limit)
-          .snapshots();
-    } else {
-      return FirebaseFirestore.instance
-          .collection(KeyTable.storyList)
-          .where(KeyTable.bookType,
-              isEqualTo: 'E-Book') // Filter berdasarkan kategori 'E-Book'
-          .snapshots();
+  static getPhysicalBooks(
+      {int limit = 0, Map<String, dynamic>? selectedItems}) {
+    Query query = FirebaseFirestore.instance
+        .collection(KeyTable.storyList)
+        .where(KeyTable.isActive, isEqualTo: true)
+        .where(KeyTable.bookType, isEqualTo: 'Buku Fisik');
+
+    if (selectedItems != null && selectedItems.isNotEmpty) {
+      selectedItems.forEach((key, value) {
+        if (key != 'book_type') {
+          // Ubah kondisi untuk filter 'genre_id'
+          if (key == 'genre_id' && value != null) {
+            // Tambahkan pemeriksaan untuk nilai null
+            if (value is List) {
+              if (value.isNotEmpty) {
+                // Tambahkan pemeriksaan untuk daftar tidak kosong
+                query = query.where(key, arrayContainsAny: value);
+              }
+            }
+          } else {
+            query = query.where(key, isEqualTo: value);
+          }
+        }
+      });
     }
+
+    if (limit != 0) {
+      query = query.limit(limit);
+    }
+    return query.orderBy(KeyTable.index, descending: true).snapshots();
+  }
+
+  static getEBooks({int limit = 0, Map<String, dynamic>? selectedItems}) {
+    Query query = FirebaseFirestore.instance
+        .collection(KeyTable.storyList)
+        .where(KeyTable.isActive, isEqualTo: true)
+        .where(KeyTable.bookType, isEqualTo: 'E-Book');
+
+    if (selectedItems != null && selectedItems.isNotEmpty) {
+      selectedItems.forEach((key, value) {
+        if (key != 'book_type') {
+          // Ubah kondisi untuk filter 'genre_id'
+          if (key == 'genre_id' && value != null) {
+            // Tambahkan pemeriksaan untuk nilai null
+            if (value is List) {
+              if (value.isNotEmpty) {
+                // Tambahkan pemeriksaan untuk daftar tidak kosong
+                query = query.where(key, arrayContainsAny: value);
+              }
+            }
+          } else {
+            query = query.where(key, isEqualTo: value);
+          }
+        }
+      });
+    }
+
+    if (limit != 0) {
+      query = query.limit(limit);
+    }
+
+    return query.orderBy(KeyTable.index, descending: true).snapshots();
   }
 }

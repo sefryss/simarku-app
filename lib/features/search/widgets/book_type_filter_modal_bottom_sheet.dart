@@ -1,14 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:simarku/models/models.dart';
 
 class BookTypeFilterModalBottomSheet extends StatefulWidget {
   const BookTypeFilterModalBottomSheet({
-    super.key,
+    Key? key,
     required this.selectedItems,
-  });
+    required this.updateSelectedItems,
+  }) : super(key: key);
 
   final Map<String, dynamic> selectedItems;
+  final Function(String, dynamic) updateSelectedItems;
 
   @override
   State<BookTypeFilterModalBottomSheet> createState() =>
@@ -17,8 +17,18 @@ class BookTypeFilterModalBottomSheet extends StatefulWidget {
 
 class _BookTypeFilterModalBottomSheetState
     extends State<BookTypeFilterModalBottomSheet> {
+  late Map<String, dynamic> tempSelectedItems;
+
+  @override
+  void initState() {
+    super.initState();
+    tempSelectedItems = Map.from(widget.selectedItems);
+  }
+
   @override
   Widget build(BuildContext context) {
+    const List<String> bookTypes = ['Buku Fisik', 'E-Book'];
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -33,62 +43,37 @@ class _BookTypeFilterModalBottomSheetState
             ),
           ),
         ),
-        StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection('books').snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Center(child: Text('Error: ${snapshot.error}'));
-            }
-
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
-            }
-
-            // Get unique book types from the stories
-            List<BookType> bookTypes = snapshot.data!.docs
-                .map((doc) {
-                  StoryModel story = StoryModel.fromFirestore(doc);
-                  return story.bookType!;
-                })
-                .toSet()
-                .toList();
-
-            return Padding(
-              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-              child: Wrap(
-                spacing: 8,
-                children: List<Widget>.generate(
-                  bookTypes.length,
-                  (index) => FilterChip(
-                    label: Text(getBookTypeString(bookTypes[index])),
-                    onSelected: (selected) {
-                      setState(() {
-                        if (selected) {
-                          widget.selectedItems.addAll({
-                            'book_type': bookTypes[index],
-                            'book_type_name':
-                                getBookTypeString(bookTypes[index]),
-                          });
-                        } else {
-                          widget.selectedItems.remove('book_type');
-                        }
-                      });
-                    },
-                    selected:
-                        widget.selectedItems['book_type'] == bookTypes[index],
-                  ),
-                ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          child: Wrap(
+            spacing: 8,
+            children: List<Widget>.generate(
+              bookTypes.length,
+              (index) => FilterChip(
+                label: Text(bookTypes[index]),
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      tempSelectedItems['book_type'] = bookTypes[index];
+                    } else {
+                      tempSelectedItems.remove('book_type');
+                    }
+                  });
+                },
+                selected: tempSelectedItems['book_type'] == bookTypes[index],
+                showCheckmark: false,
               ),
-            );
-          },
+            ),
+          ),
         ),
         const Divider(height: 1),
         Padding(
           padding: const EdgeInsets.all(16),
           child: FilledButton(
             onPressed: () {
-              widget.selectedItems.addAll({'apply': true});
-              Navigator.pop(context, widget.selectedItems);
+              widget.updateSelectedItems(
+                  'book_type', tempSelectedItems['book_type']);
+              Navigator.pop(context, tempSelectedItems);
             },
             child: const Text('Pilih'),
           ),

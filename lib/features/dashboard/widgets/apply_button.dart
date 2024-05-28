@@ -8,7 +8,7 @@ import '../../../utils/global/app_config.dart';
 
 class ApplyButton extends StatelessWidget {
   final Category? category;
-  final StoryModel book; // Add category property
+  final StoryModel book;
   const ApplyButton({super.key, required this.category, required this.book});
 
   @override
@@ -21,19 +21,19 @@ class ApplyButton extends StatelessWidget {
       case Category.tukarPinjam:
         buttonText = 'Tukar Pinjam';
         onTap = () {
-          Get.to(TukarPinjamBookView());
+          Get.to(() => TukarPinjamBookView());
         };
         break;
       case Category.tukarMilik:
         buttonText = 'Tukar Milik';
         onTap = () {
-          Get.to(TukarMilikBookView());
+          Get.to(() => TukarMilikBookView());
         };
         break;
       case Category.bebasBaca:
         buttonText = 'Baca Buku';
         onTap = () {
-          Get.to(ReadBookView(book: book));
+          Get.to(() => ReadBookView(book: book));
         };
         break;
       default:

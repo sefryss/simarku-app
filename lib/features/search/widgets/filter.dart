@@ -5,78 +5,95 @@ import 'package:simarku/features/search/widgets/book_type_filter_modal_bottom_sh
 import 'package:simarku/features/search/widgets/genre_filter_modal_bottom_sheet.dart';
 import 'package:simarku/utils/global/app_config.dart';
 
-class BookFilter extends StatelessWidget implements PreferredSizeWidget {
-  const BookFilter({super.key});
+class BookFilter extends StatefulWidget implements PreferredSizeWidget {
+  const BookFilter({
+    Key? key,
+    required this.selectedItems,
+    required this.updateSelectedItems,
+  }) : super(key: key);
+
+  final Map<String, dynamic> selectedItems;
+  final Function(String, dynamic) updateSelectedItems;
 
   @override
+  _BookFilterState createState() => _BookFilterState();
+
+  @override
+  Size get preferredSize => const Size.fromHeight(56);
+}
+
+class _BookFilterState extends State<BookFilter> {
+  @override
   Widget build(BuildContext context) {
-    final Map<String, dynamic> selectedItems = {};
     final theme = Theme.of(context);
     final filters = [
       CustomFilterChip(
         label: const Text('Kategori '),
-        onSelected: (_) {
-          // Handle the selection logic
+        onSelected: (selected) {
           showModalBottomSheet(
-              context: context,
-              showDragHandle: true,
-              backgroundColor: theme.scaffoldBackgroundColor,
-              isScrollControlled: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-              ),
-              builder: (context) {
-                return CategoryFilterModalBottomSheet(
-                    selectedItems: selectedItems);
-              });
+            context: context,
+            showDragHandle: true,
+            backgroundColor: theme.scaffoldBackgroundColor,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+            ),
+            builder: (context) {
+              return CategoryFilterModalBottomSheet(
+                selectedItems: widget.selectedItems,
+                updateSelectedItems: widget.updateSelectedItems,
+              );
+            },
+          );
         },
-        selected: false, // Set this based on your static data
+        selected: widget.selectedItems.containsKey('category'),
       ),
       CustomFilterChip(
         label: const Text('Genre'),
-        onSelected: (_) {
-          // Handle the selection logic
+        onSelected: (selected) {
           showModalBottomSheet(
-              context: context,
-              showDragHandle: true,
-              backgroundColor: theme.scaffoldBackgroundColor,
-              isScrollControlled: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-              ),
-              builder: (context) {
-                return GenreFilterModalBottomSheet(
-                    selectedItems: selectedItems);
-              });
+            context: context,
+            showDragHandle: true,
+            backgroundColor: theme.scaffoldBackgroundColor,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+            ),
+            builder: (context) {
+              return GenreFilterModalBottomSheet(
+                selectedItems: widget.selectedItems,
+                updateSelectedItems: widget.updateSelectedItems,
+              );
+            },
+          );
         },
-        selected: false, // Set this based on your static data
+        selected: widget.selectedItems.containsKey('genre_id'),
       ),
       CustomFilterChip(
-        label: const Text(
-          'Jenis Buku',
-        ),
-        onSelected: (_) {
-          // Handle the selection logic
+        label: const Text('Jenis Buku'),
+        onSelected: (selected) {
           showModalBottomSheet(
-              context: context,
-              showDragHandle: true,
-              backgroundColor: theme.scaffoldBackgroundColor,
-              isScrollControlled: true,
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-              ),
-              builder: (context) {
-                return BookTypeFilterModalBottomSheet(
-                    selectedItems: selectedItems);
-              });
+            context: context,
+            showDragHandle: true,
+            backgroundColor: theme.scaffoldBackgroundColor,
+            isScrollControlled: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+            ),
+            builder: (context) {
+              return BookTypeFilterModalBottomSheet(
+                selectedItems: widget.selectedItems,
+                updateSelectedItems: widget.updateSelectedItems,
+              );
+            },
+          );
         },
-        selected: false, // Set this based on your static data
+        selected: widget.selectedItems.containsKey('book_type'),
       ),
     ];
 
     return Container(
       height: 56,
-      // padding: const EdgeInsets.only(left: 16),
       child: Stack(
         alignment: Alignment.centerLeft,
         children: [
@@ -91,81 +108,99 @@ class BookFilter extends StatelessWidget implements PreferredSizeWidget {
               itemCount: filters.length,
             ),
           ),
-          const _FilterChip(),
+          _FilterChip(
+            selectedCount: widget.selectedItems.length,
+            selectedItems: widget.selectedItems,
+            updateSelectedItems: widget.updateSelectedItems,
+          ),
         ],
       ),
     );
   }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(56);
 }
 
 class _FilterChip extends StatelessWidget {
-  const _FilterChip();
+  const _FilterChip({
+    required this.selectedItems,
+    required this.updateSelectedItems,
+    required this.selectedCount,
+  });
+
+  final Map<String, dynamic> selectedItems;
+  final Function(String, dynamic) updateSelectedItems;
+  final int selectedCount;
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
+
     const contentColor = Color(0xFF697586);
     const iconTheme = IconThemeData(size: 18, color: contentColor);
 
-    return Badge.count(
-      count: 0,
-      backgroundColor: AppColors.primary,
-      child: FilterChip.elevated(
-        elevation: 2,
-        surfaceTintColor: Colors.white,
-        padding: const EdgeInsets.all(8),
-        label: const SizedBox(
-          height: 20,
-          child:
-              IconTheme(data: iconTheme, child: Icon(Icons.filter_alt_rounded)),
-        ),
-        selected: false,
-        onSelected: (value) {
-          final size = MediaQuery.of(context).size;
-          final theme = Theme.of(context);
-          Map<String, dynamic> selectedItems = {}; // Define selectedItems here
+    final isVisibleCount = selectedCount > 0;
 
-          showModalBottomSheet<Map<String, dynamic>>(
-            context: context,
-            builder: (context) {
-              // Add the 'builder' parameter
+    return isVisibleCount
+        ? Badge.count(
+            count: selectedCount,
+            backgroundColor: AppColors.primary,
+            child: _buildFilterChip(context, size, theme, iconTheme),
+          )
+        : _buildFilterChip(context, size, theme, iconTheme);
+  }
 
-              return Container(
-                  // Replace with the actual content of your bottom sheet
-                  constraints: BoxConstraints(maxHeight: size.height * 0.8),
-                  decoration: BoxDecoration(
-                    color: theme.scaffoldBackgroundColor,
-                    borderRadius:
-                        const BorderRadius.vertical(top: Radius.circular(8)),
-                  ),
-                  child: AllFilterModalBottomSheet(
-                      selectedItems:
-                          selectedItems) // Replace with your actual content
-                  );
-            },
-            constraints: BoxConstraints(maxHeight: size.height * 0.8),
-            showDragHandle: true,
-            backgroundColor: theme.scaffoldBackgroundColor,
-            isScrollControlled: true,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
-            ),
-          );
-        },
+  Widget _buildFilterChip(BuildContext context, Size size, ThemeData theme,
+      IconThemeData iconTheme) {
+    return FilterChip.elevated(
+      showCheckmark: false,
+      elevation: 2,
+      surfaceTintColor: Colors.white,
+      padding: const EdgeInsets.all(8),
+      label: SizedBox(
+        height: 20,
+        child:
+            IconTheme(data: iconTheme, child: Icon(Icons.filter_alt_rounded)),
       ),
+      selected: false,
+      onSelected: (value) {
+        showModalBottomSheet<Map<String, dynamic>>(
+          context: context,
+          builder: (context) {
+            return Container(
+              constraints: BoxConstraints(maxHeight: size.height * 0.8),
+              decoration: BoxDecoration(
+                color: theme.scaffoldBackgroundColor,
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(8)),
+              ),
+              child: AllFilterModalBottomSheet(
+                selectedItems: selectedItems,
+                updateSelectedItems: (key, value) {
+                  updateSelectedItems(key, value);
+                },
+              ),
+            );
+          },
+          constraints: BoxConstraints(maxHeight: size.height * 0.8),
+          showDragHandle: true,
+          backgroundColor: theme.scaffoldBackgroundColor,
+          isScrollControlled: true,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+          ),
+        );
+      },
     );
   }
 }
 
 class CustomFilterChip extends StatelessWidget {
   const CustomFilterChip({
-    super.key,
+    Key? key,
     required this.label,
     this.onSelected,
     this.selected = false,
-  });
+  }) : super(key: key);
 
   final Widget label;
   final ValueChanged<bool>? onSelected;
@@ -173,23 +208,24 @@ class CustomFilterChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const contentColor = Color(0xFF697586);
-    const iconTheme = IconThemeData(size: 18, color: contentColor);
-
+    final theme = Theme.of(context);
     return FilterChip(
+      showCheckmark: false,
       padding: const EdgeInsets.only(left: 16, top: 8, right: 8, bottom: 8),
       label: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           label,
           const SizedBox(width: 8),
-          const IconTheme(
-            data: iconTheme,
-            child: Icon(Icons.keyboard_arrow_down_rounded),
+          const Icon(
+            Icons.keyboard_arrow_down_rounded,
+            size: 18,
+            color: Color(0xFF697586),
           ),
         ],
       ),
       selected: selected,
+      backgroundColor: selected ? theme.scaffoldBackgroundColor : null,
       onSelected: onSelected,
       side: BorderSide(color: AppColors.neutral04),
     );

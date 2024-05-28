@@ -36,9 +36,9 @@ class _ReadBookViewState extends State<ReadBookView> {
   void initState() {
     super.initState();
     getBytes();
-    pdfPinchController = PdfControllerPinch(
-      document: PdfDocument.openData(InternetFile.get(widget.book.pdf ?? "")),
-    );
+    // pdfPinchController = PdfControllerPinch(
+    //   document: PdfDocument.openData(InternetFile.get(widget.book.pdf ?? "")),
+    // );
     addViewStory();
   }
 
@@ -103,8 +103,8 @@ class _ReadBookViewState extends State<ReadBookView> {
                       ),
                       documentLoaderBuilder: (context) =>
                           getLottieAnimationWidget(),
-                      pageLoaderBuilder: (context) =>
-                          getLottieAnimationWidget(),
+                      //   pageLoaderBuilder: (context) =>
+                      //       getLottieAnimationWidget(),
                       errorBuilder: (context, error) =>
                           Center(child: Text(error.toString())),
                       builder: SomeWidget.builder,
