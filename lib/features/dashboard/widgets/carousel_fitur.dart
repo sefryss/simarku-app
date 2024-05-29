@@ -82,7 +82,7 @@ class CarouselFiturItems {
     CarouselFiturInfo(
       title: 'Tukar Pinjam',
       description:
-          'Kamu mempunyai buku yang \njarang kamu baca? lebih baik \nTukar Pinjam.',
+          'Bosan dengan koleksi buku yang kamu punya? \n  Ingin membaca buku yang lain? \nAyo, coba Tukar Pinjam! ',
       image: 'assets/icons/carousel_tukar_pinjam.svg',
     ),
     CarouselFiturInfo(
