@@ -25,7 +25,7 @@ class VerifyEmailController extends GetxController {
           title: 'Email Terkirim',
           message: 'Tolong cek inbox kamu dan konfirmasi email kamu.');
     } catch (e) {
-      SMLoaders.errorSnackBar(title: 'Oh Snap', message: e.toString());
+      SMLoaders.errorSnackBar(title: 'Oops', message: e.toString());
     }
   }
 

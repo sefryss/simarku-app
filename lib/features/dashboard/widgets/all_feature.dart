@@ -301,10 +301,10 @@ class AllFeature extends StatelessWidget {
                                 ),
                               ),
 
-                              //Fitur Sekilas Ilmu
+                              //Fitur Bebas Baca
                               GestureDetector(
                                 onTap: () => Get.to(
-                                  () => AllArticlePage(),
+                                  () => AllBebasBacaView(),
                                 ),
                                 child: Column(
                                   children: [
@@ -319,7 +319,7 @@ class AllFeature extends StatelessWidget {
                                         SizedBox(
                                           width: 32,
                                           child: Image.asset(
-                                              'assets/icons/sekilas ilmu.png'),
+                                              'assets/icons/icon_bebas_baca.png'),
                                         ),
                                       ],
                                     ),
@@ -327,7 +327,7 @@ class AllFeature extends StatelessWidget {
                                       height: 8,
                                     ),
                                     const Text(
-                                      'Seklias \nIlmu',
+                                      'Bebas \nBaca',
                                       style: AppTextStyle.body4Medium,
                                       textAlign: TextAlign.center,
                                     ),
@@ -342,10 +342,10 @@ class AllFeature extends StatelessWidget {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              //Fitur Bebas Baca
+                              //Fitur Sekilas Info
                               GestureDetector(
                                 onTap: () {
-                                  Get.to(() => AllBebasBacaView());
+                                  Get.to(() => AllArticlePage());
                                 },
                                 child: Column(
                                   children: [
@@ -368,7 +368,7 @@ class AllFeature extends StatelessWidget {
                                       height: 8,
                                     ),
                                     const Text(
-                                      'Bebas Baca',
+                                      'Sekilas \nInfo',
                                       style: AppTextStyle.body4Medium,
                                       textAlign: TextAlign.center,
                                     ),

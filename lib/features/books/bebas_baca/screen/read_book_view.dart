@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pdfx/pdfx.dart';
+import 'package:simarku/controllers/books/detail_book_controller.dart';
 import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/constant.dart';
 import 'package:simarku/utils/constantWidget.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/network/network_manager.dart';
+import 'package:simarku/utils/pref_data.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 import 'package:internet_file/internet_file.dart';
 
@@ -32,13 +34,15 @@ class _ReadBookViewState extends State<ReadBookView> {
     });
   }
 
+  RecentController recentController = Get.put(RecentController());
+
   @override
   void initState() {
     super.initState();
     getBytes();
-    // pdfPinchController = PdfControllerPinch(
-    //   document: PdfDocument.openData(InternetFile.get(widget.book.pdf ?? "")),
-    // );
+    PrefData.setRecentReadBook(widget.book.pdf ?? "");
+    PrefData.setRecentReadBookName(widget.book.name ?? "");
+    recentController.setRecentList(widget.book.id.toString());
     addViewStory();
   }
 
@@ -48,12 +52,15 @@ class _ReadBookViewState extends State<ReadBookView> {
         FirebaseStorage.instanceFor(bucket: 'e-book-a4896.appspot.com');
 
     Reference pdfRef = storage.refFromURL(widget.book.pdf ?? "");
-    await pdfRef.getDownloadURL().then((value) => print(""));
-    await pdfRef.getData(104857600).then((value) {
-      _pdfBytes = value;
-
-      print("pdfBytes---${_pdfBytes!.length}");
-      setState(() {});
+    await pdfRef.getDownloadURL().then((url) async {
+      _pdfBytes = await InternetFile.get(url);
+      setState(() {
+        pdfPinchController = PdfControllerPinch(
+          document: PdfDocument.openData(_pdfBytes!),
+        );
+      });
+    }).catchError((error) {
+      print("Error getting PDF data: $error");
     });
   }
 
@@ -85,11 +92,9 @@ class _ReadBookViewState extends State<ReadBookView> {
             } else {
               final isConnected = snapshot.data ?? false;
               if (isConnected) {
-                // Initialize the pdfPinchController here
-                pdfPinchController = PdfControllerPinch(
-                  document: PdfDocument.openData(
-                      InternetFile.get(widget.book.pdf ?? "")),
-                );
+                if (pdfPinchController == null) {
+                  return Center(child: CircularProgressIndicator());
+                }
 
                 return Container(
                   color: context.theme.focusColor,
@@ -103,8 +108,6 @@ class _ReadBookViewState extends State<ReadBookView> {
                       ),
                       documentLoaderBuilder: (context) =>
                           getLottieAnimationWidget(),
-                      //   pageLoaderBuilder: (context) =>
-                      //       getLottieAnimationWidget(),
                       errorBuilder: (context, error) =>
                           Center(child: Text(error.toString())),
                       builder: SomeWidget.builder,

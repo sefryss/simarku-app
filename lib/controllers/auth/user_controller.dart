@@ -86,7 +86,7 @@ class UserController extends GetxController {
       }
     } catch (e) {
       SMLoaders.errorSnackBar(
-          title: 'Oh Snap', message: 'Terjadi kesalahan $e');
+          title: 'Oops', message: 'Terjadi kesalahan $e');
     } finally {
       imageUploading.value = false;
     }

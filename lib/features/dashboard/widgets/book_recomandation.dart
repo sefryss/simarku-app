@@ -33,7 +33,7 @@ class BookRecommendation extends StatelessWidget {
           return ListView.separated(
             scrollDirection: Axis.horizontal,
             itemCount: filteredBookList.length,
-            separatorBuilder: (context, index) => const SizedBox(width: 16),
+            separatorBuilder: (context, index) => const SizedBox(width: 0),
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () => Get.to(

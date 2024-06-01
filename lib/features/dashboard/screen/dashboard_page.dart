@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:simarku/controllers/auth/user_controller.dart';
 import 'package:simarku/features/article/screen/all_article/screen/all_article_page.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
+import 'package:simarku/features/home/home_page.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 
@@ -13,6 +14,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(UserController());
+    final navController = Get.find<NavigationController>();
     return Scaffold(
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
@@ -36,14 +38,20 @@ class DashboardPage extends StatelessWidget {
                               final networkImage =
                                   controller.user.value.profilePicture;
                               final image = networkImage;
-                              return controller.imageUploading.value
-                                  ? const SMShimmerWidget(height: 56, width: 56)
-                                  : SMCircularImage(
-                                      image: image,
-                                      // width: 80,
-                                      // height: 80,
-                                      isNetworkImage: networkImage.isNotEmpty,
-                                    );
+                              return InkWell(
+                                onTap: () {
+                                  navController.selectedIndex.value = 3;
+                                },
+                                child: controller.imageUploading.value
+                                    ? const SMShimmerWidget(
+                                        height: 56, width: 56)
+                                    : SMCircularImage(
+                                        image: image,
+                                        // width: 80,
+                                        // height: 80,
+                                        isNetworkImage: networkImage.isNotEmpty,
+                                      ),
+                              );
                             }),
                             const SizedBox(
                               width: 16,
@@ -119,9 +127,24 @@ class DashboardPage extends StatelessWidget {
                   const SizedBox(
                     height: 24,
                   ),
-                  Text(
-                    'Kegiatan Literasi',
-                    style: AppTextStyle.body2Medium,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Kegiatan Literasi',
+                        style: AppTextStyle.body2Medium,
+                      ),
+                      InkWell(
+                        onTap: () {
+                          //   Get.to(() => AllArticlePage());
+                        },
+                        child: Text(
+                          'Lihat Semua',
+                          style: AppTextStyle.body3Medium
+                              .copyWith(color: AppColors.primary),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 16.0,
@@ -134,7 +157,7 @@ class DashboardPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Sekilas Ilmu',
+                        'Sekilas Info',
                         style: AppTextStyle.body2Medium,
                       ),
                       InkWell(
@@ -142,7 +165,7 @@ class DashboardPage extends StatelessWidget {
                           Get.to(() => AllArticlePage());
                         },
                         child: Text(
-                          'Lebih Banyak',
+                          'Lihat Semua',
                           style: AppTextStyle.body3Medium
                               .copyWith(color: AppColors.primary),
                         ),

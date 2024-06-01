@@ -46,7 +46,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: searchField(context, 'Cari Buku', textEditingController,
                     onChanged: (value) {
                   setState(() {
-                    queryText.value = value; // Update queryText
+                    queryText.value = value; 
                   });
                 }),
               ),

@@ -30,7 +30,7 @@ class PhysicalBookWidget extends StatelessWidget {
             InkWell(
               onTap: () => Get.to(() => PhysicalBookView()),
               child: Text(
-                'Lebih Banyak',
+                'Lihat Semua',
                 style:
                     AppTextStyle.body3Medium.copyWith(color: AppColors.primary),
               ),

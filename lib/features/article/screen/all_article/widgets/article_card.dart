@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:simarku/controllers/sekilas_info/sekilas_info_controller.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/models/models.dart';
 
 class ArticleCard extends StatelessWidget {
-  final Article article;
+  final SekilasInfoModel article;
   const ArticleCard({
     super.key,
     required this.article,
@@ -11,20 +13,27 @@ class ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final SekilasInfoController controller = Get.put(SekilasInfoController());
+
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: SizedBox(
-        height: 100,
+        height: 115,
         child: Row(
           children: [
             Container(
               width: 132,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(8),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(article.thumbnail),
-                ),
+                image: article.image != null && article.image!.isNotEmpty
+                    ? DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(article.image!),
+                      )
+                    : null,
+                color: article.image == null || article.image!.isEmpty
+                    ? Colors.grey[200]
+                    : null,
               ),
             ),
             SizedBox(
@@ -35,13 +44,13 @@ class ArticleCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    article.createdAt,
+                    article.date!,
                     style: AppTextStyle.body3Regular
                         .copyWith(color: AppColors.neutral06),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    article.title,
+                    article.title!,
                     style: AppTextStyle.body2SemiBold,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -51,17 +60,18 @@ class ArticleCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        article.author,
+                        article.author!,
                         style: AppTextStyle.body3Medium
                             .copyWith(color: AppColors.neutral06),
                       ),
                       const Spacer(),
-                      Icon(
-                        article.isFavorite
-                            ? Icons.bookmark
-                            : Icons.bookmark_outline,
-                        color: AppColors.primary,
-                        // size: 16,
+                      Obx(
+                        () => Icon(
+                          color: AppColors.primary,
+                          controller.bookMarkList.contains(article.id)
+                              ? Icons.bookmark
+                              : Icons.bookmark_outline,
+                        ),
                       ),
                     ],
                   )

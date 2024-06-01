@@ -30,7 +30,7 @@ class EBookWidget extends StatelessWidget {
             InkWell(
               onTap: () => Get.to(() => EBookView()),
               child: Text(
-                'Lebih Banyak',
+                'Lihat Semua',
                 style:
                     AppTextStyle.body3Medium.copyWith(color: AppColors.primary),
               ),

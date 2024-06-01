@@ -1,16 +1,52 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:simarku/controllers/books/detail_book_controller.dart';
 import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
 import 'package:simarku/utils/constantWidget.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/models/models.dart';
+import 'package:simarku/utils/loaders/loaders.dart';
 import 'package:simarku/utils/shared_widgets/sm_back_button.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 
-class DetailBook extends StatelessWidget {
+class DetailBook extends StatefulWidget {
   final StoryModel book;
   const DetailBook({super.key, required this.book});
+
+  @override
+  _DetailBookState createState() => _DetailBookState();
+}
+
+class _DetailBookState extends State<DetailBook> {
+  final DetailBookScreenController controller =
+      Get.put(DetailBookScreenController());
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(Duration.zero, () async {
+      controller.getFavDataList();
+      controller.getBookMarkList();
+    });
+
+    Future.delayed(
+      Duration.zero,
+      () {
+        controller.checkInFav(widget.book.id.toString());
+      },
+    );
+
+    Future.delayed(
+      Duration.zero,
+      () {
+        controller.checkInBookMark(widget.book.id.toString());
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +62,29 @@ class DetailBook extends StatelessWidget {
           'Detail Buku',
           style: TextStyle(color: Colors.white),
         ),
+        actions: [
+          GetBuilder<DetailBookScreenController>(
+            init: DetailBookScreenController(),
+            builder: (controller) {
+              return IconButton(
+                icon: SvgPicture.asset(controller.save.value
+                    ? "assets/images/white_fill_save.svg"
+                    : "assets/images/white_border_save_icon.svg"),
+                onPressed: () {
+                  controller.checkInBookMarkList(widget.book);
+                  controller.checkInBookMark(widget.book.id ?? "");
+                  if (controller.save.value) {
+                    SMLoaders.successSnackBar(
+                        message: 'Ditandai sebagai favorit', title: 'Berhasil');
+                  } else {
+                    SMLoaders.errorSnackBar(
+                        message: 'Dihapus dari favorit', title: 'Berhasil');
+                  }
+                },
+              );
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -45,7 +104,7 @@ class DetailBook extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           image: DecorationImage(
-                            image: NetworkImage(book.image ?? ''),
+                            image: NetworkImage(widget.book.image ?? ''),
                           ),
                         ),
                       ),
@@ -78,13 +137,13 @@ class DetailBook extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  book.name ?? '',
+                                  widget.book.name ?? '',
                                   style: AppTextStyle.heading5SemiBold,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
                                 Text(
-                                  book.author ?? '',
+                                  widget.book.author ?? '',
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                   style: AppTextStyle.body2Regular
@@ -99,17 +158,15 @@ class DetailBook extends StatelessWidget {
                         height: 8,
                       ),
                       StreamBuilder<QuerySnapshot>(
-                        stream:
-                            FireBaseData.getGenreById(id: book.genreId ?? []),
+                        stream: FireBaseData.getGenreById(
+                            id: widget.book.genreId ?? []),
                         builder: (context, snapshot) {
                           if (snapshot.data != null &&
                               snapshot.connectionState ==
                                   ConnectionState.active) {
                             List<DocumentSnapshot> list = snapshot.data!.docs;
-
                             String genre = FireBaseData.getGenreName(
-                                genre: book.genreId!, list: list);
-
+                                genre: widget.book.genreId!, list: list);
                             return Text(
                               'Genre: ${genre}',
                               style: AppTextStyle.body3Regular
@@ -124,7 +181,15 @@ class DetailBook extends StatelessWidget {
                         height: 4.0,
                       ),
                       Text(
-                        'Penerbit: ${book.publisher ?? ''}',
+                        'Penerbit: ${widget.book.publisher ?? ''}',
+                        style: AppTextStyle.body3Regular
+                            .copyWith(color: AppColors.neutral08),
+                      ),
+                      const SizedBox(
+                        height: 4.0,
+                      ),
+                      Text(
+                        'Jenis Buku: ${getBookTypeString(widget.book.bookType!)}',
                         style: AppTextStyle.body3Regular
                             .copyWith(color: AppColors.neutral08),
                       ),
@@ -148,7 +213,7 @@ class DetailBook extends StatelessWidget {
                       ),
                       HtmlWidget(
                         decode(
-                          book.desc ?? '',
+                          widget.book.desc ?? '',
                         ),
                         textStyle: AppTextStyle.body3Regular
                             .copyWith(color: AppColors.neutral08),
@@ -161,114 +226,119 @@ class DetailBook extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
-          bottom: 24,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(
-              height: 16,
+      bottomNavigationBar: Stack(
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              left: 16,
+              right: 16,
+              bottom: 24,
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              height: 68,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8),
-                  color: AppColors.neutral01),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                const SizedBox(
+                  height: 16,
+                ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                  height: 68,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    color: AppColors.neutral01,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'Rilis',
-                        style: AppTextStyle.body3Regular,
-                      ),
-                      const SizedBox(
-                        height: 2,
-                      ),
-                      Text(
-                        book.releaseDate ?? '',
-                        style: AppTextStyle.body3Medium,
-                      ),
-                    ],
-                  ),
-                  VerticalDivider(
-                    thickness: 1,
-                    color: AppColors.neutral08,
-                  ),
-                  StreamBuilder<QuerySnapshot>(
-                    stream: FireBaseData.getOwnerById(id: book.ownerId ?? []),
-                    builder: (context, snapshot) {
-                      if (snapshot.data != null &&
-                          snapshot.connectionState == ConnectionState.active) {
-                        List<DocumentSnapshot> list = snapshot.data!.docs;
-
-                        String owner = FireBaseData.getOwnerName(
-                            owner: book.ownerId!, list: list);
-
-                        return Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                'Pemilik',
-                                style: AppTextStyle.body3Regular,
-                              ),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                              Text(
-                                owner,
-                                style: AppTextStyle.body3Medium
-                                    .copyWith(color: AppColors.primary),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+                      Column(
+                        children: [
+                          Text(
+                            'Rilis',
+                            style: AppTextStyle.body3Regular,
                           ),
-                        );
-                      } else {
-                        return Text('');
-                      }
-                    },
-                  ),
-                  VerticalDivider(
-                    thickness: 1,
-                    color: AppColors.neutral08,
-                  ),
-                  Column(
-                    children: [
-                      Text(
-                        'Halaman',
-                        style: AppTextStyle.body3Regular,
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            widget.book.releaseDate ?? '',
+                            style: AppTextStyle.body3Medium,
+                          ),
+                        ],
                       ),
-                      const SizedBox(
-                        height: 2,
+                      VerticalDivider(
+                        thickness: 1,
+                        color: AppColors.neutral08,
                       ),
-                      Text(
-                        book.page ?? '',
-                        style: AppTextStyle.body3Medium,
+                      StreamBuilder<QuerySnapshot>(
+                        stream: FireBaseData.getOwnerById(
+                            id: widget.book.ownerId ?? []),
+                        builder: (context, snapshot) {
+                          if (snapshot.data != null &&
+                              snapshot.connectionState ==
+                                  ConnectionState.active) {
+                            List<DocumentSnapshot> list = snapshot.data!.docs;
+                            String owner = FireBaseData.getOwnerName(
+                                owner: widget.book.ownerId!, list: list);
+                            return Expanded(
+                              child: Column(
+                                children: [
+                                  Text(
+                                    'Pemilik',
+                                    style: AppTextStyle.body3Regular,
+                                  ),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(
+                                    owner,
+                                    style: AppTextStyle.body3Medium
+                                        .copyWith(color: AppColors.primary),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
+                            );
+                          } else {
+                            return Text('');
+                          }
+                        },
+                      ),
+                      VerticalDivider(
+                        thickness: 1,
+                        color: AppColors.neutral08,
+                      ),
+                      Column(
+                        children: [
+                          Text(
+                            'Halaman',
+                            style: AppTextStyle.body3Regular,
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            widget.book.page ?? '',
+                            style: AppTextStyle.body3Medium,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                ApplyButton(
+                  book: widget.book,
+                  category: widget.book.category,
+                ),
+              ],
             ),
-            const SizedBox(
-              height: 12,
-            ),
-            ApplyButton(
-                book: book,
-              category: book.category,
-            )
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -45,7 +45,7 @@ class ForgetPasswordController extends GetxController {
     } catch (e) {
       // Remove Loaders
       SMFullScreenLoader.stopLoading();
-      SMLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      SMLoaders.errorSnackBar(title: 'Oops!', message: e.toString());
     }
   }
 
@@ -76,7 +76,7 @@ class ForgetPasswordController extends GetxController {
     } catch (e) {
       // Remove Loaders
       SMFullScreenLoader.stopLoading();
-      SMLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      SMLoaders.errorSnackBar(title: 'Oops!', message: e.toString());
     }
   }
 }

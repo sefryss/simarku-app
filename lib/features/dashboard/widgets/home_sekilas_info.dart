@@ -1,77 +1,48 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/features/article/screen/detail_article/screen/detail_article_page.dart';
+import 'package:simarku/models/sekilas_info_model.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/models/models.dart';
-
-class HomeArticle extends StatelessWidget {
-  const HomeArticle({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 200,
-      child: ListView(
-        children: [
-          _TitleSection(),
-          ListArticle(),
-        ],
-      ),
-    );
-  }
-}
 
 class ListArticle extends StatelessWidget {
   const ListArticle();
 
   @override
   Widget build(BuildContext context) {
-    List<Article> filteredArticlekList =
-        List<Article>.from(articleList).sublist(0, 6);
-    return SizedBox(
+    return Container(
       height: 300,
-      child: ListView.separated(
-        // padding: const EdgeInsets.symmetric(horizontal: 16),
-        scrollDirection: Axis.horizontal,
-        itemBuilder: (context, index) => InkWell(
-            onTap: () => Get.to(
-                  () => DetailArticle(
-                    article: filteredArticlekList[index],
-                  ),
-                ),
-            child: _ArticleCard(article: filteredArticlekList[index])),
-        separatorBuilder: (context, index) => const SizedBox(
-          width: 16,
-        ),
-        itemCount: filteredArticlekList.length,
-      ),
-    );
-  }
-}
+      child: StreamBuilder<QuerySnapshot>(
+        stream: FireBaseData.getSekilasInfoList(),
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CircularProgressIndicator());
+          }
 
-class _TitleSection extends StatelessWidget {
-  const _TitleSection();
+          List<SekilasInfoModel> sekilasInfoList = snapshot.data!.docs
+              .map((doc) => SekilasInfoModel.fromFirestore(doc))
+              .toList();
 
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      title: const Text(
-        'Artikel',
-        style: TextStyle(
-          fontWeight: FontWeight.w700,
-          fontSize: 16,
-        ),
-      ),
-      trailing: InkWell(
-        onTap: () {},
-        child: const Text(
-          'Lebih Banyak',
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 12,
-            color: Color(0xFF666666),
-          ),
-        ),
+          return SizedBox(
+            height: 300,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) => InkWell(
+                  onTap: () => Get.to(
+                        () => DetailArticle(
+                          article: sekilasInfoList[index],
+                        ),
+                      ),
+                  child: _ArticleCard(article: sekilasInfoList[index])),
+              separatorBuilder: (context, index) => const SizedBox(
+                width: 16,
+              ),
+              itemCount: sekilasInfoList.length,
+            ),
+          );
+        },
       ),
     );
   }
@@ -80,7 +51,7 @@ class _TitleSection extends StatelessWidget {
 class _ArticleCard extends StatelessWidget {
   const _ArticleCard({required this.article});
 
-  final Article article;
+  final SekilasInfoModel article;
 
   @override
   Widget build(BuildContext context) {
@@ -116,32 +87,42 @@ class _ArticleCard extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: AppColors.neutral03),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        article.thumbnail,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    child: article.image != null && article.image!.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: Image.network(
+                              article.image!,
+                              fit: BoxFit.cover,
+                            ),
+                          )
+                        : Container(
+                            height: 150,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: AppColors.neutral03),
+                              color: Colors.grey[200],
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  article.createdAt,
+                  article.date ?? '',
                   style: AppTextStyle.body3Regular,
                 ),
                 const SizedBox(
                   height: 8,
                 ),
                 Text(
-                  article.title,
+                  article.title ?? '',
                   style: AppTextStyle.body2SemiBold,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 const Spacer(),
                 Text(
-                  article.author,
+                  article.author ?? '',
                   style: AppTextStyle.body3Regular,
                 ),
                 const SizedBox(

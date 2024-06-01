@@ -263,61 +263,61 @@ showCustomToast(
       fontSize: 20.sp);
 }
 
-// Widget getCustumAppbar(
-//     {Color? color,
-//     String? leftIcon,
-//     Color? titlecolor,
-//     Color? givecolor,
-//     String? title,
-//     String? rightIcon,
-//     bool leftPermission = true,
-//     bool rightPermission = true,
-//     bool titlePermission = true,
-//     bool colorPermition = true,
-//     Function? leftFunction,
-//     Function? rightFunction}) {
-//   return Container(
-//     color: colorPermition ? givecolor : bgColor,
-//     child: Row(
-//       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//       children: [
-//         leftPermission
-//             ? GestureDetector(
-//                 onTap: () {
-//                   leftFunction!();
-//                 },
-//                 child: getSvgImage(leftIcon!))
-//             : const SizedBox(),
-//         titlePermission
-//             ? Expanded(
-//                 flex: 1,
-//                 child: Row(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Expanded(
-//                       flex: 1,
-//                       child: getCustomFont(
-//                           title!, 24.sp, titlecolor ?? regularBlack, 1,
-//                           fontWeight: FontWeight.w700,
-//                           textAlign: TextAlign.center),
-//                     ),
-//                   ],
-//                 ),
-//               )
-//             : const SizedBox(),
-//         rightPermission
-//             ? GestureDetector(
-//                 onTap: () {
-//                   rightFunction!();
-//                 },
-//                 child: getSvgImage(rightIcon!))
-//             : SizedBox(
-//                 width: 20.h,
-//               ),
-//       ],
-//     ).paddingSymmetric(horizontal: 20.h, vertical: 20.h),
-//   );
-// }
+Widget getCustumAppbar(
+    {Color? color,
+    String? leftIcon,
+    Color? titlecolor,
+    Color? givecolor,
+    String? title,
+    String? rightIcon,
+    bool leftPermission = true,
+    bool rightPermission = true,
+    bool titlePermission = true,
+    bool colorPermition = true,
+    Function? leftFunction,
+    Function? rightFunction}) {
+  return Container(
+    color: colorPermition ? givecolor : bgColor,
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        leftPermission
+            ? GestureDetector(
+                onTap: () {
+                  leftFunction!();
+                },
+                child: getSvgImage(leftIcon!))
+            : const SizedBox(),
+        titlePermission
+            ? Expanded(
+                flex: 1,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: getCustomFont(
+                          title!, 24.sp, titlecolor ?? regularBlack, 1,
+                          fontWeight: FontWeight.w700,
+                          textAlign: TextAlign.center),
+                    ),
+                  ],
+                ),
+              )
+            : const SizedBox(),
+        rightPermission
+            ? GestureDetector(
+                onTap: () {
+                  rightFunction!();
+                },
+                child: getSvgImage(rightIcon!))
+            : SizedBox(
+                width: 20.h,
+              ),
+      ],
+    ).paddingSymmetric(horizontal: 20.h, vertical: 20.h),
+  );
+}
 
 
 bool isNotEmpty(String s) {

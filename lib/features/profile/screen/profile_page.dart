@@ -130,22 +130,22 @@ class ProfilePage extends StatelessWidget {
               /// Menu Profile
               ProfileMenuWidget(
                 icon: 'assets/icons/icon_about_us.svg',
-                title: 'About Us',
+                title: 'Tentang Kami',
                 onTap: () {},
               ),
               ProfileMenuWidget(
                 icon: 'assets/icons/icon_rate_us.svg',
-                title: 'Rate Us',
+                title: 'Nilai Kami',
                 onTap: () {},
               ),
               ProfileMenuWidget(
                 icon: 'assets/icons/icon_feedback.svg',
-                title: 'FeedBack',
+                title: 'Umpan Balik',
                 onTap: () {},
               ),
               ProfileMenuWidget(
                 icon: 'assets/icons/icon_tnc.svg',
-                title: 'Terms & Conditions',
+                title: 'Kebijakan Privasi',
                 onTap: () {},
               ),
               const SizedBox(

@@ -82,19 +82,19 @@ class CarouselFiturItems {
     CarouselFiturInfo(
       title: 'Tukar Pinjam',
       description:
-          'Bosan dengan koleksi buku yang kamu punya? \nIngin membaca buku yang lain? \nAyo, coba Tukar Pinjam!',
+          'Bosan dengan koleksi buku kamu? \nIngin membaca buku yang lain? \nAyo, coba Tukar Pinjam!',
       image: 'assets/icons/carousel_tukar_pinjam.svg',
     ),
     CarouselFiturInfo(
       title: 'Tukar Milik',
       description:
-          'Tidak puas dengan buku bacaan yang kamu punya. \nMungkin dengan menukarnya bisa menjadi solusi. \Mulai Tukar Buku dengan bookmates lainnya!',
+          'Tidak puas dengan buku kamu? \nMenukarnya bisa menjadi solusi. \nAyo, coba Tukar Milik!',
       image: 'assets/icons/carousel_book_swap.svg',
     ),
     CarouselFiturInfo(
       title: 'Donasi Buku',
       description:
-          'Donasi tidak selalu berbentuk uang. Kamu dapat  \nberkontribusi lewat buku juga lho, \njadi tunggu apa lagi? Donasikan bukumu disini.',
+          'Donasi tidak selalu berbentuk uang.\nBisa juga dengan buku, \nMari donasikan bukumu disini.',
       image: 'assets/icons/carousel_donation.svg',
     ),
   ];

@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserModel {
   final String id;
- String fullName;
-   String nikNumber;
-   String phoneNumber;
-   String address;
+  String fullName;
+  String nikNumber;
+  String phoneNumber;
+  String address;
   final String email;
   String profilePicture;
 
@@ -84,7 +84,7 @@ class UserModel {
     }
   }
 
-   factory UserModel.fromFirestore(DocumentSnapshot doc) {
+  factory UserModel.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
     return UserModel(
       id: doc.id,

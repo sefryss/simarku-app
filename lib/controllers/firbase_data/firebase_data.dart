@@ -284,4 +284,22 @@ class FireBaseData {
 
     return query.orderBy(KeyTable.index, descending: true).snapshots();
   }
+
+  static getSekilasInfoList({
+    int limit = 0,
+  }) {
+    if (limit != 0) {
+      return FirebaseFirestore.instance
+          .collection(KeyTable.sekilasInfo)
+          .limit(limit)
+          .where(KeyTable.isActive, isEqualTo: true)
+          .orderBy(KeyTable.index)
+          .snapshots();
+    }
+    return FirebaseFirestore.instance
+        .collection(KeyTable.sekilasInfo)
+        .where(KeyTable.isActive, isEqualTo: true)
+        .orderBy(KeyTable.index)
+        .snapshots();
+  }
 }

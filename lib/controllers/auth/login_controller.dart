@@ -61,7 +61,7 @@ class LoginController extends GetxController {
       AuthRepository.instance.screenRedirect();
     } catch (e) {
       SMFullScreenLoader.stopLoading();
-      SMLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+      SMLoaders.errorSnackBar(title: 'Oops!', message: e.toString());
     }
   }
 }

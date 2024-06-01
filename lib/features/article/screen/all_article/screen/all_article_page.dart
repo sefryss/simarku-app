@@ -14,7 +14,7 @@ class AllArticlePage extends StatelessWidget {
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: AppColors.primary,
-        title: Text('Sekilas Ilmu', style: TextStyle(color: AppColors.white)),
+        title: Text('Sekilas Info', style: TextStyle(color: AppColors.white)),
         leading: SMBackButton(
           buttonColor: AppColors.white,
         ),
