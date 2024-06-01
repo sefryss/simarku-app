@@ -68,7 +68,7 @@ class _DetailArticleState extends State<DetailArticle> {
             children: [
               //Thumbnail Article
               Container(
-                height: 200,
+                height: 350,
                 width: MediaQuery.of(context).size.width,
                 // margin: EdgeInsets.symmetric(vertical: 16),
                 child: widget.article.image != null &&
@@ -77,7 +77,7 @@ class _DetailArticleState extends State<DetailArticle> {
                         borderRadius: BorderRadius.circular(10),
                         child: Image.network(
                           widget.article.image!,
-                          fit: BoxFit.cover,
+                          fit: BoxFit.fill,
                         ),
                       )
                     : Container(

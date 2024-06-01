@@ -92,7 +92,7 @@ class _ArticleCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(10),
                             child: Image.network(
                               article.image!,
-                              fit: BoxFit.cover,
+                              fit: BoxFit.fill,
                             ),
                           )
                         : Container(

@@ -51,7 +51,67 @@ class SMElevatedButton extends StatelessWidget {
             : Text(
                 labelText,
                 textAlign: TextAlign.center,
-                style: AppTextStyle.paragraphMedium .copyWith(color: labelColor),
+                style: AppTextStyle.paragraphMedium.copyWith(color: labelColor),
+              ),
+      ),
+    );
+  }
+}
+
+class SMOutlineElevatedButton extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final String labelText;
+  final Color labelColor;
+  final Color borderColor;
+  final Color backgroundColor;
+  final Color disableBorderColor;
+  final BorderRadiusGeometry? borderRadius;
+  final double? width;
+  final double? height;
+  final TextStyle? customTextStyle;
+  final bool isLoading;
+
+  const SMOutlineElevatedButton({
+    super.key,
+    required this.onPressed,
+    required this.labelText,
+    this.backgroundColor = AppColors.white,
+    this.borderColor = AppColors.primary,
+    this.disableBorderColor = AppColors.grey,
+    this.labelColor = AppColors.primary,
+    this.borderRadius,
+    this.width,
+    this.height,
+    this.customTextStyle,
+    this.isLoading = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: ElevatedButton(
+        onPressed: isLoading ? () {} : onPressed,
+        style: ElevatedButton.styleFrom(
+            backgroundColor: backgroundColor,
+            side: BorderSide(
+                color: isLoading ? disableBorderColor : borderColor,
+                width: 1.0),
+            padding:
+                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: borderRadius ?? BorderRadius.circular(8.0))),
+        child: isLoading
+            ? Center(
+                child: CircularProgressIndicator.adaptive(
+                  backgroundColor: labelColor,
+                ),
+              )
+            : Text(
+                labelText,
+                textAlign: TextAlign.center,
+                style: AppTextStyle.paragraphMedium.copyWith(color: labelColor),
               ),
       ),
     );

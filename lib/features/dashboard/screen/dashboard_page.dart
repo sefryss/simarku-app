@@ -5,6 +5,7 @@ import 'package:simarku/controllers/auth/user_controller.dart';
 import 'package:simarku/features/article/screen/all_article/screen/all_article_page.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
 import 'package:simarku/features/home/home_page.dart';
+import 'package:simarku/features/kegiatan_literasi/screens/kegiatan_literasi_page.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 
@@ -136,7 +137,7 @@ class DashboardPage extends StatelessWidget {
                       ),
                       InkWell(
                         onTap: () {
-                          //   Get.to(() => AllArticlePage());
+                          Get.to(() => AllKegiatanLiterasi());
                         },
                         child: Text(
                           'Lihat Semua',

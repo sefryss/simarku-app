@@ -13,6 +13,8 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = UserController.instance;
+    final user = controller.user.value; 
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
@@ -84,8 +86,6 @@ class ProfilePage extends StatelessWidget {
                               )
                             : SMCircularImage(
                                 image: image,
-                                // width: 200,
-                                // height: 200,
                                 isNetworkImage: networkImage.isNotEmpty,
                               );
                       },
@@ -103,7 +103,6 @@ class ProfilePage extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: AppTextStyle.heading5SemiBold,
               ),
-
               SizedBox(
                 height: 4,
               ),
@@ -122,41 +121,46 @@ class ProfilePage extends StatelessWidget {
                 width: 185,
                 borderRadius: BorderRadius.circular(24),
               ),
-
               const SizedBox(
                 height: 32,
               ),
-
-              /// Menu Profile
+              // Menu Profile
               ProfileMenuWidget(
                 icon: 'assets/icons/icon_about_us.svg',
                 title: 'Tentang Kami',
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => AboutUsPage());
+                },
               ),
               ProfileMenuWidget(
                 icon: 'assets/icons/icon_rate_us.svg',
                 title: 'Nilai Kami',
-                onTap: () {},
+                onTap: () {
+                  showRateUsDialog(context, user);
+                },
               ),
               ProfileMenuWidget(
                 icon: 'assets/icons/icon_feedback.svg',
                 title: 'Umpan Balik',
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => FeedbackPage(user: user));
+                },
               ),
               ProfileMenuWidget(
                 icon: 'assets/icons/icon_tnc.svg',
                 title: 'Kebijakan Privasi',
-                onTap: () {},
+                onTap: () {
+                  Get.to(() => KebijakanPrivasiPage());
+                },
               ),
               const SizedBox(
                 height: 8,
               ),
-
               SMElevatedButton(
                 onPressed: () => AuthRepository.instance.logout(),
                 labelText: 'Keluar',
                 width: double.infinity,
-              )
+              ),
             ],
           ),
         ),

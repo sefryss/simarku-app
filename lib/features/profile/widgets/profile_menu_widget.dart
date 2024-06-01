@@ -26,13 +26,6 @@ class ProfileMenuWidget extends StatelessWidget {
           color: AppColors.primary,
           width: 24,
         ),
-        // Container(
-        //   height: 40,
-        //   width: 40,
-        //   decoration: BoxDecoration(
-        //       borderRadius: BorderRadius.circular(100),
-        //       color: AppColors.neutral02),
-        // ),
         title: Text(
           title,
           style: AppTextStyle.body3Medium,

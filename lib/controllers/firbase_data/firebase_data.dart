@@ -302,4 +302,22 @@ class FireBaseData {
         .orderBy(KeyTable.index)
         .snapshots();
   }
+
+  static getKegiatanLiterasiList({
+    int limit = 0,
+  }) {
+    if (limit != 0) {
+      return FirebaseFirestore.instance
+          .collection(KeyTable.kegiatanLiterasi)
+          .limit(limit)
+          .where(KeyTable.isActive, isEqualTo: true)
+          .orderBy(KeyTable.index)
+          .snapshots();
+    }
+    return FirebaseFirestore.instance
+        .collection(KeyTable.kegiatanLiterasi)
+        .where(KeyTable.isActive, isEqualTo: true)
+        .orderBy(KeyTable.index)
+        .snapshots();
+  }
 }
