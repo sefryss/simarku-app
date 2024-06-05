@@ -1,5 +1,6 @@
 class KeyTable {
   static String user = 'Users';
+  static String donationBook = 'donation_books';
   static String genreList = 'genre_list';
   static String sekilasInfo = 'sekilas_info';
   static String kegiatanLiterasi = 'kegiatan_literasi';

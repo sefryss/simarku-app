@@ -9,3 +9,5 @@ export 'donation_book_owner_widget.dart';
 export 'donation_book_publisher_widget.dart';
 export 'donation_book_release_date_widget.dart';
 export 'donation_submit_button_widget.dart';
+export 'donation_book_card.dart';
+export 'donation_book_detail.dart';

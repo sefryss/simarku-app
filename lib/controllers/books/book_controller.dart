@@ -292,27 +292,36 @@ class BookController extends GetxController {
   }
 
 // Upload PDF File
-
+// Upload PDF File
   Future<String> uploadPdfFile() async {
     try {
-      Uint8List fileBytes = result!.files.first.bytes!;
+      if (result == null || result!.files.isEmpty) {
+        print("No file selected for upload");
+        return '';
+      }
+
+      Uint8List? fileBytes = result!.files.first.bytes;
+      if (fileBytes == null && result!.files.first.path != null) {
+        File file = File(result!.files.first.path!);
+        fileBytes = await file.readAsBytes();
+      }
+
+      if (fileBytes == null) {
+        print("File bytes are null");
+        throw Exception("File bytes are null");
+      }
 
       String fileName = result!.files.first.name;
-
-      var reference = FirebaseStorage.instance.ref().child(
-            'uploads/$fileName',
-          );
+      var reference = FirebaseStorage.instance.ref().child('uploads/$fileName');
 
       UploadTask uploadTask = reference.putData(
-          fileBytes,
-          SettableMetadata(
-            contentType: "application/pdf",
-          ));
-
-      print("data===${fileBytes.toString()}");
+        fileBytes,
+        SettableMetadata(contentType: "application/pdf"),
+      );
 
       return await getUrlFromTask(uploadTask);
     } catch (e) {
+      print('Error in uploading PDF: ${e.toString()}');
       return '';
     }
   }

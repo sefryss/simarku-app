@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:simarku/controllers/books/donation_book_controller.dart';
 import 'package:simarku/features/donation_book/widgets/widgets.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
@@ -8,6 +10,7 @@ class AddDonationBookPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     final controller = Get.put(DonationBookController());
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.primary,
@@ -40,52 +43,55 @@ class AddDonationBookPage extends StatelessWidget {
             Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 16.0, vertical: 16.0),
-                child: Column(
-                  children: [
-                    DonationBookTitleWidget(),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    DonationBookTypeWidget(),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    DonationBookGenreWidget(),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        DonationBookAuthorWidget(),
-                        SizedBox(
-                          width: 16.0,
-                        ),
-                        DonationBookPublisherWidget(),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        DonationBookReleaseDateWidget(),
-                        SizedBox(
-                          width: 16,
-                        ),
-                        DonationBookPageWidget(),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    DonationBookOwnerWidget(),
-                    SizedBox(
-                      height: 16.0,
-                    ),
-                    DonationBookDescWidget(),
-                  ],
+                child: Form(
+                    key: controller.donationBookFormKey,
+                  child: Column(
+                    children: [
+                      DonationBookTitleWidget(),
+                      SizedBox(
+                        height: 16.0,
+                      ),
+                      DonationBookTypeWidget(),
+                      SizedBox(
+                        height: 16.0,
+                      ),
+                      DonationBookGenreWidget(),
+                      SizedBox(
+                        height: 16.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          DonationBookAuthorWidget(),
+                          SizedBox(
+                            width: 16.0,
+                          ),
+                          DonationBookPublisherWidget(),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16.0,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          DonationBookReleaseDateWidget(),
+                          SizedBox(
+                            width: 16,
+                          ),
+                          DonationBookPageWidget(),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 16.0,
+                      ),
+                      DonationBookOwnerWidget(),
+                      SizedBox(
+                        height: 16.0,
+                      ),
+                      DonationBookDescWidget(),
+                    ],
+                  ),
                 )),
           ],
         ),
@@ -96,7 +102,7 @@ class AddDonationBookPage extends StatelessWidget {
           right: 16,
           bottom: 24,
         ),
-        child: DonationSubmitBookButton(onTap: () {}),
+        child: DonationSubmitBookButton(),
       ),
     );
   }

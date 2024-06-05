@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:simarku/controllers/books/donation_book_controller.dart';
 import 'package:simarku/utils/global/app_config.dart';
 
 class DonationBookReleaseDateWidget extends StatelessWidget {
@@ -7,6 +9,7 @@ class DonationBookReleaseDateWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(DonationBookController());
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,7 +23,7 @@ class DonationBookReleaseDateWidget extends StatelessWidget {
           ),
           DateTimePickerWidget(
             context,
-            'Tanggal Rilis',
+            controller.releaseDateController,
           )
         ],
       ),
@@ -30,7 +33,7 @@ class DonationBookReleaseDateWidget extends StatelessWidget {
 
 Widget DateTimePickerWidget(
   BuildContext context,
-  String hintText,
+  TextEditingController controller,
 ) {
   return GestureDetector(
     onTap: () async {
@@ -41,14 +44,18 @@ Widget DateTimePickerWidget(
         lastDate: DateTime(2101),
       );
       if (pickedDate != null) {
-        DateFormat('MMMM d, yyyy', 'id_ID').format(pickedDate);
+        controller.text = DateFormat('MMM d, yyyy', 'id_ID').format(pickedDate);
       }
     },
     child: AbsorbPointer(
       child: TextFormField(
+        // validator: (value) =>
+        //     SMValidator.validateEmptyField('Tanggal Rilis', value),
+        controller: controller,
+        style: AppTextStyle.body2Regular.copyWith(color: AppColors.black),
         decoration: InputDecoration(
-          contentPadding: EdgeInsets.only(left: 10),
-          border: InputBorder.none,
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(8),
             borderSide: BorderSide(
@@ -62,6 +69,12 @@ Widget DateTimePickerWidget(
                 color: AppColors.neutral04,
                 width: 1,
               )),
+          border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(8),
+              borderSide: const BorderSide(
+                color: AppColors.primary,
+                width: 1,
+              )),
           errorBorder: InputBorder.none,
           disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
@@ -71,7 +84,7 @@ Widget DateTimePickerWidget(
               )),
           filled: true,
           fillColor: const Color(0xFFFFFBFE),
-          hintText: hintText,
+          hintText: 'Tanggal Rilis',
           hintStyle: AppTextStyle.paragraphRegular
               .copyWith(color: const Color(0xFF8B849B)),
           suffixIcon: Icon(Icons.calendar_today),

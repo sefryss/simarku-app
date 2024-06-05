@@ -6,19 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:simarku/utils/constantWidget.dart';
 
 class FireBaseData {
-  static insertData(
-      {required var map,
-      required String tableName,
-      required Function function,
-      required BuildContext context}) async {
-    FirebaseFirestore.instance.collection(tableName).add(map).then((value) {
-      showCustomToast(
-        message: "Add Successfully...",
-        title: '',
-      );
-      function();
-    });
-  }
+//   static insertData(
+//       {required var map,
+//       required String tableName,
+//       required Function function,
+//       required BuildContext context}) async {
+//     FirebaseFirestore.instance.collection(tableName).add(map).then((value) {
+//       showCustomToast(
+//         message: "Add Successfully...",
+//         title: '',
+//       );
+//       function();
+//     });
+//   }
 
   static Future<int> getLastIndexFromTable(String table) async {
     QuerySnapshot querySnapshot = await FirebaseFirestore.instance
@@ -221,6 +221,14 @@ class FireBaseData {
   static getBookList() {
     return FirebaseFirestore.instance
         .collection(KeyTable.storyList)
+        .where(KeyTable.isActive, isEqualTo: true)
+        .orderBy(KeyTable.index)
+        .snapshots();
+  }
+
+  static getDonationBookList() {
+    return FirebaseFirestore.instance
+        .collection(KeyTable.donationBook)
         .where(KeyTable.isActive, isEqualTo: true)
         .orderBy(KeyTable.index)
         .snapshots();

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-enum BookType { physicalBook, ebook }
+enum DonationBookType { physicalBook, ebook }
 
 class DonationBookModel {
   String? name = "";
@@ -24,7 +24,7 @@ class DonationBookModel {
   bool? isPopular = false;
   bool? isFeatured = false;
   bool? isAvailable = true;
-  BookType? bookType;
+  DonationBookType? bookType;
 
   DonationBookModel({
     this.author,
@@ -77,8 +77,8 @@ class DonationBookModel {
       isPopular: data['is_popular'] ?? false,
       isFeatured: data['is_featured'] ?? false,
       bookType: data['book_type'] != null
-          ? BookType.values
-              .firstWhere((e) => getBookTypeString(e) == data['book_type'])
+          ? DonationBookType.values.firstWhere(
+              (e) => getDonationBookTypeString(e) == data['book_type'])
           : null,
     );
   }
@@ -106,8 +106,8 @@ class DonationBookModel {
       isFeatured: data['is_featured'],
       isAvailable: data['is_active'],
       bookType: data['book_type'] != null
-          ? BookType.values
-              .firstWhere((e) => getBookTypeString(e) == data['book_type'])
+          ? DonationBookType.values.firstWhere(
+              (e) => getDonationBookTypeString(e) == data['book_type'])
           : null,
     );
   }
@@ -134,17 +134,18 @@ class DonationBookModel {
     data['is_featured'] = this.isFeatured;
     data['is_available'] = this.isAvailable;
     data['pdf'] = this.pdf;
-    data['book_type'] =
-        this.bookType != null ? getBookTypeString(this.bookType!) : null;
+    data['book_type'] = this.bookType != null
+        ? getDonationBookTypeString(this.bookType!)
+        : null;
     return data;
   }
 }
 
-String getBookTypeString(BookType bookType) {
+String getDonationBookTypeString(DonationBookType bookType) {
   switch (bookType) {
-    case BookType.physicalBook:
+    case DonationBookType.physicalBook:
       return 'Buku Fisik';
-    case BookType.ebook:
+    case DonationBookType.ebook:
       return 'E-Book';
     default:
       return '';

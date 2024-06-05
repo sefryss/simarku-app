@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
-import 'package:simarku/features/search/widgets/widgets.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';

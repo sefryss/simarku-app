@@ -5,3 +5,4 @@ export 'detail_book.dart';
 export 'apply_button.dart';
 export 'home_kegiatan_literasi.dart';
 export 'home_sekilas_info.dart';
+export 'book_card.dart';

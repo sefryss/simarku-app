@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/controllers/firbase_data/key_table.dart';
+import 'package:simarku/features/activity/widgets/history_donation_book.dart';
 import 'package:simarku/features/activity/widgets/my_book.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/models/models.dart';
@@ -23,14 +25,14 @@ class DonationBookController extends GetxController {
   static DonationBookController get instance => Get.find();
 
   // Variables
-  List<BookType> bookTypeList = BookType.values;
+  List<DonationBookType> bookTypeList = DonationBookType.values;
   RxString pdf = Constant.file.obs;
   RxString genre = ''.obs;
-  Rx<BookType> bookType = BookType.physicalBook.obs;
+  Rx<DonationBookType> bookType = DonationBookType.physicalBook.obs;
   RxList<Genre> genreList = <Genre>[].obs;
   RxList<String> allGenreList = <String>[].obs;
 
-  GlobalKey<FormState> bookFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> donationBookFormKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   TextEditingController imageController = TextEditingController();
   TextEditingController pdfController = TextEditingController();
@@ -48,7 +50,7 @@ class DonationBookController extends GetxController {
   Uint8List webFile = Uint8List(10);
   RxBool isImageOffline = false.obs;
 
-  StoryModel? storyModel;
+  DonationBookModel? storyModel;
   RxBool isLoading = false.obs;
   RxBool isPopular = false.obs;
   RxBool isFeatured = false.obs;
@@ -57,6 +59,8 @@ class DonationBookController extends GetxController {
 
   RxList selectedGenre = [].obs;
   RxList selectedGenreNameList = [].obs;
+  RxList selectedCategory = [].obs;
+  RxList selectedCategoryNameList = [].obs;
   RxList selectedUser = [].obs;
   RxList selectedUserNameList = [].obs;
 
@@ -126,7 +130,7 @@ class DonationBookController extends GetxController {
         selectedUserNameList.toString().replaceAll('[', '').replaceAll(']', '');
   }
 
-  setAllDataFromStoryModel(StoryModel? s) {
+  setAllDataFromStoryModel(DonationBookModel? s) {
     if (s != null) {
       storyModel = s;
       if (storyModel != null) {
@@ -175,7 +179,6 @@ class DonationBookController extends GetxController {
     publisherController.clear();
     releaseDateController.clear();
     bookTypeController.clear();
-
     imageController.clear();
     pdfController.clear();
     descController.clear();
@@ -188,6 +191,8 @@ class DonationBookController extends GetxController {
     selectedGenreNameList.clear();
     selectedUser.clear();
     selectedUserNameList.clear();
+    selectedCategory.clear();
+    selectedCategoryNameList.clear();
     webFile = Uint8List(10);
     isImageOffline.value = false;
     storyModel = null;
@@ -209,7 +214,7 @@ class DonationBookController extends GetxController {
         return;
       }
 
-      if (!bookFormKey.currentState!.validate()) {
+      if (!donationBookFormKey.currentState!.validate()) {
         SMFullScreenLoader.stopLoading();
         return;
       }
@@ -217,7 +222,10 @@ class DonationBookController extends GetxController {
       String url = pickImage != null ? await uploadFile(pickImage!) : '';
       String pdfUploadUrl = await uploadPdfFile();
 
-      StoryModel firebaseHistory = StoryModel(
+      // Log PDF URL
+      print('PDF Upload URL: $pdfUploadUrl');
+
+      DonationBookModel firebaseHistory = DonationBookModel(
         name: nameController.text,
         author: authorController.text,
         publisher: publisherController.text,
@@ -243,14 +251,17 @@ class DonationBookController extends GetxController {
       );
 
       Map<String, dynamic> data = firebaseHistory.toJson();
-      await FirebaseFirestore.instance.collection(KeyTable.storyList).add(data);
+      await FirebaseFirestore.instance
+          .collection(KeyTable.donationBook)
+          .add(data);
 
       SMFullScreenLoader.stopLoading();
       clearStoryData();
       SMLoaders.successSnackBar(
-          title: 'Selamat', message: 'Buku berhasil ditambahkan');
+          title: 'Berhasil!',
+          message: 'Terima Kasih sudah mendonasikan bukumu');
       print("Story added successfully");
-      Get.toEnd(() => MyBook());
+      Get.off(() => HistoryDonationBook());
     } catch (e) {
       SMFullScreenLoader.stopLoading();
       print('Error adding story: $e');
@@ -282,34 +293,30 @@ class DonationBookController extends GetxController {
 // Upload PDF File
   Future<String> uploadPdfFile() async {
     try {
-      // Check if a file was selected
       if (result == null || result!.files.isEmpty) {
         print("No file selected for upload");
         return '';
       }
 
-      // Get the file bytes
       Uint8List? fileBytes = result!.files.first.bytes;
+      if (fileBytes == null && result!.files.first.path != null) {
+        File file = File(result!.files.first.path!);
+        fileBytes = await file.readAsBytes();
+      }
 
-      // Ensure fileBytes is not null
       if (fileBytes == null) {
         print("File bytes are null");
         throw Exception("File bytes are null");
       }
 
-      // Get the file name
       String fileName = result!.files.first.name;
-
-      // Define the Firebase Storage reference
       var reference = FirebaseStorage.instance.ref().child('uploads/$fileName');
 
-      // Upload the file to Firebase Storage
       UploadTask uploadTask = reference.putData(
         fileBytes,
         SettableMetadata(contentType: "application/pdf"),
       );
 
-      // Get the URL from the upload task
       return await getUrlFromTask(uploadTask);
     } catch (e) {
       print('Error in uploading PDF: ${e.toString()}');
@@ -327,7 +334,6 @@ class DonationBookController extends GetxController {
       });
 
       String url = await taskSnapshot.ref.getDownloadURL();
-
       print("File URL: $url");
 
       return url;
@@ -346,37 +352,40 @@ class DonationBookController extends GetxController {
     }
   }
 
-  // Open File Picker
+// Open File Picker
   openFile() async {
     try {
-      // Pick files using FilePicker
       result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['pdf'],
         allowMultiple: false,
       );
 
-      // If files were selected
       if (result != null && result!.files.isNotEmpty) {
-        // Get the file name and size
         String fileName = result!.files.first.name;
         String size =
             getFileSizeString(bytes: result!.files.first.size, decimals: 1);
 
-        // Update the observable values
-        pdfUrl.value = fileName;
-        pdfSize.value = size;
+        // Read file bytes manually if result!.files.first.bytes is null
+        Uint8List? fileBytes = result!.files.first.bytes;
+        if (fileBytes == null && result!.files.first.path != null) {
+          File file = File(result!.files.first.path!);
+          fileBytes = await file.readAsBytes();
+        }
 
-        // Debugging prints
-        print("File picked: $fileName, Size: $size");
-        print("File bytes: ${result!.files.first.bytes}");
+        if (fileBytes != null) {
+          webFile = fileBytes; // Assign to webFile
+          pdfUrl.value = fileName;
+          pdfSize.value = size;
+          print("File picked: $fileName, Size: $size");
+        } else {
+          print("File bytes are null");
+        }
       } else {
-        // No file selected
         pdfUrl.value = '';
         print("No file picked");
       }
     } catch (e) {
-      // Handle any errors
       print("Error picking file: $e");
     }
   }

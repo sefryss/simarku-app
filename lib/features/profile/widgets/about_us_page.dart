@@ -41,22 +41,22 @@ class AboutUsPage extends StatelessWidget {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Misi:',
-                    style: AppTextStyle.body1Medium,
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Meningkatkan literasi dan kemudahan akses dunia pengetahuan dengan memanfaatkan teknologi.',
-                    style: AppTextStyle.body2Regular,
-                  ),
-                  SizedBox(height: 16),
-                  Text(
                     'Visi:',
                     style: AppTextStyle.body1Medium,
                   ),
                   SizedBox(height: 10),
                   Text(
                     'Menjadi platform literasi terdepan yang memberdayakan masyarakat melalui akses buku yang mudah dan terjangkau, serta membangun komunitas yang inklusif dan inspiratif.',
+                    style: AppTextStyle.body2Regular,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Misi:',
+                    style: AppTextStyle.body1Medium,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Meningkatkan literasi dan kemudahan akses dunia pengetahuan dengan memanfaatkan teknologi.',
                     style: AppTextStyle.body2Regular,
                   ),
                 ],

@@ -1,4 +1,4 @@
-export 'book_card.dart';
+export '../../dashboard/widgets/book_card.dart';
 export 'search_field_widget.dart';
 export 'e_book_view.dart';
 export 'physical_book_view.dart';

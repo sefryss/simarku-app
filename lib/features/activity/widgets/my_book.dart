@@ -4,7 +4,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:simarku/features/books/add_book/screen/add_book_page.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
-import 'package:simarku/features/search/widgets/widgets.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/repository/auth/auth_repository.dart';
 import 'package:simarku/utils/global/app_config.dart';
@@ -77,7 +76,7 @@ class MyBook extends StatelessWidget {
                           ),
                           Text(
                             'Kamu belum mengupload buku apapun,\nAyo tambahkan buku kamu disini!',
-                            style: AppTextStyle.body1Regular,
+                            style: AppTextStyle.body2Regular,
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(

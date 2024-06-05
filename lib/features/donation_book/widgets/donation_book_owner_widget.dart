@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:simarku/controllers/books/donation_book_controller.dart';
 import 'package:simarku/utils/global/app_config.dart';
+import 'package:simarku/utils/validation/validation.dart';
 
 class DonationBookOwnerWidget extends StatelessWidget {
   const DonationBookOwnerWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(DonationBookController());
     return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           'Pilih Pemilik',
@@ -24,7 +27,10 @@ class DonationBookOwnerWidget extends StatelessWidget {
             Expanded(
                 child: TextFormField(
               enabled: false,
-              onTap: () {},
+              controller: controller.ownerController,
+              style: AppTextStyle.body2Regular.copyWith(color: AppColors.black),
+              validator: (value) =>
+                  SMValidator.validateEmptyField('Pemilik', value),
               decoration: InputDecoration(
                 hintText: 'Pemilik',
                 hintStyle: AppTextStyle.paragraphRegular
@@ -60,17 +66,22 @@ class DonationBookOwnerWidget extends StatelessWidget {
             SizedBox(
               width: 10,
             ),
-            Container(
-              padding: EdgeInsets.all(12.0),
-              height: 45,
-              decoration: BoxDecoration(
-                border: Border.all(width: 1, color: AppColors.neutral05),
-                borderRadius: BorderRadius.circular(12),
-                color: AppColors.neutral02,
-              ),
-              child: Text(
-                'Pilih Pemilik',
-                textAlign: TextAlign.center,
+            InkWell(
+              onTap: () async {
+                await controller.showOwnerDialog(context);
+              },
+              child: Container(
+                padding: EdgeInsets.all(12.0),
+                height: 45,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1, color: AppColors.neutral05),
+                  borderRadius: BorderRadius.circular(12),
+                  color: AppColors.neutral02,
+                ),
+                child: Text(
+                  'Pilih Pemilik',
+                  textAlign: TextAlign.center,
+                ),
               ),
             )
           ],

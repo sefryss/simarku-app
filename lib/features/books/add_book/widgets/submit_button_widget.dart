@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/controllers/books/book_controller.dart';
 import 'package:simarku/utils/global/app_config.dart';
-import 'package:simarku/utils/loaders/loaders.dart';
 
 class SubmitBookButton extends StatelessWidget {
   const SubmitBookButton({
