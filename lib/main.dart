@@ -8,6 +8,7 @@ import 'package:simarku/firebase_options.dart';
 import 'package:simarku/utils/global/app_colors.dart';
 import 'package:simarku/utils/global/app_theme.dart';
 import 'package:simarku/repository/auth/auth_repository.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   final WidgetsBinding widgetsBinding =
@@ -36,6 +37,17 @@ class MyApp extends StatelessWidget {
       initialBinding: GeneralBindings(),
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        // S.delegate
+      ],
+      // locale: Locale("ar"," "),
+      supportedLocales: [
+        Locale("en", " "),
+        Locale("ar", " "),
+      ],
       //   home: SplashScreen(),
       home: const Scaffold(
         backgroundColor: AppColors.white,

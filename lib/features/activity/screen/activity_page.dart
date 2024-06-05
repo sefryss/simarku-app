@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:simarku/features/activity/favourite_book.dart';
-import 'package:simarku/features/activity/my_book.dart';
-import 'package:simarku/features/activity/recent_book.dart';
+import 'package:simarku/features/activity/widgets/history_donation_book.dart';
+import 'package:simarku/features/activity/widgets/widgets.dart';
 import 'package:simarku/features/profile/widgets/widgets.dart';
 import 'package:simarku/utils/global/app_config.dart';
 
@@ -51,7 +50,9 @@ class ActivityPage extends StatelessWidget {
                 ProfileMenuWidget(
                   icon: 'assets/icons/icon_donasi.svg',
                   title: 'Riwayat Donasi',
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(() => HistoryDonationBook());
+                  },
                 ),
                 SizedBox(
                   height: 16,

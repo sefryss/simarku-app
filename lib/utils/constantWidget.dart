@@ -24,21 +24,21 @@ Widget getAssetImage(String image,
     {double? width,
     double? height,
     Color? color,
-      BoxFit boxFit = BoxFit.contain}) {
-    return Image.asset(
-      Constant.assetImagePath + image,
-      color: color,
-      width: width,
-      height: height,
-      fit: boxFit,
-    );
-  }
+    BoxFit boxFit = BoxFit.contain}) {
+  return Image.asset(
+    Constant.assetImagePath + image,
+    color: color,
+    width: width,
+    height: height,
+    fit: boxFit,
+  );
+}
 
-  Widget getNetWorkImage(
-      BuildContext context, String image, double width, double height,
-      {Color? color, BoxFit boxFit = BoxFit.contain, bool listen = true}) {
-    return Image.network(
-      image,
+Widget getNetWorkImage(
+    BuildContext context, String image, double width, double height,
+    {Color? color, BoxFit boxFit = BoxFit.contain, bool listen = true}) {
+  return Image.network(
+    image,
     color: color,
     width: width,
     height: height,
@@ -50,7 +50,7 @@ Widget getSvgImage(String image,
     {double? width,
     double? height,
     Color? color,
-      // Function? onTap,
+    // Function? onTap,
     BoxFit boxFit = BoxFit.contain}) {
   return SvgPicture.asset(
     Constant.assetImagePath + image,
@@ -62,28 +62,33 @@ Widget getSvgImage(String image,
   );
 }
 
-
-getCommonLoginAppBar(BuildContext context,{required String title,bool withLeading = false,Function? onTap}){
+getCommonLoginAppBar(BuildContext context,
+    {required String title, bool withLeading = false, Function? onTap}) {
   return AppBar(
     elevation: 0,
     title: getCustomFont(title, 22.sp, context.theme.primaryColor, 1,
         fontWeight: FontWeight.w700, textAlign: TextAlign.center),
     centerTitle: true,
-    leading: (withLeading)?GestureDetector(onTap: (){
-      if(onTap != null){
-        onTap();
-      }
-    },child: Center(child: getSvgImage("back_arrow.svg",height: 24.h,color: context.theme.primaryColor))):Container(),
+    leading: (withLeading)
+        ? GestureDetector(
+            onTap: () {
+              if (onTap != null) {
+                onTap();
+              }
+            },
+            child: Center(
+                child: getSvgImage("back_arrow.svg",
+                    height: 24.h, color: context.theme.primaryColor)))
+        : Container(),
     backgroundColor: Colors.transparent,
-
   );
 }
 
 Widget getCommonOtherWidget(
     {required BuildContext context,
-      required String s1,
-      required String s2,
-      required Function function}) {
+    required String s1,
+    required String s2,
+    required Function function}) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
@@ -174,10 +179,10 @@ Widget getCustomButton(String text, Function function,
     double? buttonWidth,
     double? fontSize,
     FontWeight? weight,
-      Key? key,
-      bool? isProgress,
+    Key? key,
+    bool? isProgress,
     Color? color,
-      BuildContext? context,
+    BuildContext? context,
     BoxDecoration? decoration}) {
   return GestureDetector(
     onTap: () {
@@ -193,19 +198,19 @@ Widget getCustomButton(String text, Function function,
             color: maximumOrange,
           ),
       child: Center(
-          child: (isProgress != null && isProgress)?getProgressDialog(context!,color: Colors.white):Text(
-            text,
-            style: TextStyle(
-                fontSize: fontSize ?? 18.sp,
-                color: color ?? const Color(0XFFFFFFFF),
-                fontFamily: Constant.fontsFamily,
-                fontWeight: weight ?? FontWeight.w700),
-          )),
+          child: (isProgress != null && isProgress)
+              ? getProgressDialog(context!, color: Colors.white)
+              : Text(
+                  text,
+                  style: TextStyle(
+                      fontSize: fontSize ?? 18.sp,
+                      color: color ?? const Color(0XFFFFFFFF),
+                      fontFamily: Constant.fontsFamily,
+                      fontWeight: weight ?? FontWeight.w700),
+                )),
     ),
   );
 }
-
-
 
 // Widget getCustomReadButton(String text, Function function,
 //     {double? buttonHeight,
@@ -251,15 +256,14 @@ Widget getCustomButton(String text, Function function,
 //   );
 // }
 
-showCustomToast(
-    {required String message, String? title}) {
+showCustomToast({required String message, String? title}) {
   Fluttertoast.showToast(
       msg: message,
       toastLength: Toast.LENGTH_SHORT,
       gravity: ToastGravity.BOTTOM,
       timeInSecForIosWeb: 1,
-      backgroundColor: Colors.black,
-      textColor: Colors.white,
+      backgroundColor: Colors.white,
+      textColor: Colors.black,
       fontSize: 20.sp);
 }
 
@@ -319,18 +323,15 @@ Widget getCustumAppbar(
   );
 }
 
-
 bool isNotEmpty(String s) {
   return (s.isNotEmpty);
 }
 
 bool isValidEmail(String email) {
   return RegExp(
-      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$')
       .hasMatch(email);
 }
-
-
 
 // Widget getCommonBookWidget(BuildContext context, String image, String bookName,
 //     String authorName, Function function) {
@@ -376,7 +377,6 @@ bool isValidEmail(String email) {
 //     ),
 //   );
 // }
-
 
 // Widget getBook(BuildContext context,StoryModel model,String auth,Function function){
 //   return GestureDetector(
@@ -542,11 +542,10 @@ Widget getSearchFigmaWidget(
     height: height,
     // padding: EdgeInsets.symmetric(horizontal: 19.h),
 
-    decoration:BoxDecoration(
-      // color: context.theme.focusColor,
-      borderRadius: BorderRadius.circular(12.r),
-      border: Border.all(color: grey10)
-    ),
+    decoration: BoxDecoration(
+        // color: context.theme.focusColor,
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: grey10)),
 
     child: Row(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -562,21 +561,15 @@ Widget getSearchFigmaWidget(
               readOnly: readOnly,
               controller: searchController,
               onChanged: onChanged,
-
               decoration: InputDecoration(
                   contentPadding: EdgeInsets.zero,
                   // isDense: true,
                   // isCollapsed: true,
                   hintText: 'Search...',
                   prefixIcon: getSvgImage("searchIcon.svg",
-                      color: Get.isDarkMode
-                          ? regularWhite
-                          : null)
+                          color: Get.isDarkMode ? regularWhite : null)
                       .paddingOnly(
-                      top: 16.h,
-                      left: 16.w,
-                      bottom: 16.h,
-                      right: 13.h),
+                          top: 16.h, left: 16.w, bottom: 16.h, right: 13.h),
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16.h),
                       borderSide: BorderSide(color: grey10)),
@@ -585,25 +578,20 @@ Widget getSearchFigmaWidget(
                       fontFamily: Constant.fontsFamily,
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w400),
-                  fillColor: Get.isDarkMode
-                      ? Colors.grey.shade900
-                      : grey10,
+                  fillColor: Get.isDarkMode ? Colors.grey.shade900 : grey10,
                   filled: true,
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16.h),
                       borderSide: BorderSide(color: grey10)),
                   focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16.h),
-                      borderSide:
-                      BorderSide(color: maximumOrange))
-              ),
+                      borderSide: BorderSide(color: maximumOrange))),
               style: TextStyle(
                   fontFamily: Constant.fontsFamily,
                   fontSize: fontSize,
                   fontWeight: FontWeight.w500,
                   color: context.theme.hintColor),
               textAlign: TextAlign.start,
-
               maxLines: 1,
             ),
           ),
@@ -619,7 +607,6 @@ Widget getSearchFigmaWidget(
     ),
   );
 }
-
 
 Widget getSearchTextField(
     {double? height,
@@ -693,19 +680,17 @@ Widget getTabSearchTextField(
       .paddingSymmetric(horizontal: horPadding ?? 20.h);
 }
 
-
-
 Widget getDefaultTextFiledWidget(
     BuildContext context, String s, TextEditingController textEditingController,
     {bool? isEnabled,
-      var inputType,
-      RxString? errorText,
-      var inputFormatters,
-      var onChanged,
-      var focus,
-      double? height,
-      FormFieldValidator? validator,
-      Function? onTapFunction}) {
+    var inputType,
+    RxString? errorText,
+    var inputFormatters,
+    var onChanged,
+    var focus,
+    double? height,
+    FormFieldValidator? validator,
+    Function? onTapFunction}) {
   double fontSize = 16.sp;
 
   return TextFormField(
@@ -720,16 +705,13 @@ Widget getDefaultTextFiledWidget(
         fontWeight: FontWeight.w400,
         fontSize: fontSize),
     decoration: InputDecoration(
-      prefixIconConstraints: BoxConstraints(
-        maxHeight: 60.h,
-        minHeight: 60.h
-      ),
-      prefixIcon: SizedBox(
-        height: 60.h,
-        width: 20.h,
-      ),
-      isDense: true,
-      errorText: errorText?.value,
+        prefixIconConstraints: BoxConstraints(maxHeight: 60.h, minHeight: 60.h),
+        prefixIcon: SizedBox(
+          height: 60.h,
+          width: 20.h,
+        ),
+        isDense: true,
+        errorText: errorText?.value,
         contentPadding: EdgeInsets.zero,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16.r),
@@ -753,7 +735,8 @@ Widget getDefaultTextFiledWidget(
         ),
         hintText: s,
         filled: true,
-        fillColor: Get.isDarkMode ? Colors.grey.shade900 : context.theme.focusColor,
+        fillColor:
+            Get.isDarkMode ? Colors.grey.shade900 : context.theme.focusColor,
         hintStyle: TextStyle(
             fontFamily: Constant.fontsFamily,
             color: grey,
@@ -762,110 +745,110 @@ Widget getDefaultTextFiledWidget(
   );
 }
 
-Widget getPasswordTextFiledWidget(BuildContext context, String s,
-    TextEditingController textEditingController,
-    {bool? isEnabled,
-      var inputType,
-      var inputFormatters,
-      var onChanged,
-      FormFieldValidator? validator,
-      var focus,
-      double? height,
-      Function? onTapFunction,}) {
+Widget getPasswordTextFiledWidget(
+  BuildContext context,
+  String s,
+  TextEditingController textEditingController, {
+  bool? isEnabled,
+  var inputType,
+  var inputFormatters,
+  var onChanged,
+  FormFieldValidator? validator,
+  var focus,
+  double? height,
+  Function? onTapFunction,
+}) {
   double fontSize = 16.sp;
-
 
   RxBool isSecure = true.obs;
 
   return Obx(() => TextFormField(
-    obscureText: isSecure.value,
-    maxLines: 1,
-    enabled: (isEnabled != null) ? isEnabled : true,
-    controller: textEditingController,
-    textAlign: TextAlign.start,
-    textAlignVertical: TextAlignVertical.center,
-    keyboardType: (inputType != null) ? inputType : null,
-    // autofocus: true,
-    onTap: () {
-      // setState(() {});
-      // if (onTapFunction != null) {
-      //   onTapFunction();
-      // }
-    },
-    inputFormatters: (inputFormatters != null) ? inputFormatters : null,
-    onChanged: (onChanged != null) ? onChanged : null,
-    style: TextStyle(
-        fontFamily: Constant.fontsFamily,
-        color: context.theme.primaryColor,
-        fontWeight: FontWeight.w400,
-        fontSize: fontSize),
-    validator: validator,
-    decoration: InputDecoration(
-        prefixIconConstraints: BoxConstraints(
-            maxHeight: 60.h,
-            minHeight: 60.h
-        ),
-        prefixIcon: SizedBox(
-          height: 60.h,
-          width: 20.h,
-        ),
-        filled: true,
-        fillColor: Get.isDarkMode ? Colors.grey.shade900 : context.theme.focusColor,
-        contentPadding: EdgeInsets.zero,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(width: 1.h, color: grey30),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(width: 1.h, color: grey30),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(width: 1.h, color: grey30),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(width: 1.h, color: Colors.red),
-        ),
-        disabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16.r),
-          borderSide: BorderSide(width: 1.h, color: grey30),
-        ),
-        hintText: s,
-        // isDense: true,
-        suffixIconConstraints: BoxConstraints(
-          minWidth: 6.h,
-          minHeight: 6.h,
-        ),
-        suffixIcon: GestureDetector(
-            onTap: () {
-              // isObscureText.n = !isObscureText;
-              // function(isObscureText);
-              // // setState(() {});
-
-              (isSecure.value)?isSecure.value = false:isSecure.value = true;
-
-            },
-            child: Container(
-              padding: EdgeInsets.only(
-                  right: 20.h),
-              child: Container(
-                  height: 18.h,
-                  width: 18.h,
-                  child: (isSecure.value)?getSvgImage("hide.svg",height: 18.h):getSvgImage(
-                      "eye.svg", height: 18.h)),
-            )),
-        hintStyle: TextStyle(
+        obscureText: isSecure.value,
+        maxLines: 1,
+        enabled: (isEnabled != null) ? isEnabled : true,
+        controller: textEditingController,
+        textAlign: TextAlign.start,
+        textAlignVertical: TextAlignVertical.center,
+        keyboardType: (inputType != null) ? inputType : null,
+        // autofocus: true,
+        onTap: () {
+          // setState(() {});
+          // if (onTapFunction != null) {
+          //   onTapFunction();
+          // }
+        },
+        inputFormatters: (inputFormatters != null) ? inputFormatters : null,
+        onChanged: (onChanged != null) ? onChanged : null,
+        style: TextStyle(
             fontFamily: Constant.fontsFamily,
+            color: context.theme.primaryColor,
             fontWeight: FontWeight.w400,
-            color: grey,
-            fontSize: fontSize)),
-  ));
+            fontSize: fontSize),
+        validator: validator,
+        decoration: InputDecoration(
+            prefixIconConstraints:
+                BoxConstraints(maxHeight: 60.h, minHeight: 60.h),
+            prefixIcon: SizedBox(
+              height: 60.h,
+              width: 20.h,
+            ),
+            filled: true,
+            fillColor: Get.isDarkMode
+                ? Colors.grey.shade900
+                : context.theme.focusColor,
+            contentPadding: EdgeInsets.zero,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide(width: 1.h, color: grey30),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide(width: 1.h, color: grey30),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide(width: 1.h, color: grey30),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide(width: 1.h, color: Colors.red),
+            ),
+            disabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(16.r),
+              borderSide: BorderSide(width: 1.h, color: grey30),
+            ),
+            hintText: s,
+            // isDense: true,
+            suffixIconConstraints: BoxConstraints(
+              minWidth: 6.h,
+              minHeight: 6.h,
+            ),
+            suffixIcon: GestureDetector(
+                onTap: () {
+                  // isObscureText.n = !isObscureText;
+                  // function(isObscureText);
+                  // // setState(() {});
+
+                  (isSecure.value)
+                      ? isSecure.value = false
+                      : isSecure.value = true;
+                },
+                child: Container(
+                  padding: EdgeInsets.only(right: 20.h),
+                  child: Container(
+                      height: 18.h,
+                      width: 18.h,
+                      child: (isSecure.value)
+                          ? getSvgImage("hide.svg", height: 18.h)
+                          : getSvgImage("eye.svg", height: 18.h)),
+                )),
+            hintStyle: TextStyle(
+                fontFamily: Constant.fontsFamily,
+                fontWeight: FontWeight.w400,
+                color: grey,
+                fontSize: fontSize)),
+      ));
 }
-
-
-
 
 Widget getTextField(Color containerColor, String hintText,
     {bool suffixIconPermission = false,
@@ -1096,7 +1079,6 @@ Widget getMoreTabOption(String icon, String optionName, String rightIcon,
   );
 }
 
-
 TextStyle buildTextStyle(BuildContext context, Color fontColor,
     FontWeight fontWeight, double fontSize,
     {double txtHeight = 1, TextOverflow overflow = TextOverflow.ellipsis}) {
@@ -1109,22 +1091,19 @@ TextStyle buildTextStyle(BuildContext context, Color fontColor,
       height: txtHeight);
 }
 
-
-
 Widget getHtmlWidget(BuildContext context, String desc, double fontSize) {
   return HtmlWidget(
     decode(desc),
     renderMode: RenderMode.column,
     textStyle: buildTextStyle(
       context,
-        (Get.isDarkMode)?regularWhite:regularBlack,
+      (Get.isDarkMode) ? regularWhite : regularBlack,
       FontWeight.w400,
       fontSize,
       txtHeight: 1.5.h,
     ),
   );
 }
-
 
 String decode(String codeUnits) {
   var unescape = HtmlUnescape();
@@ -1140,7 +1119,6 @@ String decode(String codeUnits) {
 // Future getRateUsDialogue() {
 
 //   double rate=5;
-
 
 //   return Get.generalDialog(
 //     pageBuilder: (context, animation, secondaryAnimation) {
@@ -1183,7 +1161,6 @@ String decode(String codeUnits) {
 
 //                   rate = rating;
 
-
 //                   print("rate--------$rating--------$rate");
 
 //                   if (kDebugMode) {
@@ -1213,7 +1190,6 @@ String decode(String codeUnits) {
 //                       child: getCustomButton("Yes", () {
 //                         if(rate < 3) {
 
-
 //                           Constant.backToFinish();
 //                           Constant.sendToNext(context, Routes.feedBackScreenRoute);
 //                         }else{
@@ -1232,7 +1208,6 @@ String decode(String codeUnits) {
 //     },
 //   );
 // }
-
 
 Future getDeleteDialogueFormat(
     String title, Color fontColor, Function yesFunction, Function noFunction) {
@@ -1285,10 +1260,16 @@ getShimmerWidget(BuildContext context, Widget child) {
 DecorationImage getDecorationNetworkImage(
     BuildContext buildContext, String image,
     {BoxFit fit = BoxFit.contain}) {
-  return (image.isNotEmpty)?DecorationImage(
-    image: NetworkImage(image),
-    fit: fit,
-  ):DecorationImage(image: AssetImage("${Constant.assetImagePath}place.png",),fit: fit);
+  return (image.isNotEmpty)
+      ? DecorationImage(
+          image: NetworkImage(image),
+          fit: fit,
+        )
+      : DecorationImage(
+          image: AssetImage(
+            "${Constant.assetImagePath}place.png",
+          ),
+          fit: fit);
 }
 
 Widget checkEmptyData(
@@ -1329,7 +1310,6 @@ Future<bool> getNetwork() async {
   }
 }
 
-
 // getWidgetFromStatus(
 //     {required BuildContext context,
 //     required AsyncSnapshot data,
@@ -1338,7 +1318,6 @@ Future<bool> getNetwork() async {
 //   int status = getStatus(data);
 
 //   // checkConnectivity();
-
 
 //   // bool isNetwork = await getNetwork();
 //   // if (isNetwork) {
@@ -1379,7 +1358,6 @@ getProgressWidget(BuildContext context) {
   );
 }
 
-
 getLoaderWidget(BuildContext context) {
   return Center(
     child: SizedBox(
@@ -1404,12 +1382,7 @@ getProgressDialog(BuildContext context,
       )));
 }
 
-
-
-
-
 getDefaultWidget(Widget child) {
-
   if (kIsWeb) {
     return Row(
       children: [
@@ -1432,9 +1405,6 @@ getDefaultWidget(Widget child) {
       ],
     );
   } else {
-
-
-
     // return FutureBuilder<bool>(
     //   future: getNetwork(),
     //   builder: (context, snapshot) {
@@ -1459,18 +1429,13 @@ getDefaultWidget(Widget child) {
     // );
 
     return child;
-
-    }
-
-
-
-
-
-
+  }
 }
 
-
-showCommonDialog({required Widget widget, required BuildContext context,}) {
+showCommonDialog({
+  required Widget widget,
+  required BuildContext context,
+}) {
   showDialog(
     barrierDismissible: false,
     context: context,
@@ -1483,8 +1448,5 @@ showCommonDialog({required Widget widget, required BuildContext context,}) {
 Widget getLottieAnimationWidget() {
   return Center(
       child: Lottie.asset('${Constant.assetImagePath}loading.json',
-          height: (kIsWeb)?90.h:90.h,
-          width: (kIsWeb)?90.h:90.h));
+          height: (kIsWeb) ? 90.h : 90.h, width: (kIsWeb) ? 90.h : 90.h));
 }
-
-

@@ -3,8 +3,43 @@ import 'package:simarku/controllers/firbase_data/key_table.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/models/models.dart';
 import 'package:flutter/material.dart';
+import 'package:simarku/utils/constantWidget.dart';
 
 class FireBaseData {
+  static insertData(
+      {required var map,
+      required String tableName,
+      required Function function,
+      required BuildContext context}) async {
+    FirebaseFirestore.instance.collection(tableName).add(map).then((value) {
+      showCustomToast(
+        message: "Add Successfully...",
+        title: '',
+      );
+      function();
+    });
+  }
+
+  static Future<int> getLastIndexFromTable(String table) async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(table)
+        .orderBy(KeyTable.index, descending: true)
+        .get();
+
+    if (querySnapshot.size > 0) {
+      if (querySnapshot.docs.length > 0) {
+        List<DocumentSnapshot> list1 = querySnapshot.docs;
+        if (list1.length > 0) {
+          StoryModel categoryModel = StoryModel.fromFirestore(list1[0]);
+          return (categoryModel.index! + 1);
+        }
+      }
+      return 1;
+    } else {
+      return 1;
+    }
+  }
+
   static updateData(
       {required var map,
       required String tableName,
@@ -20,14 +55,33 @@ class FireBaseData {
         .update(map)
         .then((value) {
       if (isToast == null) {
-        // showCustomToast(
-        //   message: "Update Successfully...",
-        //   title: 'Success',
-        //   context: context,
-        // );
+        showCustomToast(
+          message: "Update Successfully...",
+          title: 'Success',
+        );
       }
       function();
     });
+  }
+
+  static Future<int> getLastIndexFromGenreTable() async {
+    QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+        .collection(KeyTable.genreList)
+        .orderBy(KeyTable.index, descending: true)
+        .get();
+
+    if (querySnapshot.size > 0) {
+      if (querySnapshot.docs.length > 0) {
+        List<DocumentSnapshot> list1 = querySnapshot.docs;
+        if (list1.length > 0) {
+          Genre genreModel = Genre.fromFirestore(list1[0]);
+          return (genreModel.index! + 1);
+        }
+      }
+      return 1;
+    } else {
+      return 1;
+    }
   }
 
   static getString(List snap) {

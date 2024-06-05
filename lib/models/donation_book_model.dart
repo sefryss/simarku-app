@@ -2,9 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum BookType { physicalBook, ebook }
 
-enum Category { tukarPinjam, tukarMilik, bebasBaca }
-
-class StoryModel {
+class DonationBookModel {
   String? name = "";
   String? author = "";
   List? ownerId;
@@ -27,9 +25,8 @@ class StoryModel {
   bool? isFeatured = false;
   bool? isAvailable = true;
   BookType? bookType;
-  Category? category;
 
-  StoryModel({
+  DonationBookModel({
     this.author,
     this.releaseDate,
     this.page,
@@ -52,13 +49,12 @@ class StoryModel {
     this.isBookmark,
     this.isFav,
     this.bookType,
-    this.category,
   });
 
-  factory StoryModel.fromFirestore(DocumentSnapshot doc) {
+  factory DonationBookModel.fromFirestore(DocumentSnapshot doc) {
     Map data = doc.data() as Map;
 
-    return StoryModel(
+    return DonationBookModel(
       id: doc.id,
       name: data['name'] ?? '',
       author: data['author'] ?? '',
@@ -84,15 +80,11 @@ class StoryModel {
           ? BookType.values
               .firstWhere((e) => getBookTypeString(e) == data['book_type'])
           : null,
-      category: data['category'] != null
-          ? Category.values
-              .firstWhere((e) => getCategoryString(e) == data['category'])
-          : null,
     );
   }
 
-  factory StoryModel.fromJson(Map<String, dynamic> data) {
-    return StoryModel(
+  factory DonationBookModel.fromJson(Map<String, dynamic> data) {
+    return DonationBookModel(
       image: data['image'],
       name: data['name'],
       author: data['author'],
@@ -116,10 +108,6 @@ class StoryModel {
       bookType: data['book_type'] != null
           ? BookType.values
               .firstWhere((e) => getBookTypeString(e) == data['book_type'])
-          : null,
-      category: data['category'] != null
-          ? Category.values
-              .firstWhere((e) => getCategoryString(e) == data['category'])
           : null,
     );
   }
@@ -148,23 +136,7 @@ class StoryModel {
     data['pdf'] = this.pdf;
     data['book_type'] =
         this.bookType != null ? getBookTypeString(this.bookType!) : null;
-    data['category'] =
-        this.category != null ? getCategoryString(this.category!) : null;
-
     return data;
-  }
-}
-
-String getCategoryString(Category category) {
-  switch (category) {
-    case Category.bebasBaca:
-      return 'Bebas Baca';
-    case Category.tukarMilik:
-      return 'Tukar Milik';
-    case Category.tukarPinjam:
-      return 'Tukar Pinjam';
-    default:
-      return '';
   }
 }
 

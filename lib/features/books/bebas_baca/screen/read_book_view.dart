@@ -28,11 +28,11 @@ class ReadBookView extends StatefulWidget {
 class _ReadBookViewState extends State<ReadBookView> {
   PdfControllerPinch? pdfPinchController;
 
-  addViewStory() {
-    Future.delayed(Duration.zero, () async {
-      FireBaseData.addStoryViews(widget.book, context);
-    });
-  }
+//   addViewStory() {
+//     Future.delayed(Duration.zero, () async {
+//       FireBaseData.addStoryViews(widget.book, context);
+//     });
+//   }
 
   RecentController recentController = Get.put(RecentController());
 
@@ -43,7 +43,7 @@ class _ReadBookViewState extends State<ReadBookView> {
     PrefData.setRecentReadBook(widget.book.pdf ?? "");
     PrefData.setRecentReadBookName(widget.book.name ?? "");
     recentController.setRecentList(widget.book.id.toString());
-    addViewStory();
+    // addViewStory();
   }
 
   Uint8List? _pdfBytes;

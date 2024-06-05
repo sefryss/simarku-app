@@ -5,9 +5,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class Constant{
+class Constant {
   static String assetImagePath = "assets/images/";
-  static const String fontsFamily = "SF UI Text";
+  static const String fontsFamily = "Poppins";
+  static String physichBook = "Buku Fisik";
+  static String file = "E-Book";
 
   static String saveDirectory = '/ebook';
   static const double defScreenWidth = 414;
@@ -29,12 +31,12 @@ class Constant{
     }
   }
 
-  static sendToNextWithResult(BuildContext context, Widget route,Function function) {
+  static sendToNextWithResult(
+      BuildContext context, Widget route, Function function) {
     Get.to(route)!.then((value) {
       function();
     });
   }
-
 
   static launchURL(String url) async {
     if (await launchUrl((Uri.parse(url)))) {
@@ -52,15 +54,13 @@ class Constant{
     final d1 = Duration(seconds: sec);
     return format(d1);
   }
-
-  }
+}
 
 initializeScreenSize(BuildContext context,
     {double width = 428, double height = 896}) {
-    // {double width = 414, double height = 896}) {
+  // {double width = 414, double height = 896}) {
   ScreenUtil.init(context, designSize: Size(width, height), minTextAdapt: true);
 }
-
 
 launchURL(String url) async {
   if (!await launchUrl(Uri.parse(url))) {
@@ -68,15 +68,15 @@ launchURL(String url) async {
   }
 }
 
-
-
-setIndex(){
-
+setIndex() {
   print("called----setIndex");
 
   var db = FirebaseFirestore.instance.collection("stories");
 
-  Query<Map<String, dynamic>> nameQuery = db.where("is_active",isEqualTo: true).where("is_popular",isEqualTo: true).orderBy("index",descending: true);
+  Query<Map<String, dynamic>> nameQuery = db
+      .where("is_active", isEqualTo: true)
+      .where("is_popular", isEqualTo: true)
+      .orderBy("index", descending: true);
 
   print("query========${nameQuery.parameters}");
 
@@ -86,5 +86,4 @@ setIndex(){
 
   // db.where("category",isEqualTo: "burgers")
   //     .orderBy("star_rating");
-
 }

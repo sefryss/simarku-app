@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/features/kegiatan_literasi/widgets/detail_kegiatan_literasi.dart';
-import 'package:simarku/features/kegiatan_literasi/widgets/kegiatan_literasi_card.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
 

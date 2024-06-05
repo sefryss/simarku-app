@@ -5,6 +5,7 @@ import 'package:simarku/features/article/screen/all_article/screen/all_article_p
 import 'package:simarku/features/books/bebas_baca/screen/all_bebas_baca_view.dart';
 import 'package:simarku/features/books/tukar_milik/screen/all_tukar_milik_view.dart';
 import 'package:simarku/features/books/tukar_pinjam/screen/all_tukar_pinjam_view.dart';
+import 'package:simarku/features/donation_book/screen/donation_book_page.dart';
 import 'package:simarku/utils/global/app_config.dart';
 
 class MainFeature extends StatelessWidget {
@@ -83,7 +84,9 @@ class MainFeature extends StatelessWidget {
 
         //Fitur Donasi Buku
         GestureDetector(
-          onTap: () {},
+          onTap: () {
+             Get.to(() => DonationBookPage());
+          },
           child: Column(
             children: [
               Stack(

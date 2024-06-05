@@ -120,7 +120,7 @@ class SMTextField extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(
-                  color: enabledBorderColor ?? const Color(0xFF8BB4FF),
+                  color: enabledBorderColor ?? AppColors.neutral04,
                   width: 1,
                 )),
             border: OutlineInputBorder(

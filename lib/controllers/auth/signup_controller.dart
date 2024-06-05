@@ -49,13 +49,6 @@ class SignUpController extends GetxController {
         return; // Tidak lanjut jika belum setuju kebijakan privasi
       }
 
-      // Your signup logic here (API call etc.)
-
-      //   // Signup successful (replace with your success logic)
-      //   SMFullScreenLoader.stopLoading();
-      //   Get.snackbar("Sukses", "Registrasi berhasil!",
-      //       snackPosition: SnackPosition.BOTTOM);
-
       // Register user in Firebase Authentication & Save user data in Firebase
       final userCredential = await AuthRepository.instance
           .registerWithEmailAndPassword(
