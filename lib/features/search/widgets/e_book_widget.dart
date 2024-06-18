@@ -39,69 +39,65 @@ class EBookWidget extends StatelessWidget {
         ),
         SizedBox(height: 16),
         Container(
-          height: 220,
-          child: Container(
-            height: 220,
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FireBaseData.getEBooks(
-                limit: 4,
-                selectedItems: selectedItems,
-                // searchQuery: queryText.value,
-              ),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Center(child: Text('Error: ${snapshot.error}'));
-                }
-
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(child: CircularProgressIndicator());
-                }
-
-                List<StoryModel> bookList = snapshot.data!.docs.map((doc) {
-                  return StoryModel.fromFirestore(doc);
-                }).toList();
-
-                if (queryText.value.isNotEmpty) {
-                  bookList = bookList
-                      .where((book) => book.name!
-                          .toLowerCase()
-                          .contains(queryText.value.toLowerCase()))
-                      .toList();
-                }
-
-                if (bookList.isEmpty) {
-                  return Center(child: Text('Tidak ada buku'));
-                }
-
-                return ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: bookList.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 0),
-                  itemBuilder: (context, index) {
-                    StoryModel storyModel = bookList[index];
-                    bool cell = true;
-
-                    if (queryText.value.isNotEmpty &&
-                        !storyModel.name!
-                            .toLowerCase()
-                            .contains(queryText.value)) {
-                      cell = false;
-                    }
-
-                    return cell
-                        ? InkWell(
-                            onTap: () =>
-                                Get.to(() => DetailBook(book: storyModel)),
-                            child: BookCard(
-                              book: storyModel,
-                            ),
-                          )
-                        : Container(); // If cell is false, return an empty container
-                  },
-                );
-              },
+          height: 230,
+          child: StreamBuilder<QuerySnapshot>(
+            stream: FireBaseData.getEBooks(
+              limit: 4,
+              selectedItems: selectedItems,
+              // searchQuery: queryText.value,
             ),
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              }
+
+              List<StoryModel> bookList = snapshot.data!.docs.map((doc) {
+                return StoryModel.fromFirestore(doc);
+              }).toList();
+
+              if (queryText.value.isNotEmpty) {
+                bookList = bookList
+                    .where((book) => book.name!
+                        .toLowerCase()
+                        .contains(queryText.value.toLowerCase()))
+                    .toList();
+              }
+
+              if (bookList.isEmpty) {
+                return Center(child: Text('Tidak ada buku'));
+              }
+
+              return ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: bookList.length,
+                separatorBuilder: (context, index) => const SizedBox(width: 0),
+                itemBuilder: (context, index) {
+                  StoryModel storyModel = bookList[index];
+                  bool cell = true;
+
+                  if (queryText.value.isNotEmpty &&
+                      !storyModel.name!
+                          .toLowerCase()
+                          .contains(queryText.value)) {
+                    cell = false;
+                  }
+
+                  return cell
+                      ? InkWell(
+                          onTap: () =>
+                              Get.to(() => DetailBook(book: storyModel)),
+                          child: BookCard(
+                            book: storyModel,
+                          ),
+                        )
+                      : Container(); // If cell is false, return an empty container
+                },
+              );
+            },
           ),
         ),
       ],

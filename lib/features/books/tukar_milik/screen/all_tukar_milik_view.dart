@@ -34,93 +34,88 @@ class _AllTukarMilikViewState extends State<AllTukarMilikView> {
           style: TextStyle(color: AppColors.white),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            16.0,
-            16.0,
-            0,
-            16.0,
-          ),
-          child: Column(
-            children: [
-              Container(
-                padding: EdgeInsets.only(right: 16.0),
-                child: searchField(context, 'Cari Buku', textEditingController,
-                    onChanged: (value) {
-                  setState(() {
-                    queryText.value = value;
-                  });
-                }),
-              ),
-              SizedBox(height: 16),
-              Container(
-                height: 220,
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FireBaseData.getTukarMilikBookList(),
-                  builder: (context, snapshot) {
-                    if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
-                    }
+      body: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          16.0,
+          16.0,
+          0,
+          16.0,
+        ),
+        child: Column(
+          children: [
+            Container(
+              padding: EdgeInsets.only(right: 16.0),
+              child: searchField(context, 'Cari Buku', textEditingController,
+                  onChanged: (value) {
+                setState(() {
+                  queryText.value = value;
+                });
+              }),
+            ),
+            SizedBox(height: 16),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FireBaseData.getTukarMilikBookList(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Center(child: Text('Error: ${snapshot.error}'));
+                  }
 
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
 
-                    List<StoryModel> bookList = snapshot.data!.docs.map((doc) {
-                      return StoryModel.fromFirestore(doc);
-                    }).toList();
+                  List<StoryModel> bookList = snapshot.data!.docs.map((doc) {
+                    return StoryModel.fromFirestore(doc);
+                  }).toList();
 
-                    List<StoryModel> filteredBookList = bookList.toList();
-                    if (queryText.value.isNotEmpty) {
-                      bookList = bookList
-                          .where((book) => book.name!
+                  List<StoryModel> filteredBookList = bookList.toList();
+                  if (queryText.value.isNotEmpty) {
+                    bookList = bookList
+                        .where((book) => book.name!
+                            .toLowerCase()
+                            .contains(queryText.value.toLowerCase()))
+                        .toList();
+                  }
+
+                  if (bookList.isEmpty) {
+                    return Center(child: Text('Tidak ada buku'));
+                  }
+
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 0.5,
+                    ),
+                    itemCount: filteredBookList.length,
+                    itemBuilder: (context, index) {
+                      StoryModel storyModel = filteredBookList[
+                          index]; // Menggunakan filteredBookList
+                      bool cell = true;
+
+                      if (queryText.value.isNotEmpty &&
+                          !storyModel.name!
                               .toLowerCase()
-                              .contains(queryText.value.toLowerCase()))
-                          .toList();
-                    }
+                              .contains(queryText.value.toLowerCase())) {
+                        cell = false;
+                      }
 
-                    if (bookList.isEmpty) {
-                      return Center(child: Text('Tidak ada buku'));
-                    }
-
-                    return GridView.builder(
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        childAspectRatio: 0.5,
-                      ),
-                      itemCount: filteredBookList.length,
-                      itemBuilder: (context, index) {
-                        StoryModel storyModel = filteredBookList[
-                            index]; // Menggunakan filteredBookList
-                        bool cell = true;
-
-                        if (queryText.value.isNotEmpty &&
-                            !storyModel.name!
-                                .toLowerCase()
-                                .contains(queryText.value.toLowerCase())) {
-                          cell = false;
-                        }
-
-                        return cell
-                            ? InkWell(
-                                onTap: () => Get.to(
-                                  () =>
-                                      DetailBook(book: filteredBookList[index]),
-                                ),
-                                child: BookCard(
-                                  book: filteredBookList[index],
-                                ),
-                              )
-                            : Container(); // If cell is false, return an empty container
-                      },
-                     
-                    );
-                  },
-                ),
+                      return cell
+                          ? InkWell(
+                              onTap: () => Get.to(
+                                () => DetailBook(book: filteredBookList[index]),
+                              ),
+                              child: BookCard(
+                                book: filteredBookList[index],
+                              ),
+                            )
+                          : Container(); // If cell is false, return an empty container
+                    },
+                  );
+                },
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

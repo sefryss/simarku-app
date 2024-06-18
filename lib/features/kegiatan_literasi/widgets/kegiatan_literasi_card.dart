@@ -14,7 +14,7 @@ class KegiatanLiterasiCard extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(16.0),
       child: SizedBox(
-        height: 115,
+        height: 120,
         child: Row(
           children: [
             Container(

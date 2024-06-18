@@ -12,7 +12,7 @@ class BookRecommendation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 220,
+      height: 230,
       child: StreamBuilder<QuerySnapshot>(
         stream: FireBaseData.getFeaturedList(),
         builder: (context, snapshot) {

@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:simarku/controllers/auth/user_controller.dart';
 import 'package:simarku/features/article/screen/all_article/screen/all_article_page.dart';
+import 'package:simarku/features/chat/screen/chat_page.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
 import 'package:simarku/features/home/home_page.dart';
 import 'package:simarku/features/kegiatan_literasi/screens/kegiatan_literasi_page.dart';
@@ -85,9 +86,12 @@ class DashboardPage extends StatelessWidget {
                               ),
                             ),
                             const Spacer(),
-                            SvgPicture.asset(
-                              'assets/icons/icon_pesan.svg',
-                              width: 36.0,
+                            InkWell(
+                                onTap: () => Get.to(() => ChatPage()),
+                              child: SvgPicture.asset(
+                                'assets/icons/icon_pesan.svg',
+                                width: 36.0,
+                              ),
                             ),
                           ],
                         ),
