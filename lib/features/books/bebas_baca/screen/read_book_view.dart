@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:simarku/controllers/books/detail_book_controller.dart';
-import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/constant.dart';
 import 'package:simarku/utils/constantWidget.dart';

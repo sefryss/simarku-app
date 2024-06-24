@@ -9,6 +9,8 @@ import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/repository/auth/auth_repository.dart';
 import 'package:simarku/utils/exceptions/exceptions.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 class UserRepository extends GetxController {
   static UserRepository get instance => Get.find();
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -70,7 +72,7 @@ class UserRepository extends GetxController {
     }
   }
 
-  // Update User Details
+  // Update User Field
   Future<void> updateUserField(Map<String, dynamic> json) async {
     try {
       await _db
@@ -103,6 +105,19 @@ class UserRepository extends GetxController {
       throw SMPlatformException(e.code).message;
     } catch (e) {
       throw 'Terjadi kesalahan. Mohon coba lagi';
+    }
+  }
+
+  // Fetch Firebase Messaging Token
+  Future<String> fetchFirebaseMessagingToken() async {
+    try {
+      FirebaseMessaging messaging = FirebaseMessaging.instance;
+      await messaging.requestPermission();
+      String? token = await messaging.getToken();
+      if (token == null) throw Exception('Failed to get push token');
+      return token;
+    } catch (e) {
+      throw 'Terjadi kesalahan mendapatkan push token';
     }
   }
 }

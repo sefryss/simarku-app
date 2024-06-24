@@ -22,7 +22,7 @@ class SignUpController extends GetxController {
   final email = TextEditingController();
   final password = TextEditingController(text: '');
   GlobalKey<FormState> signupFormKey = GlobalKey<FormState>();
-
+  final time = DateTime.now().millisecondsSinceEpoch.toString();
   Future<void> signup() async {
     try {
       SMFullScreenLoader.openLoadingDialog('assets/animations/loading.json');
@@ -56,14 +56,19 @@ class SignUpController extends GetxController {
 
       // Save Authentication user data in the Firebase Firestore
       final newUser = UserModel(
-        id: userCredential.user!.uid,
-        fullName: fullName.text.trim(),
-        nikNumber: nikNumber.text.trim(),
-        phoneNumber: phoneNumber.text.trim(),
-        address: address.text.trim(),
-        email: email.text.trim(),
-        profilePicture: '',
-      );
+          id: userCredential.user!.uid,
+          fullName: fullName.text.trim(),
+          nikNumber: nikNumber.text.trim(),
+          phoneNumber: phoneNumber.text.trim(),
+          address: address.text.trim(),
+          email: email.text.trim(),
+          profilePicture: '',
+          deviceId: '',
+          isAccess: false,
+          isAdmin: false,
+          isOnline: false,
+          lastActive: time,
+          pushToken: '');
 
       final userRepository = Get.put(UserRepository());
       await userRepository.saveUserRecord(newUser);
