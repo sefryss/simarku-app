@@ -31,7 +31,7 @@ class PopularBookWidget extends StatelessWidget {
         ),
         SizedBox(height: 16),
         Container(
-          height: 220,
+          height: 230,
           child: StreamBuilder<QuerySnapshot>(
             stream: FireBaseData.getPopularList(selectedItems: selectedItems),
             builder: (context, snapshot) {

@@ -8,6 +8,12 @@ class UserModel {
   String address;
   final String email;
   String profilePicture;
+  bool isOnline;
+  String lastActive;
+  String pushToken;
+  bool isAccess;
+  bool isAdmin;
+  String deviceId;
 
   UserModel({
     required this.id,
@@ -17,6 +23,12 @@ class UserModel {
     required this.address,
     required this.email,
     required this.profilePicture,
+    required this.isOnline,
+    required this.lastActive,
+    required this.pushToken,
+    required this.isAccess,
+    required this.isAdmin,
+    required this.deviceId,
   });
 
   UserModel copyWith({
@@ -27,6 +39,12 @@ class UserModel {
     String? address,
     String? email,
     String? profilePicture,
+    bool? isOnline,
+    String? lastActive,
+    String? pushToken,
+    bool? isAccess,
+    bool? isAdmin,
+    String? deviceId,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -36,10 +54,16 @@ class UserModel {
       address: address ?? this.address,
       email: email ?? this.email,
       profilePicture: profilePicture ?? this.profilePicture,
+      isOnline: isOnline ?? this.isOnline,
+      lastActive: lastActive ?? this.lastActive,
+      pushToken: pushToken ?? this.pushToken,
+      isAccess: isAccess ?? this.isAccess,
+      isAdmin: isAdmin ?? this.isAdmin,
+      deviceId: deviceId ?? this.deviceId,
     );
   }
 
-  /// Static function to create on empty user model
+  /// Static function to create an empty user model
   static UserModel empty() => UserModel(
         id: '',
         fullName: '',
@@ -48,6 +72,12 @@ class UserModel {
         address: '',
         email: '',
         profilePicture: '',
+        isOnline: false,
+        lastActive: '',
+        pushToken: '',
+        isAccess: false,
+        isAdmin: false,
+        deviceId: '',
       );
 
   /// Convert model to JSON structure for storing data in Firebase.
@@ -59,10 +89,16 @@ class UserModel {
       'Address': address,
       'Email': email,
       'ProfilePicture': profilePicture,
+      'IsOnline': isOnline,
+      'LastActive': lastActive,
+      'PushToken': pushToken,
+      'IsAccess': isAccess,
+      'IsAdmin': isAdmin,
+      'DeviceId': deviceId,
     };
   }
 
-  /// Factory method to crate a UserModel from a Firebase document snapshot.
+  /// Factory method to create a UserModel from a Firebase document snapshot.
   factory UserModel.fromSnapshot(
     DocumentSnapshot<Map<String, dynamic>> document,
   ) {
@@ -76,6 +112,12 @@ class UserModel {
         address: data['Address'] ?? '',
         email: data['Email'] ?? '',
         profilePicture: data['ProfilePicture'] ?? '',
+        isOnline: data['IsOnline'] ?? false,
+        lastActive: data['LastActive'] ?? '',
+        pushToken: data['PushToken'] ?? '',
+        isAccess: data['IsAccess'] ?? false,
+        isAdmin: data['IsAdmin'] ?? false,
+        deviceId: data['DeviceId'] ?? '',
       );
     } else {
       // Handle the case where the document data is null
@@ -94,6 +136,12 @@ class UserModel {
       phoneNumber: data['PhoneNumber'] ?? '',
       profilePicture: data['ProfilePicture'] ?? '',
       nikNumber: data['NIKNumber'] ?? '',
+      isOnline: data['IsOnline'] ?? false,
+      lastActive: data['LastActive'] ?? '',
+      pushToken: data['PushToken'] ?? '',
+      isAccess: data['IsAccess'] ?? false,
+      isAdmin: data['IsAdmin'] ?? false,
+      deviceId: data['DeviceId'] ?? '',
     );
   }
 }

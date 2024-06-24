@@ -6,3 +6,4 @@ export 'kegiatan_literasi_model.dart';
 export 'feedback_model.dart';
 export 'rate_us_model.dart';
 export 'donation_book_model.dart';
+export 'chat_model.dart';

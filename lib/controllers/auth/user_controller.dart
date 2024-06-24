@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:simarku/controllers/chat/chat_controller.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/repository/auth/user_repository.dart';
 import 'package:simarku/utils/loaders/loaders.dart';
@@ -12,6 +16,7 @@ class UserController extends GetxController {
   Rx<UserModel> user = UserModel.empty().obs;
   final profileLoading = false.obs;
   final imageUploading = false.obs;
+  final time = DateTime.now().millisecondsSinceEpoch.toString();
 
   @override
   void onInit() {
@@ -23,8 +28,14 @@ class UserController extends GetxController {
   Future<void> fetchUserRecord() async {
     try {
       profileLoading.value = true;
-      final user = await userRepository.fetchUserDetails();
-      this.user(user);
+      final fetchedUser = await userRepository.fetchUserDetails();
+      user(fetchedUser);
+
+      // Update active status
+      await ChatController.updateActiveStatus(true);
+
+      // Update push token
+      await updatePushToken();
     } catch (e) {
       user(UserModel.empty());
     } finally {
@@ -41,7 +52,7 @@ class UserController extends GetxController {
       if (user.value.id.isEmpty) {
         if (userCredential != null) {
           // Map Data
-          final user = UserModel(
+          final newUser = UserModel(
             id: userCredential.user!.uid,
             fullName: userCredential.user!.displayName ?? '',
             nikNumber: '',
@@ -49,10 +60,22 @@ class UserController extends GetxController {
             address: '',
             email: userCredential.user!.email ?? '',
             profilePicture: userCredential.user!.photoURL ?? '',
+            deviceId: '',
+            isAccess: false,
+            isAdmin: false,
+            isOnline: false,
+            lastActive: time,
+            pushToken: '',
           );
 
           // Save user data
-          await userRepository.saveUserRecord(user);
+          await userRepository.saveUserRecord(newUser);
+
+          // Fetch user details to get the updated user data
+          await fetchUserRecord();
+
+          // Update push token
+          await updatePushToken();
         }
       }
     } catch (e) {
@@ -62,6 +85,40 @@ class UserController extends GetxController {
               'Terjadi kesalahan ketika mencoba menyimpan informasi kamu. Kamu bisa menyimpan ulang data kamu di profil kamu.');
     }
   }
+
+  // Function to update Firebase Messaging Token
+  Future<void> updatePushToken() async {
+    try {
+      final token = await userRepository.fetchFirebaseMessagingToken();
+      await userRepository.updateUserField({'PushToken': token});
+      user.value.pushToken = token;
+
+      //   // for handling foreground messages
+      //   await FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      //     log('Got a message whilst in the foreground!');
+      //     log('Message data: ${message.data}');
+
+      //     if (message.notification != null) {
+      //       log('Message also contained a notification: ${message.notification}');
+      //     }
+      //   });
+    } catch (e) {
+      SMLoaders.errorSnackBar(
+          title: 'Push Token Error',
+          message: 'Terjadi kesalahan mendapatkan push token.');
+    }
+  }
+
+//   // Update active status
+//   Future<void> updateActiveStatus(bool isActive) async {
+//     try {
+//       await userRepository.updateUserField({'IsOnline': isActive});
+//       user.value.isOnline = isActive;
+//     } catch (e) {
+//       SMLoaders.errorSnackBar(
+//           title: 'Status Error', message: 'Terjadi kesalahan memperbarui status aktif.');
+//     }
+//   }
 
   /// Upload Profile Image
   uploadProfilePicture() async {
@@ -85,10 +142,21 @@ class UserController extends GetxController {
             title: 'Selamat!', message: 'Foto profil Kamu berhasil diperbarui');
       }
     } catch (e) {
-      SMLoaders.errorSnackBar(
-          title: 'Oops', message: 'Terjadi kesalahan $e');
+      SMLoaders.errorSnackBar(title: 'Oops', message: 'Terjadi kesalahan $e');
     } finally {
       imageUploading.value = false;
+    }
+  }
+
+  Future<void> logout() async {
+    try {
+      // Update active status to false
+      await ChatController.updateActiveStatus(false);
+      await FirebaseAuth.instance.signOut();
+      user(UserModel.empty());
+    } catch (e) {
+      SMLoaders.errorSnackBar(
+          title: 'Logout Failed', message: 'Terjadi kesalahan saat logout.');
     }
   }
 }

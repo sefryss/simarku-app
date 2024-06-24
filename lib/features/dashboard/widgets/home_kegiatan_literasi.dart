@@ -12,7 +12,7 @@ class LiteracyActivity extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 135,
+      height: 145,
       child: StreamBuilder<QuerySnapshot>(
         stream: FireBaseData.getKegiatanLiterasiList(),
         builder: (context, snapshot) {
