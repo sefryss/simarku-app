@@ -7,6 +7,7 @@ import 'package:simarku/features/books/tukar_milik/screen/all_tukar_milik_view.d
 import 'package:simarku/features/books/tukar_pinjam/screen/all_tukar_pinjam_view.dart';
 import 'package:simarku/features/chat/screen/chat_page.dart';
 import 'package:simarku/features/donation_book/screen/donation_book_page.dart';
+import 'package:simarku/features/kegiatan_literasi/screens/kegiatan_literasi_page.dart';
 import 'package:simarku/utils/global/app_config.dart';
 
 class MainFeature extends StatelessWidget {
@@ -364,7 +365,7 @@ class AllFeature extends StatelessWidget {
                                         SizedBox(
                                           width: 32,
                                           child: Image.asset(
-                                              'assets/icons/sekilas ilmu.png'),
+                                              'assets/icons/icon_sekilas_info.png'),
                                         ),
                                       ],
                                     ),
@@ -373,6 +374,40 @@ class AllFeature extends StatelessWidget {
                                     ),
                                     const Text(
                                       'Sekilas \nInfo',
+                                      style: AppTextStyle.body4Medium,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                              //Fitur Kegiatan Literasi
+                              GestureDetector(
+                                onTap: () {
+                                  Get.to(() => AllKegiatanLiterasi());
+                                },
+                                child: Column(
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        SizedBox(
+                                          width: 58,
+                                          child: SvgPicture.asset(
+                                              'assets/icons/background_fitur.svg'),
+                                        ),
+                                        SizedBox(
+                                          width: 32,
+                                          child: Image.asset(
+                                              'assets/icons/icon_kegiatan_literasi.png'),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 8,
+                                    ),
+                                    const Text(
+                                      'Kegiatan \nLiterasi',
                                       style: AppTextStyle.body4Medium,
                                       textAlign: TextAlign.center,
                                     ),
@@ -412,23 +447,6 @@ class AllFeature extends StatelessWidget {
                                 ),
                               ),
 
-                              //Fitur Kosongan
-                              const Column(
-                                children: [
-                                  SizedBox(
-                                    width: 56,
-                                    child: Text(''),
-                                  ),
-                                  SizedBox(
-                                    height: 8,
-                                  ),
-                                  Text(
-                                    '\n',
-                                    style: AppTextStyle.body4Medium,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
                               const Column(
                                 children: [
                                   SizedBox(width: 56, child: Text('')),

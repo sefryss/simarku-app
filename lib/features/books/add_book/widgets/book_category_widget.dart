@@ -12,6 +12,11 @@ class BookCategoryWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(BookController());
 
+    // Pastikan nilai awal sesuai dengan kategori yang diperbolehkan
+    if (controller.category.value == Category.bebasBaca) {
+      controller.category.value = Category.tukarPinjam;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -47,7 +52,10 @@ class BookCategoryWidget extends StatelessWidget {
               hintStyle: AppTextStyle.paragraphRegular
                   .copyWith(color: const Color(0xFF8B849B)),
             ),
-            items: Category.values.map((Category category) {
+            items: Category.values
+                .where((category) =>
+                    category != Category.bebasBaca) // Filter category here
+                .map((Category category) {
               return DropdownMenuItem<Category>(
                 value: category,
                 child: Text(
@@ -59,10 +67,6 @@ class BookCategoryWidget extends StatelessWidget {
             onChanged: (Category? newValue) {
               if (newValue != null && newValue != controller.category.value) {
                 controller.category.value = newValue;
-                if (newValue != controller.category.value) {
-                  controller.category.value = newValue;
-                }
-                ;
               }
             },
             validator: (value) =>

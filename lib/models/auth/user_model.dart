@@ -63,7 +63,6 @@ class UserModel {
     );
   }
 
-  /// Static function to create an empty user model
   static UserModel empty() => UserModel(
         id: '',
         fullName: '',
@@ -80,9 +79,9 @@ class UserModel {
         deviceId: '',
       );
 
-  /// Convert model to JSON structure for storing data in Firebase.
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'FullName': fullName,
       'NIKNumber': nikNumber,
       'PhoneNumber': phoneNumber,
@@ -98,12 +97,28 @@ class UserModel {
     };
   }
 
-  /// Factory method to create a UserModel from a Firebase document snapshot.
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      id: json['id'] ?? '',
+      fullName: json['FullName'] ?? '',
+      nikNumber: json['NIKNumber'] ?? '',
+      phoneNumber: json['PhoneNumber'] ?? '',
+      address: json['Address'] ?? '',
+      email: json['Email'] ?? '',
+      profilePicture: json['ProfilePicture'] ?? '',
+      isOnline: json['IsOnline'] ?? false,
+      lastActive: json['LastActive'] ?? '',
+      pushToken: json['PushToken'] ?? '',
+      isAccess: json['IsAccess'] ?? false,
+      isAdmin: json['IsAdmin'] ?? false,
+      deviceId: json['DeviceId'] ?? '',
+    );
+  }
+
   factory UserModel.fromSnapshot(
-    DocumentSnapshot<Map<String, dynamic>> document,
-  ) {
+      DocumentSnapshot<Map<String, dynamic>> document) {
     if (document.data() != null) {
-      final data = document.data()!; // Use '!' for non-null assertion
+      final data = document.data()!;
       return UserModel(
         id: document.id,
         fullName: data['FullName'] ?? '',
@@ -120,8 +135,6 @@ class UserModel {
         deviceId: data['DeviceId'] ?? '',
       );
     } else {
-      // Handle the case where the document data is null
-      // You can throw an exception, return an empty UserModel, etc.
       throw Exception("Document data is null!");
     }
   }

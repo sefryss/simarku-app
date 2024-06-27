@@ -179,7 +179,12 @@ class _DetailChatScreenState extends State<DetailChatScreen> {
           // Send message button
           MaterialButton(
             onPressed: () {
-              if (_textController.text.isNotEmpty) {
+              if (_list.isEmpty) {
+                //on first message (add user to my_user collection of chat user)
+                ChatController.sendFirstMessage(
+                    widget.user, _textController.text, Type.text);
+              } else {
+                //simply send message
                 ChatController.sendMessage(
                     widget.user, _textController.text, Type.text);
               }
