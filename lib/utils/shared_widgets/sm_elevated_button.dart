@@ -139,19 +139,79 @@ class SMElevatedButtonWithIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: onPressed,
-      icon: icon,
-      label: Text(
-        labelText,
-        style: AppTextStyle.body2Bold.copyWith(color: labelColor),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: ElevatedButton.icon(
+        onPressed: onPressed,
+        icon: icon,
+        iconAlignment: IconAlignment.end,
+        label: Text(
+          labelText,
+          style: AppTextStyle.paragraphMedium.copyWith(color: labelColor),
+        ),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: backgroundColor,
+            disabledBackgroundColor: disableBackgroundColor,
+            padding:
+                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: borderRadius ?? BorderRadius.circular(8.0))),
       ),
-      style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          disabledBackgroundColor: disableBackgroundColor,
-          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-          shape: RoundedRectangleBorder(
-              borderRadius: borderRadius ?? BorderRadius.circular(8.0))),
+    );
+  }
+}
+
+class SMOutlineElevatedButtonWithIcon extends StatelessWidget {
+  final VoidCallback? onPressed;
+  final String labelText;
+  final Color labelColor;
+    final Color borderColor;
+  final Color disableBorderColor;
+  final BorderRadiusGeometry? borderRadius;
+  final Color backgroundColor;
+  final Color disableBackgroundColor;
+  final Widget icon;
+    final bool isLoading;
+
+
+  const SMOutlineElevatedButtonWithIcon(
+      {super.key,
+          this.borderColor = AppColors.primary,
+    this.disableBorderColor = AppColors.grey,
+    this.borderRadius,
+      required this.onPressed,
+      required this.labelText,
+      this.backgroundColor = AppColors.primary,
+      this.disableBackgroundColor = AppColors.grey,
+      required this.icon,
+        this.isLoading = false,
+      this.labelColor = AppColors.black,});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width,
+      child: ElevatedButton.icon(
+        
+        onPressed: onPressed,
+        icon: icon,
+        iconAlignment: IconAlignment.end,
+        label: Text(
+          labelText,
+          style: AppTextStyle.paragraphMedium.copyWith(color: labelColor),
+        ),
+        style: ElevatedButton.styleFrom(
+            
+            backgroundColor: backgroundColor,
+               side: BorderSide(
+                color: isLoading ? disableBorderColor : borderColor,
+                width: 1.0),
+            disabledBackgroundColor: disableBackgroundColor,
+            padding:
+                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+            shape: RoundedRectangleBorder(
+                borderRadius: borderRadius ?? BorderRadius.circular(8.0))),
+      ),
     );
   }
 }

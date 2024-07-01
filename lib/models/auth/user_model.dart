@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class UserModel {
   final String id;
@@ -156,5 +157,26 @@ class UserModel {
       isAdmin: data['IsAdmin'] ?? false,
       deviceId: data['DeviceId'] ?? '',
     );
+  }
+
+  // Method to fetch user data from Firestore
+  static Future<UserModel> fetchCurrentUser() async {
+    try {
+      User currentUser = FirebaseAuth.instance.currentUser!;
+      DocumentSnapshot userDoc = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser.uid)
+          .get();
+      if (userDoc.exists) {
+        print('User data fetched successfully.');
+        return UserModel.fromFirestore(userDoc);
+      } else {
+        print('User document does not exist.');
+        throw 'User document does not exist.';
+      }
+    } catch (e) {
+      print('Error fetching user data: $e');
+      throw e;
+    }
   }
 }

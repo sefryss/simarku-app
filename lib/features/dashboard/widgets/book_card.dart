@@ -16,7 +16,7 @@ class BookCard extends StatelessWidget {
       padding: const EdgeInsets.only(right: 16.0),
       child: Container(
         width: 110,
-        // height: 160,
+        // height: 200,
         child: Column(
           children: [
             ClipRRect(

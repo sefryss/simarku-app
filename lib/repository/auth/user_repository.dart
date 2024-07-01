@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -114,6 +115,8 @@ class UserRepository extends GetxController {
       FirebaseMessaging messaging = FirebaseMessaging.instance;
       await messaging.requestPermission();
       String? token = await messaging.getToken();
+
+   
       if (token == null) throw Exception('Failed to get push token');
       return token;
     } catch (e) {

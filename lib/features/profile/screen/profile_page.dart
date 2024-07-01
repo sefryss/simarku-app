@@ -13,9 +13,10 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = UserController.instance;
-    final user = controller.user.value; 
+    final user = controller.user.value;
 
     return Scaffold(
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         automaticallyImplyLeading: false,

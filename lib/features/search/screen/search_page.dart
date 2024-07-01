@@ -28,6 +28,7 @@ class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         automaticallyImplyLeading: false,
@@ -46,7 +47,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: searchField(context, 'Cari Buku', textEditingController,
                     onChanged: (value) {
                   setState(() {
-                    queryText.value = value; 
+                    queryText.value = value;
                   });
                 }),
               ),
@@ -74,4 +75,3 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 }
-

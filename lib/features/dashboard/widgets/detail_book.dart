@@ -139,8 +139,11 @@ class _DetailBookState extends State<DetailBook> {
                                 Text(
                                   widget.book.name ?? '',
                                   style: AppTextStyle.heading5SemiBold,
-                                  maxLines: 2,
+                                  maxLines: 4,
                                   overflow: TextOverflow.ellipsis,
+                                ),
+                                SizedBox(
+                                  height: 2,
                                 ),
                                 Text(
                                   widget.book.author ?? '',

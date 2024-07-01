@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/features/activity/widgets/history_donation_book.dart';
+import 'package:simarku/features/activity/widgets/history_tukar_milik.dart';
 import 'package:simarku/features/activity/widgets/widgets.dart';
 import 'package:simarku/features/profile/widgets/widgets.dart';
 import 'package:simarku/utils/global/app_config.dart';
@@ -11,6 +12,7 @@ class ActivityPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.white,
       appBar: AppBar(
         backgroundColor: AppColors.primary,
         automaticallyImplyLeading: false,
@@ -45,7 +47,9 @@ class ActivityPage extends StatelessWidget {
                 ProfileMenuWidget(
                   icon: 'assets/icons/icon_tukar_milik.svg',
                   title: 'Riwayat Tukar Milik',
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(() => HistoryTukarMilik());
+                  },
                 ),
                 ProfileMenuWidget(
                   icon: 'assets/icons/icon_donasi.svg',

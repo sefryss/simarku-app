@@ -11,6 +11,7 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(SignUpController());
     return Scaffold(
+      backgroundColor: AppColors.white,
       // appBar: AppBar(
       //   leading: SMBackButton(buttonColor: AppColors.primary,),
       // ),

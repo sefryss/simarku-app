@@ -116,7 +116,7 @@ class _ChatPageState extends State<ChatPage> {
                   _addChatUserDialog(context);
                 },
                 child: const Icon(
-                  Icons.chat_rounded,
+                  Icons.person_add_outlined,
                   color: AppColors.neutral02,
                 )),
           ),

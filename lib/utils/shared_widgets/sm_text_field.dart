@@ -45,7 +45,7 @@ class SMTextField extends StatelessWidget {
     this.prefixIcon,
     this.suffixIcon,
     this.focusedBorder,
-    this.labelColor = AppColors.neutral02,
+    this.labelColor = AppColors.white,
     this.textStyle,
     this.enabledBorderColor,
     this.hintStyle,
@@ -120,7 +120,7 @@ class SMTextField extends StatelessWidget {
             enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(
-                  color: enabledBorderColor ?? AppColors.neutral04,
+                  color: enabledBorderColor ?? AppColors.white,
                   width: 1,
                 )),
             border: OutlineInputBorder(
@@ -130,7 +130,7 @@ class SMTextField extends StatelessWidget {
                   width: 1,
                 )),
             filled: true,
-            fillColor: const Color(0xFFFFFBFE),
+            fillColor: AppColors.white,
           ),
         )
       ],

@@ -72,7 +72,7 @@ Future<void> showRateUsDialog(BuildContext context, UserModel user) {
                           Navigator.of(context).pop();
                         },
                         labelText: 'Tidak',
-                        backgroundColor: AppColors.neutral01,
+                        backgroundColor: AppColors.neutral03,
                       ),
                     ),
                     SizedBox(width: 20),

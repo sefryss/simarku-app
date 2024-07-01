@@ -4,6 +4,7 @@ import 'package:simarku/features/search/widgets/category_filter_modal_bottom_she
 import 'package:simarku/features/search/widgets/book_type_filter_modal_bottom_sheet.dart';
 import 'package:simarku/features/search/widgets/genre_filter_modal_bottom_sheet.dart';
 import 'package:simarku/utils/global/app_config.dart';
+import 'package:simarku/utils/global/app_theme.dart';
 
 class BookFilter extends StatefulWidget implements PreferredSizeWidget {
   const BookFilter({
@@ -25,7 +26,7 @@ class BookFilter extends StatefulWidget implements PreferredSizeWidget {
 class _BookFilterState extends State<BookFilter> {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final theme = AppTheme.theme;
     final filters = [
       CustomFilterChip(
         label: const Text('Kategori '),
@@ -133,7 +134,7 @@ class _FilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final theme = Theme.of(context);
+    final theme = AppTheme.theme;
 
     const contentColor = Color(0xFF697586);
     const iconTheme = IconThemeData(size: 18, color: contentColor);
@@ -146,12 +147,13 @@ class _FilterChip extends StatelessWidget {
             backgroundColor: AppColors.primary,
             child: _buildFilterChip(context, size, theme, iconTheme),
           )
-        : _buildFilterChip(context, size, theme, iconTheme);
+        : _buildFilterChip(context, size, AppTheme.theme, iconTheme);
   }
 
   Widget _buildFilterChip(BuildContext context, Size size, ThemeData theme,
       IconThemeData iconTheme) {
     return FilterChip.elevated(
+      backgroundColor: AppColors.white,
       showCheckmark: false,
       elevation: 2,
       surfaceTintColor: Colors.white,
@@ -169,7 +171,7 @@ class _FilterChip extends StatelessWidget {
             return Container(
               constraints: BoxConstraints(maxHeight: size.height * 0.8),
               decoration: BoxDecoration(
-                color: theme.scaffoldBackgroundColor,
+                color: AppTheme.theme.scaffoldBackgroundColor,
                 borderRadius:
                     const BorderRadius.vertical(top: Radius.circular(8)),
               ),
@@ -183,7 +185,7 @@ class _FilterChip extends StatelessWidget {
           },
           constraints: BoxConstraints(maxHeight: size.height * 0.8),
           showDragHandle: true,
-          backgroundColor: theme.scaffoldBackgroundColor,
+          backgroundColor: AppTheme.theme.scaffoldBackgroundColor,
           isScrollControlled: true,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
@@ -225,7 +227,8 @@ class CustomFilterChip extends StatelessWidget {
         ],
       ),
       selected: selected,
-      backgroundColor: selected ? theme.scaffoldBackgroundColor : null,
+      backgroundColor:
+          selected ? theme.scaffoldBackgroundColor : AppColors.white,
       onSelected: onSelected,
       side: BorderSide(color: AppColors.neutral04),
     );

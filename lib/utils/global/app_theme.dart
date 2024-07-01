@@ -3,6 +3,7 @@ import 'package:simarku/utils/global/app_config.dart';
 
 abstract final class AppTheme {
   static final ThemeData theme = ThemeData(
+    scaffoldBackgroundColor: AppColors.white,
     colorScheme: ColorScheme.fromSeed(
       seedColor: AppColors.primary,
     ),

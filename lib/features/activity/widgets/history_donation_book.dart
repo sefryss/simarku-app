@@ -81,7 +81,8 @@ class HistoryDonationBook extends StatelessWidget {
                           ),
                           Text(
                             'Kamu belum berdonasi buku apapun,\nAyo donasikan buku kamu disini!',
-                            style: AppTextStyle.body2Regular,
+                            style: AppTextStyle.body3Regular
+                                .copyWith(color: AppColors.neutral08),
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(
@@ -92,7 +93,7 @@ class HistoryDonationBook extends StatelessWidget {
                               Get.to(() => AddDonationBookPage());
                             },
                             labelText: 'Donasi Buku',
-                            width: 185,
+                            width: 170,
                           ),
                         ],
                       ),

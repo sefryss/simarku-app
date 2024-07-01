@@ -7,8 +7,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart';
+import 'package:simarku/controllers/auth/user_controller.dart';
 import 'package:simarku/controllers/chat/notification_access_token.dart';
+import 'package:simarku/main.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/models/chat_model.dart';
 
@@ -27,22 +30,44 @@ class ChatController {
   // to return current user
   static User get user => auth.currentUser!;
 
-  // User Model
-  static late UserModel me;
+// User Model
+  static UserModel? me;
 
-  // for sending push notification (Updated Codes)
+// Initialize the user model with Firestore data
+  static Future<void> initializeUserModel() async {
+    try {
+      me = await UserModel.fetchCurrentUser();
+      print('UserModel initialized: ${me!.fullName}');
+    } catch (e) {
+      print('Error initializing user model: $e');
+    }
+  }
+
+// for sending push notification (Updated Codes)
   static Future<void> sendPushNotification(
       UserModel chatUser, String msg) async {
     try {
+      if (me == null) {
+        await initializeUserModel();
+      }
+
+      // Ensure 'me' is initialized
+      if (me == null) {
+        print('User model initialization failed.');
+        return;
+      }
+
       final body = {
         "message": {
           "token": chatUser.pushToken,
           "notification": {
-            "title": chatUser.fullName,
+            "title": me!.fullName,
             "body": msg,
           },
         }
       };
+
+      print('Sending notification with title: ${me!.fullName}');
 
       // Firebase Project > Project Settings > General Tab > Project ID
       const projectID = 'simarku-a8d45';
@@ -65,6 +90,39 @@ class ChatController {
         body: jsonEncode(body),
       );
 
+      // Initialize flutter_local_notifications
+      const AndroidInitializationSettings initializationSettingsAndroid =
+          AndroidInitializationSettings('@mipmap/launcher_icon');
+
+      const InitializationSettings initializationSettings =
+          InitializationSettings(
+        android: initializationSettingsAndroid,
+      );
+
+      await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+        RemoteNotification? notification = message.notification;
+        AndroidNotification? android = message.notification?.android;
+
+        if (notification != null && android != null) {
+          flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                'chats', // channel id
+                'Chats', // channel name
+                importance: Importance.max,
+                priority: Priority.high,
+                showWhen: false,
+              ),
+            ),
+          );
+        }
+      });
+
       log('Response status: ${res.statusCode}');
       log('Response body: ${res.body}');
     } catch (e) {
@@ -74,7 +132,7 @@ class ChatController {
 
   // for checking if user exists or not?
   static Future<bool> userExists() async {
-    return (await firestore.collection('users').doc(user.uid).get()).exists;
+    return (await firestore.collection('Users').doc(user.uid).get()).exists;
   }
 
   // for adding an chat user for our conversation

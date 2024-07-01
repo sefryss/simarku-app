@@ -1,6 +1,7 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+// import 'package:flutter_windowmanager/flutter_windowmanager.dart';
 import 'package:get/get.dart';
 import 'package:pdfx/pdfx.dart';
 import 'package:simarku/controllers/books/detail_book_controller.dart';
@@ -38,6 +39,7 @@ class _ReadBookViewState extends State<ReadBookView> {
   @override
   void initState() {
     super.initState();
+    // FlutterWindowManager.addFlags(FlutterWindowManager.FLAG_SECURE);
     getBytes();
     PrefData.setRecentReadBook(widget.book.pdf ?? "");
     PrefData.setRecentReadBookName(widget.book.name ?? "");
@@ -92,7 +94,10 @@ class _ReadBookViewState extends State<ReadBookView> {
               final isConnected = snapshot.data ?? false;
               if (isConnected) {
                 if (pdfPinchController == null) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator(
+                    color: AppColors.primary,
+                  ));
                 }
 
                 return Container(

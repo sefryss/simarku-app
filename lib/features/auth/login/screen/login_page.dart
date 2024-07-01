@@ -11,6 +11,7 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(LoginController());
     return Scaffold(
+      backgroundColor: AppColors.white,
       // appBar: AppBar(
       //   leading: SMBackButton(buttonColor: AppColors.primary),
       // ),
@@ -62,6 +63,7 @@ class LoginPage extends StatelessWidget {
                           height: 24,
                           width: 24,
                           child: Obx(() => Checkbox(
+                              activeColor: AppColors.primary,
                               value: controller.rememberMe.value,
                               onChanged: ((value) => controller.rememberMe
                                   .value = !controller.rememberMe.value))),

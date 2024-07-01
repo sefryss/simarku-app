@@ -27,7 +27,7 @@ class ApplyButton extends StatelessWidget {
       case Category.tukarMilik:
         buttonText = 'Tukar Milik';
         onTap = () {
-          Get.to(() => TukarMilikBookView());
+          showTukarMilikDialog(context, book); // Pass the book information
         };
         break;
       case Category.bebasBaca:

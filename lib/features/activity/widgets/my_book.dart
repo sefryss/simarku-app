@@ -76,7 +76,8 @@ class MyBook extends StatelessWidget {
                           ),
                           Text(
                             'Kamu belum mengupload buku apapun,\nAyo tambahkan buku kamu disini!',
-                            style: AppTextStyle.body2Regular,
+                            style: AppTextStyle.body3Regular
+                                .copyWith(color: AppColors.neutral08),
                             textAlign: TextAlign.center,
                           ),
                           SizedBox(
@@ -87,7 +88,7 @@ class MyBook extends StatelessWidget {
                               Get.to(() => AddBookPage());
                             },
                             labelText: 'Tambah Buku',
-                            width: 185,
+                            width: 170,
                           ),
                         ],
                       ),
@@ -95,32 +96,22 @@ class MyBook extends StatelessWidget {
                   }
 
                   final books = snapshot.data!;
-                  return Column(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 220,
-                          child: GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 0.5,
-                            ),
-                            itemCount: books.length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () => Get.to(
-                                  () => DetailBook(book: books[index]),
-                                ),
-                                child: BookCard(
-                                  book: books[index],
-                                ),
-                              );
-                            },
-                          ),
+                  return GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 0.49,
+                    ),
+                    itemCount: books.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () => Get.to(
+                          () => DetailBook(book: books[index]),
                         ),
-                      ),
-                    ],
+                        child: BookCard(
+                          book: books[index],
+                        ),
+                      );
+                    },
                   );
                 },
               ),
