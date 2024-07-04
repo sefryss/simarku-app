@@ -1,17 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:simarku/controllers/tukar_milik/tukar_milik_controller.dart';
 import 'package:simarku/features/activity/widgets/widgets.dart';
-import 'package:simarku/features/books/tukar_milik/screen/all_tukar_milik_view.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
-import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 
 class PengajuanTukarMilikWidget extends StatelessWidget {
   const PengajuanTukarMilikWidget({super.key});

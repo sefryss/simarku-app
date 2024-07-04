@@ -1,20 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:simarku/controllers/tukar_milik/tukar_milik_controller.dart';
+import 'package:simarku/controllers/tukar_pinjam/tukar_pinjam_controller.dart';
 import 'package:simarku/features/activity/widgets/widgets.dart';
-import 'package:simarku/features/books/tukar_milik/screen/all_tukar_milik_view.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
-import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 
-class DiajukanTukarMilikWidget extends StatelessWidget {
-  const DiajukanTukarMilikWidget({super.key});
+class PengajuanTukarPinjamWidget extends StatelessWidget {
+  const PengajuanTukarPinjamWidget({super.key});
 
   Future<UserModel> fetchUserDetails(String userId) async {
     DocumentSnapshot userDoc =
@@ -36,7 +33,7 @@ class DiajukanTukarMilikWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TukarMilikController());
+    final controller = Get.put(TukarPinjamController());
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, authSnapshot) {
@@ -46,8 +43,8 @@ class DiajukanTukarMilikWidget extends StatelessWidget {
         final currentUser = authSnapshot.data!;
         return StreamBuilder(
           stream: FirebaseFirestore.instance
-              .collection('TukarMilik')
-              .where('senderId', isEqualTo: currentUser.uid)
+              .collection('TukarPinjam')
+              .where('receiverId', isEqualTo: currentUser.uid)
               .orderBy('timestamp', descending: true)
               .snapshots(),
           builder: (context, snapshot) {
@@ -61,20 +58,10 @@ class DiajukanTukarMilikWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Kamu belum pernah melakukan tukar milik. Ayo ajukan tukar milik sekarang!',
+                        'Belum ada yang mengajukan tukar pinjam dengan kamu.',
                         style: AppTextStyle.body3Regular
                             .copyWith(color: AppColors.neutral08),
                         textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 24,
-                      ),
-                      SMElevatedButton(
-                        onPressed: () {
-                          Get.to(() => AllTukarMilikView());
-                        },
-                        labelText: 'Tukar Milik Buku',
-                        width: 170,
                       ),
                     ],
                   ),
@@ -82,14 +69,14 @@ class DiajukanTukarMilikWidget extends StatelessWidget {
               );
             }
             final requests = snapshot.data!.docs
-                .map((doc) => TukarMilikModel.fromFirestore(doc))
+                .map((doc) => TukarPinjamModel.fromFirestore(doc))
                 .toList();
             return ListView.builder(
               itemCount: requests.length,
               itemBuilder: (context, index) {
                 final request = requests[index];
                 return FutureBuilder<UserModel>(
-                  future: fetchUserDetails(request.receiverId),
+                  future: fetchUserDetails(request.senderId),
                   builder: (context, senderSnapshot) {
                     if (!senderSnapshot.hasData) {
                       return ListTile(
@@ -99,7 +86,7 @@ class DiajukanTukarMilikWidget extends StatelessWidget {
                     }
                     final sender = senderSnapshot.data!;
                     return FutureBuilder<StoryModel>(
-                      future: fetchBookDetails(request.receiverBookId),
+                      future: fetchBookDetails(request.senderBookId),
                       builder: (context, bookSnapshot) {
                         if (!bookSnapshot.hasData) {
                           return ListTile(
@@ -112,10 +99,13 @@ class DiajukanTukarMilikWidget extends StatelessWidget {
                             .addPattern(',')
                             .add_jm()
                             .format(request.timestamp.toDate());
+                        final loanEndTime = DateFormat.yMMMMd('id_ID')
+                            .format(request.loanEndTime.toDate());
                         return InkWell(
                           onTap: () => Get.to(() => DetailBook(book: book)),
-                          child: TukarMilikCard(
-                              isSender: true,
+                          child: TukarPinjamCard(
+                              loanEndTime: loanEndTime,
+                              isSender: false,
                               book: book,
                               sender: sender,
                               formattedTimestamp: formattedTimestamp,

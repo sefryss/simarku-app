@@ -28,6 +28,7 @@ class StoryModel {
   bool? isAvailable = true;
   BookType? bookType;
   Category? category;
+  Timestamp? loanEndTime;
 
   StoryModel({
     this.author,
@@ -53,6 +54,7 @@ class StoryModel {
     this.isFav,
     this.bookType,
     this.category,
+    this.loanEndTime,
   });
 
   factory StoryModel.fromFirestore(DocumentSnapshot doc) {
@@ -88,6 +90,7 @@ class StoryModel {
           ? Category.values
               .firstWhere((e) => getCategoryString(e) == data['category'])
           : null,
+      loanEndTime: data['loan_end_time'],
     );
   }
 
@@ -121,6 +124,7 @@ class StoryModel {
           ? Category.values
               .firstWhere((e) => getCategoryString(e) == data['category'])
           : null,
+      loanEndTime: data['loan_end_time'],
     );
   }
 
@@ -150,6 +154,7 @@ class StoryModel {
         this.bookType != null ? getBookTypeString(this.bookType!) : null;
     data['category'] =
         this.category != null ? getCategoryString(this.category!) : null;
+    data['loan_end_time'] = this.loanEndTime;
 
     return data;
   }

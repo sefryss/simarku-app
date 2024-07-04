@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/features/activity/widgets/history_donation_book.dart';
-import 'package:simarku/features/activity/widgets/history_tukar_milik.dart';
+import 'package:simarku/features/activity/widgets/riwayat_tukar_milik/history_tukar_milik.dart';
 import 'package:simarku/features/activity/widgets/widgets.dart';
 import 'package:simarku/features/profile/widgets/widgets.dart';
 import 'package:simarku/utils/global/app_config.dart';
@@ -42,7 +42,9 @@ class ActivityPage extends StatelessWidget {
                 ProfileMenuWidget(
                   icon: 'assets/icons/icon_tukar_pinjam.svg',
                   title: 'Riwayat Tukar Pinjam',
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(() => HistoryTukarPinjam());
+                  },
                 ),
                 ProfileMenuWidget(
                   icon: 'assets/icons/icon_tukar_milik.svg',

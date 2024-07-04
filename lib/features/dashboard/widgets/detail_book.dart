@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -23,10 +24,12 @@ class DetailBook extends StatefulWidget {
 class _DetailBookState extends State<DetailBook> {
   final DetailBookScreenController controller =
       Get.put(DetailBookScreenController());
+  late User? currentUser;
 
   @override
   void initState() {
     super.initState();
+    currentUser = FirebaseAuth.instance.currentUser;
 
     Future.delayed(Duration.zero, () async {
       controller.getFavDataList();
@@ -46,6 +49,15 @@ class _DetailBookState extends State<DetailBook> {
         controller.checkInBookMark(widget.book.id.toString());
       },
     );
+  }
+
+  Future<TukarPinjamModel?> _getTukarPinjam(String bookId) async {
+    final querySnapshot =
+        await FirebaseFirestore.instance.collection('TukarPinjam').get();
+    if (querySnapshot.docs.isNotEmpty) {
+      return TukarPinjamModel.fromFirestore(querySnapshot.docs.first);
+    }
+    return null;
   }
 
   @override
@@ -334,9 +346,28 @@ class _DetailBookState extends State<DetailBook> {
                 const SizedBox(
                   height: 12,
                 ),
-                ApplyButton(
-                  book: widget.book,
-                  category: widget.book.category,
+                FutureBuilder<TukarPinjamModel?>(
+                  future: _getTukarPinjam(widget.book.id!),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (snapshot.hasError) {
+                      return Text('Error: ${snapshot.error}');
+                    }
+                    if (!snapshot.hasData) {
+                      return Text('No data found');
+                    }
+
+                    final tukarPinjam = snapshot.data!;
+
+                    return ApplyButton(
+                      senderId: tukarPinjam.senderId,
+                      receiverId: tukarPinjam.receiverId,
+                      book: widget.book,
+                      category: widget.book.category,
+                    );
+                  },
                 ),
               ],
             ),

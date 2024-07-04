@@ -1,8 +1,12 @@
 export 'favourite_book.dart';
 export 'my_book.dart';
 export 'recent_book.dart';
-export 'history_tukar_milik.dart';
+export 'riwayat_tukar_milik/history_tukar_milik.dart';
 export 'history_donation_book.dart';
-export 'pengajuan_tukar_milik_widget.dart';
-export 'diajukan_tukar_milik_widget.dart';
-export 'tukar_milik_card.dart';
+export 'riwayat_tukar_milik/pengajuan_tukar_milik_widget.dart';
+export 'riwayat_tukar_milik/diajukan_tukar_milik_widget.dart';
+export 'riwayat_tukar_milik/tukar_milik_card.dart';
+export 'riwayat_tukar_pinjam/history_tukar_pinjam.dart';
+export 'riwayat_tukar_pinjam/diajukan_tukar_pinjam_widget.dart';
+export 'riwayat_tukar_pinjam/pengajuan_tukar_pinjam_widget.dart';
+export 'riwayat_tukar_pinjam/tukar_pinjam_card.dart';

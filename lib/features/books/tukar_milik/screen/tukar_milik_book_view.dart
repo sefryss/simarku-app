@@ -51,7 +51,7 @@ Future<void> showTukarMilikDialog(BuildContext context, StoryModel book) {
                         style: AppTextStyle.heading5SemiBold,
                       ),
                     ),
-                    SizedBox(height: 24),
+                    SizedBox(height: 16),
                     Text(
                       "Pilih Bukumu",
                       style: AppTextStyle.body1Regular,
@@ -130,6 +130,15 @@ Future<void> showTukarMilikDialog(BuildContext context, StoryModel book) {
                       onPressed: isRequestPending
                           ? null
                           : () async {
+                              if (controller.selectedBookId.value.isEmpty) {
+                                SMLoaders.errorSnackBar(
+                                  title: 'Buku Belum Dipilih',
+                                  message:
+                                      'Pilih buku yang ingin diajukan terlebih dahulu.',
+                                );
+                                return;
+                              }
+
                               setState(() {
                                 isRequestPending = true;
                               });

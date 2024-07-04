@@ -1,42 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:simarku/controllers/tukar_milik/tukar_milik_controller.dart';
 import 'package:simarku/features/activity/widgets/widgets.dart';
-import 'package:simarku/features/books/tukar_milik/screen/all_tukar_milik_view.dart';
-import 'package:simarku/models/auth/user_model.dart';
-import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
-class HistoryTukarMilik extends StatelessWidget {
-  const HistoryTukarMilik({Key? key});
-
-  Future<UserModel> fetchUserDetails(String userId) async {
-    DocumentSnapshot userDoc =
-        await FirebaseFirestore.instance.collection('Users').doc(userId).get();
-    if (!userDoc.exists) {
-      throw 'User not found in Firestore';
-    }
-    return UserModel.fromFirestore(userDoc);
-  }
-
-  Future<StoryModel> fetchBookDetails(String bookId) async {
-    DocumentSnapshot bookDoc =
-        await FirebaseFirestore.instance.collection('books').doc(bookId).get();
-    if (!bookDoc.exists) {
-      throw 'Book not found in Firestore';
-    }
-    return StoryModel.fromFirestore(bookDoc);
-  }
+class HistoryTukarPinjam extends StatelessWidget {
+  const HistoryTukarPinjam({Key? key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(TukarMilikController());
-
     return Scaffold(
         appBar: AppBar(
           backgroundColor: AppColors.primary,
@@ -46,7 +17,7 @@ class HistoryTukarMilik extends StatelessWidget {
             buttonColor: Colors.white,
           ),
           title: Text(
-            'Riwayat Tukar Milik',
+            'Riwayat Tukar Pinjam',
             style: TextStyle(color: AppColors.white),
           ),
         ),
@@ -61,7 +32,7 @@ class HistoryTukarMilik extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Pengajuan',
+                    'Pengajuan Tukar Pinjam',
                     style: AppTextStyle.body2Medium,
                   ),
                   //   InkWell(
@@ -75,7 +46,7 @@ class HistoryTukarMilik extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(child: PengajuanTukarMilikWidget()),
+            Expanded(child: PengajuanTukarPinjamWidget()),
             SizedBox(
               height: 16,
             ),
@@ -85,7 +56,7 @@ class HistoryTukarMilik extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Diajukan',
+                    'Diajukan Tukar Pinjam',
                     style: AppTextStyle.body2Medium,
                   ),
                   //   InkWell(
@@ -99,7 +70,7 @@ class HistoryTukarMilik extends StatelessWidget {
                 ],
               ),
             ),
-            Expanded(child: DiajukanTukarMilikWidget()),
+            Expanded(child: DiajukanTukarPinjamWidget()),
           ],
         ));
   }

@@ -8,6 +8,7 @@ class TukarMilikModel {
   String receiverBookId;
   String status; // Pending, Accepted, Rejected
   Timestamp timestamp;
+ 
 
   TukarMilikModel({
     required this.id,
@@ -17,6 +18,7 @@ class TukarMilikModel {
     required this.receiverBookId,
     required this.status,
     required this.timestamp,
+
   });
 
   factory TukarMilikModel.fromFirestore(DocumentSnapshot doc) {
@@ -29,6 +31,7 @@ class TukarMilikModel {
       receiverBookId: data['receiverBookId'] ?? '',
       status: data['status'] ?? '',
       timestamp: data['timestamp'] ?? '',
+
     );
   }
 
@@ -40,6 +43,7 @@ class TukarMilikModel {
       'receiverBookId': receiverBookId,
       'status': status,
       'timestamp': timestamp,
+
     };
   }
 }
