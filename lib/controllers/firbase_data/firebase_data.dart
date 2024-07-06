@@ -6,6 +6,20 @@ import 'package:flutter/material.dart';
 import 'package:simarku/utils/constantWidget.dart';
 
 class FireBaseData {
+  static Future<DocumentSnapshot<Map<String, dynamic>>> getBookById(
+      String bookId) async {
+    try {
+      DocumentSnapshot<Map<String, dynamic>> bookSnapshot =
+          await FirebaseFirestore.instance
+              .collection('books') // Ganti dengan nama koleksi Anda
+              .doc(bookId)
+              .get();
+      return bookSnapshot;
+    } catch (e) {
+      print('Error getting book by id: $e');
+      throw e; // Atau lakukan penanganan kesalahan lainnya sesuai kebutuhan aplikasi Anda
+    }
+  }
 //   static insertData(
 //       {required var map,
 //       required String tableName,

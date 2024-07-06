@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_catch_error
+
 import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -10,7 +12,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/controllers/firbase_data/key_table.dart';
 import 'package:simarku/features/activity/widgets/history_donation_book.dart';
-import 'package:simarku/features/activity/widgets/my_book.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/constant.dart';

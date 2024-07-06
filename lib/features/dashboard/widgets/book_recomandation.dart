@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
-import 'package:simarku/features/search/widgets/widgets.dart';
 import 'package:simarku/models/models.dart';
 
 class BookRecommendation extends StatelessWidget {
@@ -28,19 +27,17 @@ class BookRecommendation extends StatelessWidget {
             return StoryModel.fromFirestore(doc);
           }).toList();
 
-          List<StoryModel> filteredBookList = bookList.take(6).toList();
-
           return ListView.separated(
             scrollDirection: Axis.horizontal,
-            itemCount: filteredBookList.length,
+            itemCount: bookList.length,
             separatorBuilder: (context, index) => const SizedBox(width: 0),
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () => Get.to(
-                  () => DetailBook(book: filteredBookList[index]),
+                  () => DetailBook(book: bookList[index]),
                 ),
                 child: BookCard(
-                  book: filteredBookList[index],
+                  book: bookList[index],
                 ),
               );
             },

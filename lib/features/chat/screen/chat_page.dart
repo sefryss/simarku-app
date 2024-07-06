@@ -1,9 +1,5 @@
-import 'dart:developer';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:simarku/controllers/chat/chat_controller.dart';
 import 'package:simarku/features/chat/widgets/widgets.dart';
 import 'package:simarku/models/auth/user_model.dart';
@@ -21,7 +17,6 @@ class _ChatPageState extends State<ChatPage> {
   List<UserModel> _list = [];
   List<UserModel> _searchList = [];
   bool _isSearching = false;
-  String _searchQuery = '';
 
   @override
   Widget build(BuildContext context) {

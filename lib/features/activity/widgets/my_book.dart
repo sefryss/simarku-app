@@ -3,11 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:simarku/features/books/add_book/screen/add_book_page.dart';
+import 'package:simarku/features/books/edit_book/screen/edit_book_page.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/repository/auth/auth_repository.dart';
 import 'package:simarku/utils/global/app_config.dart';
+import 'package:simarku/utils/loaders/loaders.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
+// import 'package:simarku/features/books/edit_book/screen/edit_book_page.dart';
 
 class MyBook extends StatelessWidget {
   const MyBook({super.key});
@@ -107,6 +110,9 @@ class MyBook extends StatelessWidget {
                         onTap: () => Get.to(
                           () => DetailBook(book: books[index]),
                         ),
+                        onLongPress: () {
+                          _showBookOptions(context, books[index]);
+                        },
                         child: BookCard(
                           book: books[index],
                         ),
@@ -139,5 +145,114 @@ class MyBook extends StatelessWidget {
         },
       ),
     );
+  }
+
+  void _showBookOptions(BuildContext context, StoryModel book) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Builder(builder: (context) {
+          return FractionallySizedBox(
+            heightFactor: 0.35,
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 4,
+                        width: 32,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            color: AppColors.neutral04),
+                      ),
+                      const SizedBox(height: 16),
+                      ListTile(
+                        leading: Icon(
+                          Icons.edit,
+                          color: AppColors.second,
+                        ),
+                        title: Text('Edit'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Get.to(() => EditBookPage(book: book));
+                        },
+                      ),
+                      ListTile(
+                        leading: Icon(
+                          Icons.delete,
+                          color: Colors.red,
+                        ),
+                        title: Text('Hapus'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          _showDeleteConfirmationDialog(context, book);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          );
+        });
+      },
+    );
+  }
+
+  void _showDeleteConfirmationDialog(BuildContext context, StoryModel book) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          backgroundColor: AppColors.white,
+          title: Text('Konfirmasi Hapus'),
+          content: Text('Apakah anda ingin menghapus buku ini?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Menutup dialog
+              },
+              child: Text(
+                'Tidak',
+                style: TextStyle(color: AppColors.second),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Menutup dialog
+                _deleteBook(context, book);
+              },
+              child: Text(
+                'Ya',
+                style: TextStyle(color: AppColors.primary),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _deleteBook(BuildContext context, StoryModel book) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('books')
+          .doc(book.id)
+          .delete();
+      SMLoaders.successSnackBar(
+          title: 'Berhasil', message: 'Buku berhasil dihapus');
+    } catch (e) {
+      SMLoaders.errorSnackBar(
+          title: 'Gagal', message: 'Gagal menghapus buku: $e');
+    }
   }
 }

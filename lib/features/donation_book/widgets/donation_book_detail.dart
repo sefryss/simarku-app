@@ -1,14 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:simarku/controllers/books/detail_book_controller.dart';
 import 'package:simarku/controllers/firbase_data/firebase_data.dart';
-import 'package:simarku/features/dashboard/widgets/widgets.dart';
 import 'package:simarku/utils/constantWidget.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/models/models.dart';
-import 'package:simarku/utils/loaders/loaders.dart';
 import 'package:simarku/utils/shared_widgets/sm_back_button.dart';
 import 'package:flutter_widget_from_html_core/flutter_widget_from_html_core.dart';
 

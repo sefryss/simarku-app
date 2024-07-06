@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -131,6 +132,20 @@ class BookController extends GetxController {
         selectedUserNameList.toString().replaceAll('[', '').replaceAll(']', '');
   }
 
+  String removeHtmlTags(String htmlString) {
+    final regex = RegExp(r'<[^>]*>');
+    return htmlString.replaceAll(regex, '');
+  }
+
+  String decodeFileName(String url) {
+    try {
+      Uri uri = Uri.parse(url);
+      return Uri.decodeComponent(uri.pathSegments.last);
+    } catch (e) {
+      return '';
+    }
+  }
+
   setAllDataFromStoryModel(StoryModel? s) {
     if (s != null) {
       storyModel = s;
@@ -162,7 +177,7 @@ class BookController extends GetxController {
         bookType.value = storyModel!.bookType!;
 
         pdfUrl.value = pdfFile;
-        descController.text = storyModel!.desc!;
+        descController.text = removeHtmlTags(storyModel!.desc!);
 
         oldGenre = nameController.text;
 
@@ -271,6 +286,79 @@ class BookController extends GetxController {
     }
   }
 
+  // Update Book
+  Future<void> editBook(String bookId) async {
+    try {
+      SMFullScreenLoader.openLoadingDialog('assets/animations/loading.json');
+
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        SMFullScreenLoader.stopLoading();
+        return;
+      }
+
+      if (!bookFormKey.currentState!.validate()) {
+        SMFullScreenLoader.stopLoading();
+        return;
+      }
+
+      String url =
+          pickImage != null ? await uploadFile(pickImage!) : storyModel!.image!;
+
+      String pdfUploadUrl = '';
+      if (result != null && result!.files.isNotEmpty) {
+        pdfUploadUrl = await uploadPdfFile();
+      } else {
+        pdfUploadUrl = storyModel!.pdf!;
+      }
+
+      // Log PDF URL
+      print('PDF Upload URL: $pdfUploadUrl');
+
+      StoryModel firebaseHistory = StoryModel(
+        name: nameController.text,
+        author: authorController.text,
+        publisher: publisherController.text,
+        releaseDate: releaseDateController.text,
+        page: pageController.text,
+        image: url,
+        pdf: pdfUploadUrl,
+        refId: genre.value,
+        genreId: selectedGenre,
+        index: storyModel!.index,
+        ownerId: selectedUser,
+        desc: descController.text,
+        isActive: true,
+        views: storyModel!.views,
+        isBookmark: storyModel!.isBookmark,
+        isFav: storyModel!.isFav,
+        isPopular: isPopular.value,
+        isFeatured: isFeatured.value,
+        isAvailable: isAvailable.value,
+        bookType: bookType.value,
+        category: category.value,
+      );
+
+      Map<String, dynamic> data = firebaseHistory.toJson();
+      await FirebaseFirestore.instance
+          .collection(KeyTable.storyList)
+          .doc(bookId)
+          .update(data);
+
+      SMFullScreenLoader.stopLoading();
+      clearStoryData();
+      SMLoaders.successSnackBar(
+          title: 'Selamat', message: 'Buku berhasil diperbarui');
+      print("Story updated successfully");
+      Get.off(() => MyBook());
+    } catch (e) {
+      SMFullScreenLoader.stopLoading();
+      print('Error updating story: $e');
+      showCustomToast(
+          message: 'Failed to update story. Please try again.', title: 'Error');
+    }
+  }
+
   // Upload File
   Future<String> uploadFile(XFile _image) async {
     try {
@@ -291,7 +379,6 @@ class BookController extends GetxController {
     }
   }
 
-// Upload PDF File
 // Upload PDF File
   Future<String> uploadPdfFile() async {
     try {
@@ -331,6 +418,7 @@ class BookController extends GetxController {
     try {
       TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() {
         print("Upload complete");
+      // ignore: body_might_complete_normally_catch_error
       }).catchError((error) {
         print("Error during upload: $error");
       });
@@ -493,19 +581,27 @@ class BookController extends GetxController {
   }
 
   Future<void> showOwnerDialog(BuildContext context) async {
-    List<UserModel> userList = [];
-    try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('Users').get();
-      userList = querySnapshot.docs
-          .map((doc) => UserModel.fromFirestore(doc))
-          .toList();
-    } catch (e) {
-      print('Error fetching user data: $e');
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      showCustomToast(message: "User not logged in");
+      return;
     }
 
-    if (userList.isEmpty) {
-      showCustomToast(message: "No Data");
+    UserModel? currentUserModel;
+    try {
+      DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser.uid)
+          .get();
+      if (docSnapshot.exists) {
+        currentUserModel = UserModel.fromFirestore(docSnapshot);
+      }
+    } catch (e) {
+      print('Error fetching current user data: $e');
+    }
+
+    if (currentUserModel == null) {
+      showCustomToast(message: "Current user data not found");
       return;
     }
 
@@ -535,21 +631,22 @@ class BookController extends GetxController {
             width: MediaQuery.of(context).size.width * 0.8,
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: userList.length,
+              itemCount: 1,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    userList[index].fullName,
+                    currentUserModel!.fullName,
                     style: AppTextStyle.body3Regular,
                   ),
                   trailing: Obx(() => Radio<String>(
                         activeColor: AppColors.primary,
-                        value: userList[index].id,
+                        value: currentUserModel!.id,
                         groupValue: selectedOwnerId.value,
                         onChanged: (String? value) {
                           if (value != null) {
                             selectedOwnerId.value = value;
-                            selectedOwnerName.value = userList[index].fullName;
+                            selectedOwnerName.value =
+                                currentUserModel!.fullName;
                           }
                         },
                       )),

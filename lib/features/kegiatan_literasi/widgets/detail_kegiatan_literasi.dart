@@ -68,7 +68,7 @@ class DetailKegiatanLiterasi extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                'Tanggal: ${kegiatanLiterasi.date!}',
+                'Tanggal: ${kegiatanLiterasi.dateStart!} - ${kegiatanLiterasi.dateEnd!}',
                 style: AppTextStyle.body3Regular
                     .copyWith(color: AppColors.neutral06),
               ),

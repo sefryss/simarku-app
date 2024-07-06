@@ -9,7 +9,7 @@ import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 
 class AllBebasBacaView extends StatefulWidget {
-  const AllBebasBacaView({super.key});
+  const AllBebasBacaView({Key? key}) : super(key: key);
 
   @override
   State<AllBebasBacaView> createState() => _AllBebasBacaViewState();
@@ -64,14 +64,15 @@ class _AllBebasBacaViewState extends State<AllBebasBacaView> {
                     return StoryModel.fromFirestore(doc);
                   }).toList();
 
-                  List<StoryModel> filteredBookList = bookList.toList();
-                  if (queryText.value.isNotEmpty) {
-                    filteredBookList = bookList
-                        .where((book) => book.name!
-                            .toLowerCase()
-                            .contains(queryText.value.toLowerCase()))
-                        .toList();
-                  }
+                  // Filter and sort the book list based on the query text
+                  List<StoryModel> filteredBookList = bookList.where((book) {
+                    return book.name!
+                        .toLowerCase()
+                        .contains(queryText.value.toLowerCase());
+                  }).toList();
+
+                  // Sort the filtered list to ensure the order remains consistent
+                  filteredBookList.sort((a, b) => a.name!.compareTo(b.name!));
 
                   if (filteredBookList.isEmpty) {
                     return Center(child: Text('Tidak ada buku'));
@@ -84,7 +85,7 @@ class _AllBebasBacaViewState extends State<AllBebasBacaView> {
                     ),
                     itemCount: filteredBookList.length,
                     itemBuilder: (context, index) {
-                      StoryModel storyModel = filteredBookList[index];
+
                       return InkWell(
                         onTap: () => Get.to(
                           () => DetailBook(book: filteredBookList[index]),

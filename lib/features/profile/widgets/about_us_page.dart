@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({super.key});

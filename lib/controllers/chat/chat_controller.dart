@@ -1,3 +1,5 @@
+// ignore_for_file: body_might_complete_normally_catch_error
+
 import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
@@ -9,7 +11,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart';
-import 'package:simarku/controllers/auth/user_controller.dart';
 import 'package:simarku/controllers/chat/notification_access_token.dart';
 import 'package:simarku/main.dart';
 import 'package:simarku/models/auth/user_model.dart';

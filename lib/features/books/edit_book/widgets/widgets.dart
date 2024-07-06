@@ -1,0 +1,12 @@
+export 'book_desc_widget.dart';
+export 'book_page_widget.dart';
+export 'book_type_widget.dart';
+export 'book_genre_widget.dart';
+export 'book_image_widget.dart';
+export 'book_title_widget.dart';
+export 'book_author_widget.dart';
+export 'book_owner_widget.dart';
+export 'book_category_widget.dart';
+export 'book_publisher_widget.dart';
+export 'book_release_date_widget.dart';
+export 'submit_button_widget.dart';

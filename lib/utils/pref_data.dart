@@ -185,18 +185,19 @@ class PrefData {
     prefs.setStringList(favouriteList, sizes);
   }
 
-  static String recentList = "recentBook";
+static String recentList = "recentBookList"; // Ubah nama kunci SharedPreferences
 
-  static Future<List<String>> getRecentList() async {
-    SharedPreferences? prefs = await SharedPreferences.getInstance();
-    List<String>? value = prefs.getStringList(recentList);
-    return value ?? [];
-  }
+static Future<List<String>> getRecentList() async {
+  SharedPreferences? prefs = await SharedPreferences.getInstance();
+  List<String>? value = prefs.getStringList(recentList);
+  return value ?? [];
+}
 
-  static setRecentList(List<String> sizes) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setStringList(recentList, sizes);
-  }
+static setRecentList(List<String> bookIds) async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  prefs.setStringList(recentList, bookIds);
+}
+
 
   static String bookMarkList = "booMarkBook";
 

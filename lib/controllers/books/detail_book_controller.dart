@@ -96,14 +96,14 @@ class RecentController extends GetxController {
   RxBool like = false.obs;
   RxBool save = false.obs;
 
-  RxList<String> recentList = <String>[].obs;
+  RxList<String> recentList = <String>[].obs; // Ubah menjadi RxList<String>
 
   void getRecentDataList() async {
     recentList.value = await PrefData.getRecentList();
   }
 
-  setRecentList(String id) {
+  void setRecentList(String id) {
     recentList.add(id);
-    PrefData.setRecentList(recentList);
+    PrefData.setRecentList(recentList.toList()); // Ubah menjadi list untuk disimpan di SharedPreferences
   }
 }

@@ -5,7 +5,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:simarku/controllers/books/detail_book_controller.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
 import 'package:simarku/features/home/home_page.dart';
-import 'package:simarku/features/search/widgets/widgets.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';

@@ -69,16 +69,17 @@ class _AllTukarMilikViewState extends State<AllTukarMilikView> {
                     return StoryModel.fromFirestore(doc);
                   }).toList();
 
-                  List<StoryModel> filteredBookList = bookList.toList();
-                  if (queryText.value.isNotEmpty) {
-                    bookList = bookList
-                        .where((book) => book.name!
-                            .toLowerCase()
-                            .contains(queryText.value.toLowerCase()))
-                        .toList();
-                  }
+                  // Filter and sort the book list based on the query text
+                  List<StoryModel> filteredBookList = bookList.where((book) {
+                    return book.name!
+                        .toLowerCase()
+                        .contains(queryText.value.toLowerCase());
+                  }).toList();
 
-                  if (bookList.isEmpty) {
+                  // Sort the filtered list to ensure the order remains consistent
+                  filteredBookList.sort((a, b) => a.name!.compareTo(b.name!));
+
+                  if (filteredBookList.isEmpty) {
                     return Center(child: Text('Tidak ada buku'));
                   }
 
@@ -89,27 +90,15 @@ class _AllTukarMilikViewState extends State<AllTukarMilikView> {
                     ),
                     itemCount: filteredBookList.length,
                     itemBuilder: (context, index) {
-                      StoryModel storyModel = filteredBookList[
-                          index]; // Menggunakan filteredBookList
-                      bool cell = true;
 
-                      if (queryText.value.isNotEmpty &&
-                          !storyModel.name!
-                              .toLowerCase()
-                              .contains(queryText.value.toLowerCase())) {
-                        cell = false;
-                      }
-
-                      return cell
-                          ? InkWell(
-                              onTap: () => Get.to(
-                                () => DetailBook(book: filteredBookList[index]),
-                              ),
-                              child: BookCard(
-                                book: filteredBookList[index],
-                              ),
-                            )
-                          : Container(); // If cell is false, return an empty container
+                      return InkWell(
+                        onTap: () => Get.to(
+                          () => DetailBook(book: filteredBookList[index]),
+                        ),
+                        child: BookCard(
+                          book: filteredBookList[index],
+                        ),
+                      );
                     },
                   );
                 },

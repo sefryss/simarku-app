@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:simarku/controllers/books/detail_book_controller.dart';
 import 'package:simarku/controllers/firbase_data/firebase_data.dart';
 import 'package:simarku/features/dashboard/widgets/widgets.dart';
-import 'package:simarku/features/search/widgets/widgets.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
@@ -17,15 +16,12 @@ class RecentBook extends StatefulWidget {
 }
 
 class _RecentBookState extends State<RecentBook> {
-  RecentController controller = Get.put(RecentController());
+  final RecentController controller = Get.put(RecentController());
 
   @override
   void initState() {
     super.initState();
-
-    Future.delayed(Duration.zero, () async {
-      controller.getRecentDataList();
-    });
+    controller.getRecentDataList(); // Ambil data buku terakhir yang dibaca
   }
 
   @override
@@ -46,57 +42,49 @@ class _RecentBookState extends State<RecentBook> {
         child: Container(
           padding: EdgeInsets.fromLTRB(
             16.0,
-            24.0,
+            16.0,
             0,
             16.0,
           ),
-          child: StreamBuilder<QuerySnapshot>(
-            stream: FireBaseData.getBookList(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              }
+          child: Obx(() {
+            final List<String> recentList = controller.recentList.toList();
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
+            if (recentList.isEmpty) {
+              return Center(child: Text('Tidak ada buku'));
+            }
 
-              List<DocumentSnapshot> list = snapshot.data!.docs;
-
-              return GetBuilder<QuickReadController>(
-                  init: QuickReadController(),
-                  builder: (favController) {
-                    favController.checkDataExist(list, controller.recentList);
-
-                    if (favController.filteredRecentList.isNotEmpty) {
-                      return Obx(() => GridView.builder(
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 0.5,
-                            ),
-                            itemCount: favController.filteredRecentList.length,
-                            itemBuilder: (context, index) {
-                              StoryModel books = StoryModel.fromFirestore(
-                                  favController.filteredRecentList[index]);
-                              return InkWell(
-                                onTap: () => Get.to(
-                                  () => DetailBook(book: books),
-                                ),
-                                child: BookCard(
-                                  book: books,
-                                ),
-                              );
-                            },
-                          ));
-                    } else {
-                      return Center(
-                        child: Text('Tidak ada buku'),
-                      );
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 0.5,
+              ),
+              itemCount: recentList.length,
+              itemBuilder: (context, index) {
+                String bookId = recentList[index];
+                return FutureBuilder<DocumentSnapshot>(
+                  future: FireBaseData.getBookById(bookId),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
                     }
-                  });
-            },
-          ),
+
+                    if (snapshot.hasError || !snapshot.hasData) {
+                      return Container(); // Ganti dengan pesan error jika perlu
+                    }
+
+                    StoryModel book = StoryModel.fromFirestore(snapshot.data!);
+
+                    return InkWell(
+                      onTap: () => Get.to(() => DetailBook(book: book)),
+                      child: BookCard(
+                        book: book,
+                      ),
+                    );
+                  },
+                );
+              },
+            );
+          }),
         ),
       ),
     );

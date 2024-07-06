@@ -29,47 +29,45 @@ class DonationBookPage extends StatelessWidget {
       body: Container(
         padding: EdgeInsets.fromLTRB(
           16.0,
-          24.0,
+          16.0,
           0,
           16.0,
         ),
-        child: Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: FireBaseData.getDonationBookList(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              }
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FireBaseData.getDonationBookList(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Center(child: Text('Error: ${snapshot.error}'));
+            }
 
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
 
-              List<DonationBookModel> bookList = snapshot.data!.docs.map((doc) {
-                return DonationBookModel.fromFirestore(doc);
-              }).toList();
+            List<DonationBookModel> bookList = snapshot.data!.docs.map((doc) {
+              return DonationBookModel.fromFirestore(doc);
+            }).toList();
 
-              List<DonationBookModel> filteredBookList = bookList.toList();
+            List<DonationBookModel> filteredBookList = bookList.toList();
 
-              return GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  childAspectRatio: 0.5,
-                ),
-                itemCount: filteredBookList.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () => Get.to(
-                      () => DonationDetailBook(book: filteredBookList[index]),
-                    ),
-                    child: DonationBookCard(
-                      book: filteredBookList[index],
-                    ),
-                  );
-                },
-              );
-            },
-          ),
+            return GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                childAspectRatio: 0.5,
+              ),
+              itemCount: filteredBookList.length,
+              itemBuilder: (context, index) {
+                return InkWell(
+                  onTap: () => Get.to(
+                    () => DonationDetailBook(book: filteredBookList[index]),
+                  ),
+                  child: DonationBookCard(
+                    book: filteredBookList[index],
+                  ),
+                );
+              },
+            );
+          },
         ),
       ),
     );
