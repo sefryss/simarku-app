@@ -13,13 +13,12 @@ class RegisterEmailInputWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = Get.put(SignUpController());
     return SMTextField(
-              validator: (value) =>
-          SMValidator.validateEmail(value),
+      validator: (value) => SMValidator.validateEmail(value),
       controller: controller.email,
       labelText: 'Email',
       labelColor: AppColors.neutralBlack,
       hintText: 'Masukkan Email',
-      keyboardType: TextInputType.name,
+      keyboardType: TextInputType.emailAddress,
       textInputAction: TextInputAction.next,
       enabledBorderColor: AppColors.neutral04,
     );

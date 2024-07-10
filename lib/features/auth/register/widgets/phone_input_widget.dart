@@ -18,7 +18,7 @@ class RegisterPhoneInputWidget extends StatelessWidget {
       labelText: 'Nomor Telepon',
       labelColor: AppColors.neutralBlack,
       hintText: 'Masukkan Nomor Telepon',
-      keyboardType: TextInputType.name,
+      keyboardType: TextInputType.number,   
       textInputAction: TextInputAction.next,
       enabledBorderColor: AppColors.neutral04,
       onChanged: (phone) => {},

@@ -20,6 +20,42 @@ class _AllTukarPinjamViewState extends State<AllTukarPinjamView> {
   final TextEditingController textEditingController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showCopyrightWarning(context);
+    });
+  }
+
+  void _showCopyrightWarning(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Tukar Pinjam"),
+          content: Text(
+            textAlign: TextAlign.justify,
+            style: AppTextStyle.body2Regular,
+            "Sebelum melakukan Tukar Pinjam dan itu buku fisik maka pastikan kalian berkomunikasi dengan yang mengajukan Tukar Pinjam terlebih dahulu untuk melakukan pertemuan atau mengatur pengiriman buku dan setelah menerima masing-masing buku baru Anda bisa menerima pengajuan Tukar Pinjam.",
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                "OK",
+                style:
+                    AppTextStyle.body2Medium.copyWith(color: AppColors.primary),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -90,7 +126,6 @@ class _AllTukarPinjamViewState extends State<AllTukarPinjamView> {
                     ),
                     itemCount: filteredBookList.length,
                     itemBuilder: (context, index) {
-
                       return InkWell(
                         onTap: () => Get.to(
                           () => DetailBook(book: filteredBookList[index]),

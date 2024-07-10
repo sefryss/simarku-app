@@ -20,6 +20,54 @@ class _AllTukarMilikViewState extends State<AllTukarMilikView> {
   final TextEditingController textEditingController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showCopyrightWarning(context);
+    });
+  }
+
+  void _showCopyrightWarning(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: AppColors.neutral01,
+          title: Text("Tukar Milik"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                textAlign: TextAlign.justify,
+                style: AppTextStyle.body2Regular,
+                "Sebelum melakukan Tukar Milik dan itu buku fisik maka pastikan kalian berkomunikasi dengan yang mengajukan Tukar Milik untuk melakukan pertemuan atau mengatur pengiriman buku dan setelah menerima masing-masing buku baru Anda bisa menerima pengajuan Tukar Milik.",
+              ),
+              SizedBox(height: 16),
+              Text(
+                textAlign: TextAlign.justify,
+                style: AppTextStyle.body2Regular,
+                "Peringatan: Aplikasi SiMarKu tidak bertanggung jawab jika ada pelanggaran hak cipta atau penyalahgunaan terkait e-book.",
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                "OK",
+                style:
+                    AppTextStyle.body2Medium.copyWith(color: AppColors.primary),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -90,7 +138,6 @@ class _AllTukarMilikViewState extends State<AllTukarMilikView> {
                     ),
                     itemCount: filteredBookList.length,
                     itemBuilder: (context, index) {
-
                       return InkWell(
                         onTap: () => Get.to(
                           () => DetailBook(book: filteredBookList[index]),

@@ -42,7 +42,10 @@ class KegiatanLiterasiCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${kegiatanLiterasi.dateStart!} - ${kegiatanLiterasi.dateEnd}',
+                    kegiatanLiterasi.dateEnd != null &&
+                            kegiatanLiterasi.dateEnd!.isNotEmpty
+                        ? '${kegiatanLiterasi.dateStart!} - ${kegiatanLiterasi.dateEnd!}'
+                        : '${kegiatanLiterasi.dateStart!}',
                     style: AppTextStyle.body3Regular
                         .copyWith(color: AppColors.neutral06),
                   ),

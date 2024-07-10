@@ -31,6 +31,7 @@ class _DashboardPageState extends State<DashboardPage> {
       if (ChatController.auth.currentUser != null) {
         if (message.toString().contains('resume')) {
           ChatController.updateActiveStatus(true);
+
         }
         if (message.toString().contains('pause')) {
           ChatController.updateActiveStatus(false);
@@ -40,6 +41,8 @@ class _DashboardPageState extends State<DashboardPage> {
       return Future.value(message);
     });
   }
+
+ 
 
   @override
   Widget build(BuildContext context) {

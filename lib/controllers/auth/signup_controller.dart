@@ -83,6 +83,7 @@ class SignUpController extends GetxController {
 
       // Move to Verify Email Screen
       Get.to(() => VerifyEmail(email: email.text.trim()));
+      
     } catch (e) {
       SMFullScreenLoader.stopLoading();
       SMLoaders.errorSnackBar(title: 'Oops!', message: e.toString());

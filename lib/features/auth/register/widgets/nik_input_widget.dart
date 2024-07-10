@@ -19,7 +19,7 @@ class RegisterNIKInputWidget extends StatelessWidget {
       labelText: 'Nomor Identitas / NIK',
       labelColor: AppColors.neutralBlack,
       hintText: 'Masukkan Nomor Identitas',
-      keyboardType: TextInputType.name,
+      keyboardType: TextInputType.number,
       textInputAction: TextInputAction.next,
       enabledBorderColor: AppColors.neutral04,
     );
