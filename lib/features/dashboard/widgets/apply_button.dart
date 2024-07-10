@@ -77,6 +77,8 @@ class ApplyButton extends StatelessWidget {
       onTap = () {
         Get.to(() => ReadBookView(book: book));
       };
+    } else if (category == Category.koleksi) {
+      return Container();
     }
 
     return Material(

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum BookType { physicalBook, ebook }
 
-enum Category { tukarPinjam, tukarMilik, bebasBaca }
+enum Category { tukarPinjam, tukarMilik, bebasBaca, koleksi }
 
 class StoryModel {
   String? name = "";
@@ -168,6 +168,8 @@ String getCategoryString(Category category) {
       return 'Tukar Milik';
     case Category.tukarPinjam:
       return 'Tukar Pinjam';
+    case Category.koleksi:
+      return 'Koleksi';
     default:
       return '';
   }

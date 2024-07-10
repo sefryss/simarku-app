@@ -10,3 +10,5 @@ export 'filter.dart';
 export 'e_book_widget.dart';
 export 'physical_book_widget.dart';
 export 'popular_book_widget.dart';
+export 'collection_book_view.dart';
+export 'collection_book_widget.dart';

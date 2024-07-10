@@ -198,6 +198,38 @@ class FireBaseData {
     }
   }
 
+  static getCollectionBooks(
+      {int limit = 0, Map<String, dynamic>? selectedItems}) {
+    Query query = FirebaseFirestore.instance
+        .collection(KeyTable.storyList)
+        .where(KeyTable.isActive, isEqualTo: true)
+        .where(KeyTable.category, isEqualTo: 'Koleksi');
+
+    if (selectedItems != null && selectedItems.isNotEmpty) {
+      selectedItems.forEach((key, value) {
+        if (key != 'book_type') {
+          // Ubah kondisi untuk filter 'genre_id'
+          if (key == 'genre_id' && value != null) {
+            // Tambahkan pemeriksaan untuk nilai null
+            if (value is List) {
+              if (value.isNotEmpty) {
+                // Tambahkan pemeriksaan untuk daftar tidak kosong
+                query = query.where(key, arrayContainsAny: value);
+              }
+            }
+          } else {
+            query = query.where(key, isEqualTo: value);
+          }
+        }
+      });
+    }
+
+    if (limit != 0) {
+      query = query.limit(limit);
+    }
+    return query.orderBy(KeyTable.index, descending: true).snapshots();
+  }
+
   static getTukarPinjamBookList({int limit = 0}) {
     if (limit != 0) {
       return FirebaseFirestore.instance

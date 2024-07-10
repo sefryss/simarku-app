@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -492,19 +493,27 @@ class DonationBookController extends GetxController {
   }
 
   Future<void> showOwnerDialog(BuildContext context) async {
-    List<UserModel> userList = [];
-    try {
-      QuerySnapshot querySnapshot =
-          await FirebaseFirestore.instance.collection('Users').get();
-      userList = querySnapshot.docs
-          .map((doc) => UserModel.fromFirestore(doc))
-          .toList();
-    } catch (e) {
-      print('Error fetching user data: $e');
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser == null) {
+      showCustomToast(message: "User not logged in");
+      return;
     }
 
-    if (userList.isEmpty) {
-      showCustomToast(message: "No Data");
+    UserModel? currentUserModel;
+    try {
+      DocumentSnapshot docSnapshot = await FirebaseFirestore.instance
+          .collection('Users')
+          .doc(currentUser.uid)
+          .get();
+      if (docSnapshot.exists) {
+        currentUserModel = UserModel.fromFirestore(docSnapshot);
+      }
+    } catch (e) {
+      print('Error fetching current user data: $e');
+    }
+
+    if (currentUserModel == null) {
+      showCustomToast(message: "Current user data not found");
       return;
     }
 
@@ -534,21 +543,22 @@ class DonationBookController extends GetxController {
             width: MediaQuery.of(context).size.width * 0.8,
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: userList.length,
+              itemCount: 1,
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(
-                    userList[index].fullName,
+                    currentUserModel!.fullName,
                     style: AppTextStyle.body3Regular,
                   ),
                   trailing: Obx(() => Radio<String>(
                         activeColor: AppColors.primary,
-                        value: userList[index].id,
+                        value: currentUserModel!.id,
                         groupValue: selectedOwnerId.value,
                         onChanged: (String? value) {
                           if (value != null) {
                             selectedOwnerId.value = value;
-                            selectedOwnerName.value = userList[index].fullName;
+                            selectedOwnerName.value =
+                                currentUserModel!.fullName;
                           }
                         },
                       )),

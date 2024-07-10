@@ -204,6 +204,14 @@ class _DetailBookState extends State<DetailBook> {
                         height: 4.0,
                       ),
                       Text(
+                        'Kategori: ${getCategoryString(widget.book.category!)}',
+                        style: AppTextStyle.body3Regular
+                            .copyWith(color: AppColors.neutral08),
+                      ),
+                      const SizedBox(
+                        height: 4.0,
+                      ),
+                      Text(
                         'Jenis Buku: ${getBookTypeString(widget.book.bookType!)}',
                         style: AppTextStyle.body3Regular
                             .copyWith(color: AppColors.neutral08),

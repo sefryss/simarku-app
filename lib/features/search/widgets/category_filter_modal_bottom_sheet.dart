@@ -27,7 +27,12 @@ class _CategoryFilterModalBottomSheetState
 
   @override
   Widget build(BuildContext context) {
-    List<String> categories = ['Tukar Pinjam', 'Tukar Milik', 'Bebas Baca'];
+    List<String> categories = [
+      'Tukar Pinjam',
+      'Tukar Milik',
+      'Bebas Baca',
+      'Koleksi'
+    ];
 
     return Column(
       mainAxisSize: MainAxisSize.min,

@@ -29,7 +29,12 @@ class _AllFilterModalBottomSheetState extends State<AllFilterModalBottomSheet> {
   @override
   Widget build(BuildContext context) {
     const List<String> bookTypes = ['Buku Fisik', 'E-Book'];
-    List<String> categories = ['Tukar Pinjam', 'Tukar Milik', 'Bebas Baca'];
+    List<String> categories = [
+      'Tukar Pinjam',
+      'Tukar Milik',
+      'Bebas Baca',
+      'Koleksi'
+    ];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

@@ -67,7 +67,15 @@ class _SearchPageState extends State<SearchPage> {
                 selectedItems: selectedItems,
               ),
               SizedBox(height: 16),
-              EBookWidget(queryText: queryText, selectedItems: selectedItems)
+              EBookWidget(
+                queryText: queryText,
+                selectedItems: selectedItems,
+              ),
+              //   SizedBox(height: 16),
+              //   CollectionBookWidget(
+              //     queryText: queryText,
+              //     selectedItems: selectedItems,
+              //   ),
             ],
           ),
         ),
