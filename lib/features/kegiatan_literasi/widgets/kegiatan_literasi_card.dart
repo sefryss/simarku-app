@@ -59,6 +59,7 @@ class KegiatanLiterasiCard extends StatelessWidget {
                   const Spacer(),
                   Text(
                     kegiatanLiterasi.source!,
+                    maxLines: 1,
                     style: AppTextStyle.body3Medium
                         .copyWith(color: AppColors.neutral06),
                   )

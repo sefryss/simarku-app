@@ -10,10 +10,22 @@ import 'package:simarku/repository/auth/auth_repository.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/loaders/loaders.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
-// import 'package:simarku/features/books/edit_book/screen/edit_book_page.dart';
 
-class MyBook extends StatelessWidget {
+class MyBook extends StatefulWidget {
   const MyBook({super.key});
+
+  @override
+  _MyBookState createState() => _MyBookState();
+}
+
+class _MyBookState extends State<MyBook> {
+  late Future<List<StoryModel>> _userBooks;
+
+  @override
+  void initState() {
+    super.initState();
+    _userBooks = _fetchUserBooks();
+  }
 
   Future<List<StoryModel>> _fetchUserBooks() async {
     // Get the current user
@@ -30,6 +42,12 @@ class MyBook extends StatelessWidget {
 
     // Map the documents to StoryModel instances
     return snapshot.docs.map((doc) => StoryModel.fromFirestore(doc)).toList();
+  }
+
+  Future<void> _refreshBooks() async {
+    setState(() {
+      _userBooks = _fetchUserBooks();
+    });
   }
 
   @override
@@ -49,84 +67,75 @@ class MyBook extends StatelessWidget {
       ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(
-            16.0,
-            0,
-            16.0,
-            16.0,
-          ),
+          padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 16.0),
           child: SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: FutureBuilder<List<StoryModel>>(
-                future: _fetchUserBooks(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
-                  } else if (snapshot.hasError) {
-                    return Center(child: Text('Error: ${snapshot.error}'));
-                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/images/empty.svg',
-                            height: 300,
-                          ),
-                          SizedBox(
-                            height: 24,
-                          ),
-                          Text(
-                            'Kamu belum mengupload buku apapun,\nAyo tambahkan buku kamu disini!',
-                            style: AppTextStyle.body3Regular
-                                .copyWith(color: AppColors.neutral08),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(
-                            height: 24,
-                          ),
-                          SMElevatedButton(
-                            onPressed: () {
-                              Get.to(() => AddBookPage());
-                            },
-                            labelText: 'Tambah Buku',
-                            width: 170,
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-
-                  final books = snapshot.data!;
-                  return GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      childAspectRatio: 0.49,
-                    ),
-                    itemCount: books.length,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () => Get.to(
-                          () => DetailBook(book: books[index]),
-                        ),
-                        onLongPress: () {
-                          _showBookOptions(context, books[index]);
-                        },
-                        child: BookCard(
-                          book: books[index],
+              child: RefreshIndicator(
+                onRefresh: _refreshBooks,
+                child: FutureBuilder<List<StoryModel>>(
+                  future: _userBooks,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    } else if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/images/empty.svg',
+                              height: 300,
+                            ),
+                            SizedBox(height: 24),
+                            Text(
+                              'Kamu belum mengupload buku apapun,\nAyo tambahkan buku kamu disini!',
+                              style: AppTextStyle.body3Regular
+                                  .copyWith(color: AppColors.neutral08),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 24),
+                            SMElevatedButton(
+                              onPressed: () {
+                                Get.to(() => AddBookPage());
+                              },
+                              labelText: 'Tambah Buku',
+                              width: 170,
+                            ),
+                          ],
                         ),
                       );
-                    },
-                  );
-                },
+                    }
+
+                    final books = snapshot.data!;
+                    return GridView.builder(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        childAspectRatio: 0.49,
+                      ),
+                      itemCount: books.length,
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                          onTap: () =>
+                              Get.to(() => DetailBook(book: books[index])),
+                          onLongPress: () {
+                            _showBookOptions(context, books[index]);
+                          },
+                          child: BookCard(book: books[index]),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ),
         ),
       ),
       floatingActionButton: FutureBuilder<List<StoryModel>>(
-        future: _fetchUserBooks(),
+        future: _userBooks,
         builder: (context, snapshot) {
           if (snapshot.hasData && snapshot.data!.isNotEmpty) {
             return FloatingActionButton(
@@ -151,59 +160,61 @@ class MyBook extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       builder: (context) {
-        return Builder(builder: (context) {
-          return FractionallySizedBox(
-            heightFactor: 0.35,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(20),
-                  topRight: Radius.circular(20),
+        return Builder(
+          builder: (context) {
+            return FractionallySizedBox(
+              heightFactor: 0.4,
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(20),
+                    topRight: Radius.circular(20),
+                  ),
                 ),
-              ),
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 4,
-                        width: 32,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: AppColors.neutral04),
-                      ),
-                      const SizedBox(height: 16),
-                      ListTile(
-                        leading: Icon(
-                          Icons.edit,
-                          color: AppColors.second,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        Container(
+                          height: 4,
+                          width: 32,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(4),
+                              color: AppColors.neutral04),
                         ),
-                        title: Text('Edit'),
-                        onTap: () {
-                          Navigator.pop(context);
-                          Get.to(() => EditBookPage(book: book));
-                        },
-                      ),
-                      ListTile(
-                        leading: Icon(
-                          Icons.delete,
-                          color: Colors.red,
+                        const SizedBox(height: 16),
+                        ListTile(
+                          leading: Icon(
+                            Icons.edit,
+                            color: AppColors.second,
+                          ),
+                          title: Text('Edit'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Get.to(() => EditBookPage(book: book));
+                          },
                         ),
-                        title: Text('Hapus'),
-                        onTap: () {
-                          Navigator.pop(context);
-                          _showDeleteConfirmationDialog(context, book);
-                        },
-                      ),
-                    ],
+                        ListTile(
+                          leading: Icon(
+                            Icons.delete,
+                            color: Colors.red,
+                          ),
+                          title: Text('Hapus'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            _showDeleteConfirmationDialog(context, book);
+                          },
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
       },
     );
   }
@@ -250,6 +261,7 @@ class MyBook extends StatelessWidget {
           .delete();
       SMLoaders.successSnackBar(
           title: 'Berhasil', message: 'Buku berhasil dihapus');
+      _refreshBooks(); // Refresh the book list after deletion
     } catch (e) {
       SMLoaders.errorSnackBar(
           title: 'Gagal', message: 'Gagal menghapus buku: $e');

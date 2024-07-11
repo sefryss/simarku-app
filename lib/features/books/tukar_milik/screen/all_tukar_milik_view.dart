@@ -40,7 +40,7 @@ class _AllTukarMilikViewState extends State<AllTukarMilikView> {
               Text(
                 textAlign: TextAlign.justify,
                 style: AppTextStyle.body2Regular,
-                "Sebelum melakukan Tukar Milik dan itu buku fisik maka pastikan kalian berkomunikasi dengan yang mengajukan Tukar Milik untuk melakukan pertemuan atau mengatur pengiriman buku dan setelah menerima masing-masing buku baru Anda bisa menerima pengajuan Tukar Milik.",
+                "Sebelum anda melakukan Tukar Milik, dan jenis buku yang akan ditukar milik adalah buku fisik maka pastikan kalian berkomunikasi dengan yang mengajukan Tukar Milik untuk melakukan pertemuan atau mengatur pengiriman buku dan setelah menerima masing-masing buku baru Anda bisa menerima atau menyetujui pengajuan Tukar Milik.",
               ),
               SizedBox(height: 16),
               Text(

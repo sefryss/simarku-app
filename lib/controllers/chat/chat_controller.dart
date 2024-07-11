@@ -165,39 +165,6 @@ class ChatController {
     }
   }
 
-  // for getting current user info
-//   static Future<void> getSelfInfo() async {
-//     await firestore.collection('Users').doc(user.uid).get().then((user) async {
-//       if (user.exists) {
-//         me = UserModel.fromJson(user.data()!);
-//         await fetchFirebaseMessagingToken();
-
-//         //for setting user status to active
-//         ChatController.updateActiveStatus(true);
-//         log('My Data: ${user.data()}');
-//       } else {
-//         await createUser().then((value) => getSelfInfo());
-//       }
-//     });
-//   }
-
-//   static Future<String> fetchFirebaseMessagingToken() async {
-//     try {
-//       FirebaseMessaging messaging = FirebaseMessaging.instance;
-//       await messaging.requestPermission();
-//       String? token = await messaging.getToken();
-//       if (token == null) {
-//         print("Failed to get push token");
-//         throw Exception('Failed to get push token');
-//       }
-//       print("Push token retrieved: $token");
-//       return token;
-//     } catch (e) {
-//       print("Error getting push token: $e");
-//       throw 'Terjadi kesalahan mendapatkan push token';
-//     }
-//   }
-
   // for creating a new user
   static Future<void> createUser() async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
@@ -227,8 +194,7 @@ class ChatController {
   static Stream<QuerySnapshot<Map<String, dynamic>>> getMyUsersId() {
     return FirebaseFirestore.instance
         .collection('Users')
-        .doc(
-            user.uid) // make sure to replace 'user.uid' with the actual user ID
+        .doc(user.uid)
         .collection('my_users')
         .snapshots();
   }

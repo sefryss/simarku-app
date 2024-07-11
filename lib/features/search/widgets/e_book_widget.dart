@@ -42,7 +42,7 @@ class EBookWidget extends StatelessWidget {
           height: 230,
           child: StreamBuilder<QuerySnapshot>(
             stream: FireBaseData.getEBooks(
-              limit: 4,
+              limit: 6,
               selectedItems: selectedItems,
               // searchQuery: queryText.value,
             ),

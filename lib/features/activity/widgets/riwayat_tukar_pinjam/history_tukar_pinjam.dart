@@ -35,14 +35,6 @@ class HistoryTukarPinjam extends StatelessWidget {
                     'Pengajuan Tukar Pinjam',
                     style: AppTextStyle.body2Medium,
                   ),
-                  //   InkWell(
-                  //     //   onTap: () => Get.to(() => EBookView()),
-                  //     child: Text(
-                  //       'Lihat Semua',
-                  //       style: AppTextStyle.body3Medium
-                  //           .copyWith(color: AppColors.primary),
-                  //     ),
-                  //   ),
                 ],
               ),
             ),
@@ -59,14 +51,6 @@ class HistoryTukarPinjam extends StatelessWidget {
                     'Diajukan Tukar Pinjam',
                     style: AppTextStyle.body2Medium,
                   ),
-                  //   InkWell(
-                  //     //   onTap: () => Get.to(() => EBookView()),
-                  //     child: Text(
-                  //       'Lihat Semua',
-                  //       style: AppTextStyle.body3Medium
-                  //           .copyWith(color: AppColors.primary),
-                  //     ),
-                  //   ),
                 ],
               ),
             ),

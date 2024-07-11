@@ -53,8 +53,8 @@ class BookCategoryWidget extends StatelessWidget {
                   .copyWith(color: const Color(0xFF8B849B)),
             ),
             items: Category.values
-                .where((category) =>
-                    category != Category.bebasBaca) // Filter category here
+                .where((category) => category != Category.bebasBaca)
+                .where((category) => category != Category.koleksi)
                 .map((Category category) {
               return DropdownMenuItem<Category>(
                 value: category,

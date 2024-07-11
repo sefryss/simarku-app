@@ -32,17 +32,9 @@ class HistoryTukarMilik extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Pengajuan',
+                    'Pengajuan Tukar Milik',
                     style: AppTextStyle.body2Medium,
                   ),
-                  //   InkWell(
-                  //     //   onTap: () => Get.to(() => EBookView()),
-                  //     child: Text(
-                  //       'Lihat Semua',
-                  //       style: AppTextStyle.body3Medium
-                  //           .copyWith(color: AppColors.primary),
-                  //     ),
-                  //   ),
                 ],
               ),
             ),
@@ -56,17 +48,10 @@ class HistoryTukarMilik extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Diajukan',
+                    'Diajukan Tukar Milik',
                     style: AppTextStyle.body2Medium,
                   ),
-                  //   InkWell(
-                  //     //   onTap: () => Get.to(() => EBookView()),
-                  //     child: Text(
-                  //       'Lihat Semua',
-                  //       style: AppTextStyle.body3Medium
-                  //           .copyWith(color: AppColors.primary),
-                  //     ),
-                  //   ),
+
                 ],
               ),
             ),

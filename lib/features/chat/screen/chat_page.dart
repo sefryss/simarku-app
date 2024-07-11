@@ -4,6 +4,7 @@ import 'package:simarku/controllers/chat/chat_controller.dart';
 import 'package:simarku/features/chat/widgets/widgets.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/utils/global/app_config.dart';
+import 'package:simarku/utils/loaders/loaders.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 
 class ChatPage extends StatefulWidget {
@@ -17,6 +18,7 @@ class _ChatPageState extends State<ChatPage> {
   List<UserModel> _list = [];
   List<UserModel> _searchList = [];
   bool _isSearching = false;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -24,19 +26,6 @@ class _ChatPageState extends State<ChatPage> {
       //for hiding keyboard when a tap is detected on screen
       onTap: FocusScope.of(context).unfocus,
       child: PopScope(
-        // onWillPop: () {
-        //   if (_isSearching) {
-        //     setState(() {
-        //       _isSearching = !_isSearching;
-        //     });
-        //     return Future.value(false);
-        //   } else {
-        //     return Future.value(true);
-        //   }
-        // },
-
-        //if search is on & back button is pressed then close search
-        //or else simple close current screen on back button click
         canPop: !_isSearching,
         onPopInvoked: (_) async {
           if (_isSearching) {
@@ -236,8 +225,10 @@ class _ChatPageState extends State<ChatPage> {
                         await ChatController.addChatUser(fullName)
                             .then((value) {
                           if (!value) {
-                            Dialogs.showSnackbar(
-                                context, 'Pengguna tidak ditemukan!');
+                            SMLoaders.errorSnackBar(
+                              title: 'Pengguna tidak ditemukan',
+                              message: 'Pastikan nama pengguna benar!',
+                            );
                           }
                         });
                       }
@@ -250,56 +241,3 @@ class _ChatPageState extends State<ChatPage> {
             ));
   }
 }
-// return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: AppColors.primary,
-//         automaticallyImplyLeading: false,
-//         centerTitle: true,
-//         leading: SMBackButton(
-//           buttonColor: Colors.white,
-//         ),
-//         title: _isSearching
-//             ? TextField(
-//                 cursorColor: Colors.white,
-//                 decoration: InputDecoration(
-//                   border: InputBorder.none, // Remove the underline
-//                   hintText: 'Cari nama pengguna....',
-//                   hintStyle: TextStyle(color: Colors.white),
-//                 ),
-//                 autofocus: true,
-//                 style: TextStyle(
-//                     fontSize: 17, letterSpacing: 0.5, color: Colors.white),
-//                 onChanged: (val) {
-//                   setState(() {
-//                     _searchQuery = val;
-//                     _searchList = _list
-//                         .where((user) => user.fullName
-//                             .toLowerCase()
-//                             .contains(val.toLowerCase()))
-//                         .toList();
-//                   });
-//                 },
-//               )
-//             : Text(
-//                 'Pesan',
-//                 style: TextStyle(color: AppColors.white),
-//               ),
-//         actions: [
-//           IconButton(
-//             onPressed: () {
-//               setState(() {
-//                 _isSearching = !_isSearching;
-//                 _searchQuery = '';
-//                 _searchList.clear();
-//               });
-//             },
-//             icon: Icon(
-//               _isSearching
-//                   ? CupertinoIcons.clear_circled_solid
-//                   : Icons.search_rounded,
-//               color: Colors.white,
-//               size: 28,
-//             ),
-//           )
-//         ],
-//       ),

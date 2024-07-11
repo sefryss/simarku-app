@@ -82,7 +82,7 @@ class UserModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
+        
       'FullName': fullName,
       'NIKNumber': nikNumber,
       'PhoneNumber': phoneNumber,
@@ -144,8 +144,8 @@ class UserModel {
     Map data = doc.data() as Map;
     return UserModel(
       id: doc.id,
-      address: data['address'] ?? '',
-      email: data['email'] ?? '',
+      address: data['Address'] ?? '',
+      email: data['Email'] ?? '',
       fullName: data['FullName'] ?? '',
       phoneNumber: data['PhoneNumber'] ?? '',
       profilePicture: data['ProfilePicture'] ?? '',

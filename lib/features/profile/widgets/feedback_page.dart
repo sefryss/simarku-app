@@ -5,6 +5,7 @@ import 'package:simarku/controllers/feedback/feedback_controller.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
+import 'package:simarku/utils/loaders/loaders.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 
 class FeedbackPage extends StatelessWidget {
@@ -70,59 +71,67 @@ class FeedbackPage extends StatelessWidget {
               SMElevatedButton(
                 width: double.infinity,
                 onPressed: () {
-                  // Add feedback
-                  feedbackController.addFeedback(FeedbackModel(
-                    id: '', // Firestore will generate an ID
-                    userId: user.id,
-                    userName: user.fullName,
-                    feedback: feedbackControllerText.text,
-                  ));
-                  Navigator.of(context).pop();
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return Dialog(
-                        // backgroundColor: Colors.transparent,
-                        insetPadding: EdgeInsets.symmetric(horizontal: 20),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16)),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.neutral03,
-                            borderRadius: BorderRadius.circular(16),
+                  if (feedbackControllerText.text.isEmpty) {
+                    SMLoaders.errorSnackBar(
+                      title: 'Oops',
+                      message: 'Umpan balik belum kamu isi.',
+                    );
+                  } else {
+                    // Add feedback
+                    feedbackController.addFeedback(FeedbackModel(
+                      id: '', // Firestore will generate an ID
+                      userId: user.id,
+                      userName: user.fullName,
+                      feedback: feedbackControllerText.text,
+                    ));
+                    Navigator.of(context).pop();
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return Dialog(
+                          // backgroundColor: Colors.transparent,
+                          insetPadding: EdgeInsets.symmetric(horizontal: 20),
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16)),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: AppColors.neutral03,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 30, horizontal: 20),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SvgPicture.asset(
+                                    height: 100,
+                                    'assets/icons/icon_success.svg'),
+                                SizedBox(
+                                  height: 12,
+                                ),
+                                Text("Terima kasih sudah memberikan pendapat!",
+                                    style: AppTextStyle.heading5SemiBold,
+                                    textAlign: TextAlign.center),
+                                SizedBox(height: 20),
+                                Text(
+                                    "Kami akan terus berusaha untuk memberikan pengalaman terbaik untuk Anda.",
+                                    style: AppTextStyle.body2Regular,
+                                    textAlign: TextAlign.center),
+                                SizedBox(height: 20),
+                                SMElevatedButton(
+                                  width: 120,
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  labelText: 'Tutup',
+                                ),
+                              ],
+                            ),
                           ),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 30, horizontal: 20),
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SvgPicture.asset(
-                                  height: 100, 'assets/icons/icon_success.svg'),
-                              SizedBox(
-                                height: 12,
-                              ),
-                              Text("Terima kasih sudah memeberikan pendapat!",
-                                  style: AppTextStyle.heading5SemiBold,
-                                  textAlign: TextAlign.center),
-                              SizedBox(height: 20),
-                              Text(
-                                  "Kami akan terus berusaha untuk memberikan pengalaman terbaik untuk Anda.",
-                                  style: AppTextStyle.body2Regular,
-                                  textAlign: TextAlign.center),
-                              SizedBox(height: 20),
-                              SMElevatedButton(
-                                width: 120,
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                                labelText: 'Tutup',
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
+                        );
+                      },
+                    );
+                  }
                 },
                 labelText: 'Kirim',
               ),

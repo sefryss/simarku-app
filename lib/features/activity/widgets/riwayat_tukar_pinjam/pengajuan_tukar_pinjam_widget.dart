@@ -10,8 +10,19 @@ import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
 
-class PengajuanTukarPinjamWidget extends StatelessWidget {
+class PengajuanTukarPinjamWidget extends StatefulWidget {
   const PengajuanTukarPinjamWidget({super.key});
+
+  @override
+  _PengajuanTukarPinjamWidgetState createState() =>
+      _PengajuanTukarPinjamWidgetState();
+}
+
+class _PengajuanTukarPinjamWidgetState
+    extends State<PengajuanTukarPinjamWidget> {
+  Future<void> _refreshData() async {
+    setState(() {});
+  }
 
   Future<UserModel> fetchUserDetails(String userId) async {
     DocumentSnapshot userDoc =
@@ -71,53 +82,56 @@ class PengajuanTukarPinjamWidget extends StatelessWidget {
             final requests = snapshot.data!.docs
                 .map((doc) => TukarPinjamModel.fromFirestore(doc))
                 .toList();
-            return ListView.builder(
-              itemCount: requests.length,
-              itemBuilder: (context, index) {
-                final request = requests[index];
-                return FutureBuilder<UserModel>(
-                  future: fetchUserDetails(request.senderId),
-                  builder: (context, senderSnapshot) {
-                    if (!senderSnapshot.hasData) {
-                      return ListTile(
-                        title: Text('Loading...'),
-                        subtitle: Text('Status: ${request.status}'),
-                      );
-                    }
-                    final sender = senderSnapshot.data!;
-                    return FutureBuilder<StoryModel>(
-                      future: fetchBookDetails(request.senderBookId),
-                      builder: (context, bookSnapshot) {
-                        if (!bookSnapshot.hasData) {
-                          return ListTile(
-                            title: Text('Loading...'),
-                            subtitle: Text('Status: ${request.status}'),
-                          );
-                        }
-                        final book = bookSnapshot.data!;
-                        final formattedTimestamp = DateFormat.yMMMMd('id_ID')
-                            .addPattern(',')
-                            .add_jm()
-                            .format(request.timestamp.toDate());
-                        final loanEndTime = DateFormat.yMMMMd('id_ID')
-                            .format(request.loanEndTime.toDate());
-                        return InkWell(
-                          onTap: () => Get.to(() => DetailBook(book: book)),
-                          child: TukarPinjamCard(
-                              loanEndTime: loanEndTime,
-                              isSender: false,
-                              book: book,
-                              sender: sender,
-                              formattedTimestamp: formattedTimestamp,
-                              request: request,
-                              currentUser: currentUser,
-                              controller: controller),
+            return RefreshIndicator(
+              onRefresh: _refreshData,
+              child: ListView.builder(
+                itemCount: requests.length,
+                itemBuilder: (context, index) {
+                  final request = requests[index];
+                  return FutureBuilder<UserModel>(
+                    future: fetchUserDetails(request.senderId),
+                    builder: (context, senderSnapshot) {
+                      if (!senderSnapshot.hasData) {
+                        return ListTile(
+                          title: Text('Loading...'),
+                          subtitle: Text('Status: ${request.status}'),
                         );
-                      },
-                    );
-                  },
-                );
-              },
+                      }
+                      final sender = senderSnapshot.data!;
+                      return FutureBuilder<StoryModel>(
+                        future: fetchBookDetails(request.senderBookId),
+                        builder: (context, bookSnapshot) {
+                          if (!bookSnapshot.hasData) {
+                            return ListTile(
+                              title: Text('Loading...'),
+                              subtitle: Text('Status: ${request.status}'),
+                            );
+                          }
+                          final book = bookSnapshot.data!;
+                          final formattedTimestamp = DateFormat.yMMMMd('id_ID')
+                              .addPattern(',')
+                              .add_jm()
+                              .format(request.timestamp.toDate());
+                          final loanEndTime = DateFormat.yMMMMd('id_ID')
+                              .format(request.loanEndTime.toDate());
+                          return InkWell(
+                            onTap: () => Get.to(() => DetailBook(book: book)),
+                            child: TukarPinjamCard(
+                                loanEndTime: loanEndTime,
+                                isSender: false,
+                                book: book,
+                                sender: sender,
+                                formattedTimestamp: formattedTimestamp,
+                                request: request,
+                                currentUser: currentUser,
+                                controller: controller),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             );
           },
         );

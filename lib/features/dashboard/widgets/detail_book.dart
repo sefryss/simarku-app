@@ -354,6 +354,12 @@ class _DetailBookState extends State<DetailBook> {
                 const SizedBox(
                   height: 12,
                 ),
+                // ApplyButton(
+                //   senderId: 'g6efYL6ap6ZJhr1P0LfhOfuuUCg2',
+                //   receiverId: 'uw0JJaiPrOhQJFS4wqpq4TH14Cm2',
+                //   book: widget.book,
+                //   category: widget.book.category,
+                // ),
                 FutureBuilder<TukarPinjamModel?>(
                   future: _getTukarPinjam(widget.book.id!),
                   builder: (context, snapshot) {

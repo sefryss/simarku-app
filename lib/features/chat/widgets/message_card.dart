@@ -214,6 +214,8 @@ class _MessageCardState extends State<MessageCard> {
                     color: Colors.grey, borderRadius: BorderRadius.circular(8)),
               ),
 
+              //TODO: add download pdf file
+
               widget.message.type == Type.text
                   ? //copy option
                   _OptionItem(

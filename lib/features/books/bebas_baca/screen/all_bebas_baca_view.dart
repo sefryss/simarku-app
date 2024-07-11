@@ -35,7 +35,12 @@ class _AllBebasBacaViewState extends State<AllBebasBacaView> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.fromLTRB(
+          16.0,
+          16.0,
+          0,
+          16.0,
+        ),
         child: Column(
           children: [
             Container(
@@ -85,7 +90,6 @@ class _AllBebasBacaViewState extends State<AllBebasBacaView> {
                     ),
                     itemCount: filteredBookList.length,
                     itemBuilder: (context, index) {
-
                       return InkWell(
                         onTap: () => Get.to(
                           () => DetailBook(book: filteredBookList[index]),

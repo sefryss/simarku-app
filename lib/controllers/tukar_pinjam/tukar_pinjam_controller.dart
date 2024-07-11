@@ -178,6 +178,33 @@ class TukarPinjamController extends GetxController {
         await bookDoc.update({
           'loan_end_time': FieldValue.delete(),
         });
+
+        // Update the status to "Selesai" in TukarPinjam collection
+        final tukarPinjamDoc = await FirebaseFirestore.instance
+            .collection('TukarPinjam')
+            .where('senderBookId', isEqualTo: bookId)
+            .get();
+
+        if (tukarPinjamDoc.docs.isNotEmpty) {
+          for (var doc in tukarPinjamDoc.docs) {
+            await doc.reference.update({
+              'status': 'Selesai',
+            });
+          }
+        }
+
+        final tukarPinjamDocReceiver = await FirebaseFirestore.instance
+            .collection('TukarPinjam')
+            .where('receiverBookId', isEqualTo: bookId)
+            .get();
+
+        if (tukarPinjamDocReceiver.docs.isNotEmpty) {
+          for (var doc in tukarPinjamDocReceiver.docs) {
+            await doc.reference.update({
+              'status': 'Selesai',
+            });
+          }
+        }
       }
     });
   }

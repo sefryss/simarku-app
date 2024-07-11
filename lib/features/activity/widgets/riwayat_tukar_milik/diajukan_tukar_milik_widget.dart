@@ -12,8 +12,18 @@ import 'package:simarku/models/models.dart';
 import 'package:simarku/utils/global/app_config.dart';
 import 'package:simarku/utils/shared_widgets/shared_widget.dart';
 
-class DiajukanTukarMilikWidget extends StatelessWidget {
+class DiajukanTukarMilikWidget extends StatefulWidget {
   const DiajukanTukarMilikWidget({super.key});
+
+  @override
+  _DiajukanTukarMilikWidgetState createState() =>
+      _DiajukanTukarMilikWidgetState();
+}
+
+class _DiajukanTukarMilikWidgetState extends State<DiajukanTukarMilikWidget> {
+  Future<void> _refreshData() async {
+    setState(() {});
+  }
 
   Future<UserModel> fetchUserDetails(String userId) async {
     DocumentSnapshot userDoc =
@@ -83,50 +93,53 @@ class DiajukanTukarMilikWidget extends StatelessWidget {
             final requests = snapshot.data!.docs
                 .map((doc) => TukarMilikModel.fromFirestore(doc))
                 .toList();
-            return ListView.builder(
-              itemCount: requests.length,
-              itemBuilder: (context, index) {
-                final request = requests[index];
-                return FutureBuilder<UserModel>(
-                  future: fetchUserDetails(request.receiverId),
-                  builder: (context, senderSnapshot) {
-                    if (!senderSnapshot.hasData) {
-                      return ListTile(
-                        title: Text('Loading...'),
-                        subtitle: Text('Status: ${request.status}'),
-                      );
-                    }
-                    final sender = senderSnapshot.data!;
-                    return FutureBuilder<StoryModel>(
-                      future: fetchBookDetails(request.receiverBookId),
-                      builder: (context, bookSnapshot) {
-                        if (!bookSnapshot.hasData) {
-                          return ListTile(
-                            title: Text('Loading...'),
-                            subtitle: Text('Status: ${request.status}'),
-                          );
-                        }
-                        final book = bookSnapshot.data!;
-                        final formattedTimestamp = DateFormat.yMMMMd('id_ID')
-                            .addPattern(',')
-                            .add_jm()
-                            .format(request.timestamp.toDate());
-                        return InkWell(
-                          onTap: () => Get.to(() => DetailBook(book: book)),
-                          child: TukarMilikCard(
-                              isSender: true,
-                              book: book,
-                              sender: sender,
-                              formattedTimestamp: formattedTimestamp,
-                              request: request,
-                              currentUser: currentUser,
-                              controller: controller),
+            return RefreshIndicator(
+              onRefresh: _refreshData,
+              child: ListView.builder(
+                itemCount: requests.length,
+                itemBuilder: (context, index) {
+                  final request = requests[index];
+                  return FutureBuilder<UserModel>(
+                    future: fetchUserDetails(request.receiverId),
+                    builder: (context, senderSnapshot) {
+                      if (!senderSnapshot.hasData) {
+                        return ListTile(
+                          title: Text('Loading...'),
+                          subtitle: Text('Status: ${request.status}'),
                         );
-                      },
-                    );
-                  },
-                );
-              },
+                      }
+                      final sender = senderSnapshot.data!;
+                      return FutureBuilder<StoryModel>(
+                        future: fetchBookDetails(request.receiverBookId),
+                        builder: (context, bookSnapshot) {
+                          if (!bookSnapshot.hasData) {
+                            return ListTile(
+                              title: Text('Loading...'),
+                              subtitle: Text('Status: ${request.status}'),
+                            );
+                          }
+                          final book = bookSnapshot.data!;
+                          final formattedTimestamp = DateFormat.yMMMMd('id_ID')
+                              .addPattern(',')
+                              .add_jm()
+                              .format(request.timestamp.toDate());
+                          return InkWell(
+                            onTap: () => Get.to(() => DetailBook(book: book)),
+                            child: TukarMilikCard(
+                                isSender: true,
+                                book: book,
+                                sender: sender,
+                                formattedTimestamp: formattedTimestamp,
+                                request: request,
+                                currentUser: currentUser,
+                                controller: controller),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
             );
           },
         );

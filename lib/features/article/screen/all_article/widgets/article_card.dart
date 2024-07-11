@@ -61,6 +61,7 @@ class ArticleCard extends StatelessWidget {
                     children: [
                       Text(
                         article.author!,
+                        maxLines: 1,
                         style: AppTextStyle.body3Medium
                             .copyWith(color: AppColors.neutral06),
                       ),

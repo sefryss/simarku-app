@@ -55,6 +55,8 @@ class BookCategoryWidget extends StatelessWidget {
             items: Category.values
                 .where((category) =>
                     category != Category.bebasBaca) // Filter category here
+                .where((category) =>
+                    category != Category.koleksi) // Filter category here
                 .map((Category category) {
               return DropdownMenuItem<Category>(
                 value: category,
