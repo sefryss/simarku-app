@@ -4,17 +4,22 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:http/http.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:simarku/controllers/chat/notification_access_token.dart';
 import 'package:simarku/main.dart';
 import 'package:simarku/models/auth/user_model.dart';
 import 'package:simarku/models/chat_model.dart';
+import 'package:simarku/utils/loaders/loaders.dart';
 
 class ChatController {
   FilePickerResult? result;
@@ -331,65 +336,56 @@ class ChatController {
         .update({'msg': updatedMsg});
   }
 
-  //Download File
-//   static Future<void> saveFile(String url) async {
-//     try {
-//       // Meminta izin penyimpanan
-//       PermissionStatus status = await Permission.storage.status;
-//       if (!status.isGranted) {
-//         status = await Permission.storage.request();
-//       }
+  //Download file
+  static Future<void> downloadFile(
+      String url, String fileName, BuildContext context) async {
+    try {
+      // Check and request permission for Android 11+
+      if (await Permission.manageExternalStorage.request().isGranted ||
+          (await Permission.storage.request().isGranted)) {
+        Directory directory;
 
-//       log('Permission status: $status');
+        if (Platform.isAndroid) {
+          directory = Directory('/storage/emulated/0/Download/SiMarKu');
+        } else {
+          directory = await getApplicationDocumentsDirectory();
+        }
 
-//       if (status.isGranted) {
-//         // Mendapatkan direktori penyimpanan eksternal
-//         List<Directory>? directories = await getExternalStorageDirectories();
-//         Directory? directory;
-//         if (directories != null && directories.isNotEmpty) {
-//           directory = directories.first;
-//         }
+        if (!await directory.exists()) {
+          await directory.create(recursive: true);
+        }
 
-//         log('External storage directory: ${directory?.path}');
-//         String newPath = directory!.path.split("Android")[0] + "/SiMarKu";
-//         directory = Directory(newPath);
-//         log('New directory path: ${directory.path}');
-//         if (!await directory.exists()) {
-//           await directory.create(recursive: true);
-//           log('Directory created');
-//         }
+        String filePath = '${directory.path}/$fileName';
+        File file = File(filePath);
 
-//         // Menentukan nama file dari URL
-//         String fileName = url.split('/').last.split('?').first;
-//         File saveFile = File(directory.path + "/$fileName");
-//         log('File path: ${saveFile.path}');
+        if (await file.exists()) {
+          SMLoaders.warningSnackBar(
+            title: 'File sudah diunduh',
+            message: 'File tersedia di: $filePath',
+          );
+        } else {
+          Dio dio = Dio();
+          await dio.download(url, filePath);
 
-//         // Mengunduh file menggunakan Dio
-//         await Dio().download(url, saveFile.path);
-//         log('File downloaded');
-
-//         // Menampilkan pesan berhasil
-//         SMLoaders.successSnackBar(
-//             title: 'Berhasil',
-//             message: 'File berhasil disimpan di ${saveFile.path}');
-//       } else if (status.isPermanentlyDenied) {
-//         // Menampilkan pesan jika izin ditolak permanen dan membuka pengaturan
-//         await openAppSettings();
-//         SMLoaders.errorSnackBar(
-//             title: 'Gagal',
-//             message:
-//                 'Izin ditolak permanen, buka pengaturan untuk mengizinkan.');
-//       } else {
-//         // Menampilkan pesan jika izin ditolak
-//         SMLoaders.errorSnackBar(title: 'Gagal', message: 'Izin ditolak');
-//       }
-//     } catch (e) {
-//       // Menampilkan pesan kesalahan
-//       log('ErrorWhileSavingFile: $e');
-//       SMLoaders.errorSnackBar(
-//           title: 'Error', message: 'Terjadi kesalahan saat menyimpan file.');
-//     }
-//   }
+          SMLoaders.successSnackBar(
+            title: 'Berhasil',
+            message: 'File berhasil diunduh: $filePath',
+          );
+        }
+      } else {
+        SMLoaders.errorSnackBar(
+          title: 'Oops',
+          message: 'Izin penyimpanan ditolak',
+        );
+      }
+    } catch (e) {
+      log('Error downloading file: $e');
+      SMLoaders.errorSnackBar(
+        title: 'Gagal',
+        message: 'Gagal mengunduh file',
+      );
+    }
+  }
 
   //send chat image
   static Future<void> sendChatImage(UserModel chatUser, File file) async {

@@ -25,6 +25,7 @@ class TnC extends StatelessWidget {
           width: 24,
           child: Obx(
             () => Checkbox(
+              activeColor: AppColors.primary,
               value: controller.privacyPolicy.value,
               onChanged: (value) => controller.privacyPolicy.value =
                   !controller.privacyPolicy.value,

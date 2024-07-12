@@ -34,21 +34,23 @@ class _AllTukarMilikViewState extends State<AllTukarMilikView> {
         return AlertDialog(
           backgroundColor: AppColors.neutral01,
           title: Text("Tukar Milik"),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                textAlign: TextAlign.justify,
-                style: AppTextStyle.body2Regular,
-                "Sebelum anda melakukan Tukar Milik, dan jenis buku yang akan ditukar milik adalah buku fisik maka pastikan kalian berkomunikasi dengan yang mengajukan Tukar Milik untuk melakukan pertemuan atau mengatur pengiriman buku dan setelah menerima masing-masing buku baru Anda bisa menerima atau menyetujui pengajuan Tukar Milik.",
-              ),
-              SizedBox(height: 16),
-              Text(
-                textAlign: TextAlign.justify,
-                style: AppTextStyle.body2Regular,
-                "Peringatan: Aplikasi SiMarKu tidak bertanggung jawab jika ada pelanggaran hak cipta atau penyalahgunaan terkait e-book.",
-              ),
-            ],
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  textAlign: TextAlign.justify,
+                  style: AppTextStyle.body2Regular,
+                  "Sebelum anda melakukan Tukar Milik, dan jenis buku yang akan ditukar milik adalah buku fisik maka pastikan kalian berkomunikasi dengan yang mengajukan Tukar Milik untuk melakukan pertemuan atau mengatur pengiriman buku dan setelah menerima masing-masing buku baru Anda bisa menerima atau menyetujui pengajuan Tukar Milik. Dan jika jenis bukunya E-Book maka kalian dapat saling mengirimkan file pdf dari E-Book kalian melalui chat baru setelah menerima bisa menyetujui perngajuan Tukar Milik.",
+                ),
+                SizedBox(height: 16),
+                Text(
+                  textAlign: TextAlign.justify,
+                  style: AppTextStyle.body2Regular,
+                  "Peringatan: Aplikasi SiMarKu tidak bertanggung jawab jika ada pelanggaran hak cipta atau penyalahgunaan terkait e-book.",
+                ),
+              ],
+            ),
           ),
           actions: [
             TextButton(

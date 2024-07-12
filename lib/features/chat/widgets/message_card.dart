@@ -197,6 +197,9 @@ class _MessageCardState extends State<MessageCard> {
 
   // bottom sheet for modifying message details
   void _showBottomSheet(bool isMe) {
+    final uri = Uri.parse(widget.message.msg);
+    final fileNameEncoded = uri.pathSegments.last;
+    final fileName = Uri.decodeFull(fileNameEncoded.split('/').last);
     showModalBottomSheet(
         context: context,
         shape: const RoundedRectangleBorder(
@@ -213,8 +216,6 @@ class _MessageCardState extends State<MessageCard> {
                 decoration: BoxDecoration(
                     color: Colors.grey, borderRadius: BorderRadius.circular(8)),
               ),
-
-              //TODO: add download pdf file
 
               widget.message.type == Type.text
                   ? //copy option
@@ -234,7 +235,19 @@ class _MessageCardState extends State<MessageCard> {
                       })
                   : widget.message.type == Type.file
                       ? //read file option
-                      Container()
+                      _OptionItem(
+                          icon: const Icon(Icons.download_rounded,
+                              color: Colors.blue, size: 26),
+                          name: 'Simpan File',
+                          onTap: () async {
+                            await ChatController.downloadFile(
+                              widget.message.msg,
+                              fileName, 
+                              context,
+                            );
+                            Navigator.pop(context);
+                          },
+                        )
                       : //save image option
                       _OptionItem(
                           icon: const Icon(Icons.download_rounded,

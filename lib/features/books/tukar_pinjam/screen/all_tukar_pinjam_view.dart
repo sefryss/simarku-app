@@ -32,11 +32,14 @@ class _AllTukarPinjamViewState extends State<AllTukarPinjamView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: AppColors.neutral01,
           title: Text("Tukar Pinjam"),
-          content: Text(
-            textAlign: TextAlign.justify,
-            style: AppTextStyle.body2Regular,
-            "Sebelum anda melakukan Tukar Pinjam, dan jenis buku yang akan ditukar pinjam adalah buku fisik maka pastikan kalian berkomunikasi dengan yang mengajukan Tukar Pinjam terlebih dahulu untuk melakukan pertemuan atau mengatur pengiriman buku dan setelah menerima masing-masing buku baru Anda bisa menerima atau menyetujui pengajuan Tukar Pinjam.",
+          content: SingleChildScrollView(
+            child: Text(
+              textAlign: TextAlign.justify,
+              style: AppTextStyle.body2Regular,
+              "Sebelum anda melakukan Tukar Pinjam, dan jenis buku yang akan ditukar pinjam adalah buku fisik maka pastikan kalian berkomunikasi dengan yang mengajukan Tukar Pinjam terlebih dahulu untuk melakukan pertemuan atau mengatur pengiriman buku dan setelah menerima masing-masing buku baru Anda bisa menerima atau menyetujui pengajuan Tukar Pinjam.",
+            ),
           ),
           actions: [
             TextButton(

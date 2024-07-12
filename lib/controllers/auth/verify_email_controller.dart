@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:simarku/features/auth/login/screen/login_page.dart';
 import 'package:simarku/features/auth/register/widgets/success_screen.dart';
 import 'package:simarku/repository/auth/auth_repository.dart';
 import 'package:simarku/utils/loaders/loaders.dart';
@@ -36,9 +37,9 @@ class VerifyEmailController extends GetxController {
       final user = FirebaseAuth.instance.currentUser;
       if (user?.emailVerified ?? false) {
         timer.cancel();
-        Get.off(() => SuccessScreen(
-              onPressed: () => AuthRepository.instance.screenRedirect(),
-            ));
+        Get.off(() => SuccessScreen(onPressed: () {
+              Get.offAll(() => LoginPage());
+            }));
       }
     });
   }
@@ -47,9 +48,9 @@ class VerifyEmailController extends GetxController {
   checkEmailVerificationStatus() async {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null && currentUser.emailVerified) {
-      Get.off(() => SuccessScreen(
-            onPressed: () => AuthRepository.instance.screenRedirect(),
-          ));
+      Get.off(() => SuccessScreen(onPressed: () {
+            Get.offAll(() => LoginPage());
+          }));
     }
   }
 }
