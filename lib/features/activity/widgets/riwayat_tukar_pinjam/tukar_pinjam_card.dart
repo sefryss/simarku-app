@@ -117,7 +117,7 @@ class TukarPinjamCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       if (currentUser.uid == request.receiverId &&
-                          request.status == 'Pending')
+                          request.status == 'Menunggu Persetujuan')
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
