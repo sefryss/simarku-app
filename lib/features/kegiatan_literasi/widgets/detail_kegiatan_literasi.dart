@@ -68,7 +68,10 @@ class DetailKegiatanLiterasi extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               Text(
-                'Tanggal: ${kegiatanLiterasi.dateStart!} - ${kegiatanLiterasi.dateEnd!}',
+                kegiatanLiterasi.dateEnd != null &&
+                        kegiatanLiterasi.dateEnd!.isNotEmpty
+                    ? 'Tanggal: ${kegiatanLiterasi.dateStart!} - ${kegiatanLiterasi.dateEnd!}'
+                    : 'Tanggal: ${kegiatanLiterasi.dateStart!}',
                 style: AppTextStyle.body3Regular
                     .copyWith(color: AppColors.neutral06),
               ),

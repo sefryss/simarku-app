@@ -63,7 +63,7 @@ class TukarMilikController extends GetxController {
         receiverId: receiver.id,
         senderBookId: senderBookId,
         receiverBookId: receiverBookId,
-        status: 'Pending',
+        status: 'Menunggu Persetujuan',
         timestamp: Timestamp.now(),
       );
 

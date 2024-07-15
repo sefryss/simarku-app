@@ -57,6 +57,7 @@ class ProfilePage extends StatelessWidget {
                                     radius: 100,
                                   )
                                 : SMCircularImage(
+                                    
                                     image: image,
                                     width: 200,
                                     height: 200,

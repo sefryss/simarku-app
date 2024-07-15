@@ -26,7 +26,7 @@ Future<void> showTukarPinjamDialog(BuildContext context, StoryModel book) {
     final querySnapshot = await FirebaseFirestore.instance
         .collection('TukarPinjam')
         .where('senderId', isEqualTo: userId)
-        .where('status', isEqualTo: 'Pending')
+        .where('status', isEqualTo: 'Menunggu Persetujuan')
         .get();
     return querySnapshot.docs.isNotEmpty;
   }

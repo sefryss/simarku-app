@@ -9,7 +9,7 @@ class TukarPinjamModel {
   String status;
   String loanDuration; // Field for loan duration
   Timestamp timestamp;
-   Timestamp loanEndTime;
+  Timestamp loanEndTime;
 
   TukarPinjamModel({
     required this.id,
@@ -20,7 +20,7 @@ class TukarPinjamModel {
     required this.status,
     required this.loanDuration,
     required this.timestamp,
-      required  this.loanEndTime,
+    required this.loanEndTime,
   });
 
   factory TukarPinjamModel.fromFirestore(DocumentSnapshot doc) {
@@ -34,7 +34,7 @@ class TukarPinjamModel {
       status: data['status'],
       loanDuration: data['loanDuration'],
       timestamp: data['timestamp'],
-            loanEndTime: data['loan_end_time'],
+      loanEndTime: data['loan_end_time'],
     );
   }
 
@@ -47,7 +47,7 @@ class TukarPinjamModel {
       'status': status,
       'loanDuration': loanDuration,
       'timestamp': timestamp,
-            'loan_end_time': loanEndTime,
+      'loan_end_time': loanEndTime,
     };
   }
 }

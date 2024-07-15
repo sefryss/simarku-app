@@ -115,7 +115,8 @@ Future<void> showRateUsDialog(BuildContext context, UserModel user) {
                                         height: 12,
                                       ),
                                       Text("Terima kasih sudah menilai kami!",
-                                          style: AppTextStyle.heading5SemiBold),
+                                          style: AppTextStyle.heading5SemiBold,
+                                          textAlign: TextAlign.center),
                                       SizedBox(height: 20),
                                       Text(
                                           "Kami akan terus berusaha untuk memberikan pengalaman terbaik untuk Anda.",

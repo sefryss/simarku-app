@@ -64,7 +64,7 @@ class TukarPinjamController extends GetxController {
         receiverId: receiver.id,
         senderBookId: senderBookId,
         receiverBookId: receiverBookId,
-        status: 'Pending',
+        status: 'Menunggu Persetujuan',
         loanDuration: loanDuration,
         timestamp: Timestamp.now(),
       );
@@ -123,7 +123,7 @@ class TukarPinjamController extends GetxController {
           .collection('TukarPinjam')
           .doc(request.id)
           .update({
-        'status': 'Diterima',
+        'status': 'Dipinjam',
         'loan_end_time': loanEndTime,
       });
 

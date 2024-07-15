@@ -242,10 +242,10 @@ class _MessageCardState extends State<MessageCard> {
                           onTap: () async {
                             await ChatController.downloadFile(
                               widget.message.msg,
-                              fileName, 
+                              fileName,
                               context,
                             );
-                            Navigator.pop(context);
+                            // Navigator.pop(context);
                           },
                         )
                       : //save image option
